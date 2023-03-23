@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'google.apps.GoogleConfig',
     'incoming.apps.IncomingConfig',
-    'outgoing.apps.OutgoingConfig'
+    'outgoing.apps.OutgoingConfig',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'URLToDrive.urls'
+ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'URLToDrive.wsgi.application'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
