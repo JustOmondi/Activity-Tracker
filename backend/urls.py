@@ -1,4 +1,4 @@
-from . import views
+
 """Backend URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -14,10 +14,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from . import views
 from django.urls import path
 from django.contrib import admin
 
 urlpatterns = [
+    # Base URL
     path('', views.index, name='index'),
+
+    # Example: /group/4
+    path('group/<int:group_id>/', views.group, name='subgroup'),
+
+    # Example: /department/4
+    path('department/<int:department_id>/', views.department, name='department'),
+
+    # Example: /subgroup/4
+    path('subgroup/<int:subgroup_id>/', views.subgroup, name='subgroup'),
+    
     path('admin/', admin.site.urls),
 ]
