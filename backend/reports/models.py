@@ -1,5 +1,5 @@
 from django.db import models
-from structure.models import SubGroup, Department, Group, Member
+from ..structure.models import SubGroup, Department, Group, Member
 
 # Create your models here.
 class Report(models.Model):
