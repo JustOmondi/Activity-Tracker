@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'backend.apps.BackendConfig',
     'corsheaders',
     'rest_framework',
+    'reports',
+    'structure'
 ]
 
 MIDDLEWARE = [

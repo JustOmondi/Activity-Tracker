@@ -22,3 +22,6 @@ def department(request, department_id):
 def subgroup(request, subgroup_id):
     return HttpResponse(f"You're looking at Subgroup {subgroup_id}.")
 
+def member(request, member_id):
+    return HttpResponse(f"You're looking at member {member_id}.")
+

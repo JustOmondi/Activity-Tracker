@@ -30,6 +30,9 @@ urlpatterns = [
 
     # Example: /subgroup/4
     path('subgroup/<int:subgroup_id>/', views.subgroup, name='subgroup'),
+
+    # Example: /member/4
+    path('member/<int:member_id>/', views.member, name='member'),
     
     path('admin/', admin.site.urls),
 ]

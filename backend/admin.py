@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SubGroup, Department, Group, Member
+from structure.models import SubGroup, Department, Group, Member
 
 # Register your models here.
 admin.site.register(SubGroup)
