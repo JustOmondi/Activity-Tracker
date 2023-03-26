@@ -6,6 +6,10 @@ import sys
 import json
 import logging
 
+from .structure.models import Member
+from .structure.serializers import MemberSerializer
+from rest_framework import viewsets
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -22,6 +26,7 @@ def department(request, department_id):
 def subgroup(request, subgroup_id):
     return HttpResponse(f"You're looking at Subgroup {subgroup_id}.")
 
-def member(request, member_id):
-    return HttpResponse(f"You're looking at member {member_id}.")
+class MemberViewset(viewsets.ModelViewSet):
+    queryset = Member.objects.all()
+    serializer_class = MemberSerializer
 
