@@ -6,7 +6,7 @@ import sys
 import json
 import logging
 
-from .structure.models import Member, SubGroup, Department
+from .structure.models import Member, Subgroup, Department
 from .structure.serializers import DepartmentSerializer, MemberSerializer, SubgroupSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -41,13 +41,13 @@ def getMember(request, member_id):
 
 @api_view(['GET'])
 def getSubgroup(request, subgroup_number):
-    subgroup = SubGroup.objects.get(subgroup_number=subgroup_number)
+    subgroup = Subgroup.objects.get(subgroup_number=subgroup_number)
     serializer = SubgroupSerializer(subgroup, many=False)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def getSubgroups(request):
-    subgroups = SubGroup.objects.all()
+    subgroups = Subgroup.objects.all()
     serializer = SubgroupSerializer(subgroups, many=True)
     return Response(serializer.data)
 
@@ -58,17 +58,4 @@ def getIndex(request):
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, You're at the backend index.")
-
-def group(request, group_id):
-    return HttpResponse(f"You're looking at Group {group_id}.")
-
-def department(request, department_id):
-    return HttpResponse(f"You're looking at Department {department_id}.")
-
-def subgroup(request, subgroup_id):
-    return HttpResponse(f"You're looking at Subgroup {subgroup_id}.")
-
-class MemberViewset(viewsets.ModelViewSet):
-    queryset = Member.objects.all()
-    serializer_class = MemberSerializer
 

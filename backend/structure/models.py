@@ -6,7 +6,17 @@ from django.db.models import CharField, Count, Case, ForeignKey, Model, PROTECT,
 from backend.settings import TIME_ZONE
 from .constants import SUBGROUP_LEADER_TITLE, GROUP_LEADER_TITLE, DEPARTMENT_LEADER_TITLE, MEMBER_TITLE, UNREGISTERED, YG, MG, WG
 
-# Create your models here.
+
+def get_default_department():
+    """ get a default value for subgroup department; create new department if not available """
+    return Department.objects.get_or_create(department_number=1)[0].id
+
+
+def get_default_subgroup():
+    """ get a default value for subgroup department; create new department if not available """
+    department = Department.objects.get_or_create(department_number=1)[0]
+    subgroup = Subgroup.objects.get_or_create(subgroup_number=1, department=department)[0]
+    return subgroup.id
 
 class Group(Model):
     name = CharField(null=True, blank=True, max_length=110,)
@@ -25,7 +35,7 @@ class Department(Model):
 
     @property
     def members_per_subgroup(self):
-        subgroups = SubGroup.objects.filter(department__department_number=self.department_number)
+        subgroups = Subgroup.objects.filter(department__department_number=self.department_number)
         member_list = f'Department {self.department_number}\n'
 
         for subgroup in subgroups:
@@ -66,23 +76,30 @@ class Department(Model):
 
     @property
     def name(self):
-        return f'Department {self.department_number} - {self.nickname}'
+        return f'Department {self.department_number}'
     
-    def get_today_report_total(self, report_name):       
+    def get_report_total(self, report_name, days_ago):       
         count = 0
         for subgroup in self.subgroup_set.all():
-            count += subgroup.get_today_report_total(report_name)
+            count += subgroup.get_report_total(report_name, days_ago)
         
+        return count
+    
+    def get_total_members(self):
+        count = 0
+        for subgroup in self.subgroup_set.all():
+            count += subgroup.get_total_members()
+
         return count
 
     def __str__(self):
         return self.name
 
-class SubGroup(Model):
+class Subgroup(Model):
     nickname = CharField(null=True, blank=True, max_length=110,)
     subgroup_number = IntegerField(null=False, blank=False)
     subgroup_leader = ForeignKey('Member', on_delete=PROTECT, related_name="subgroup_leader", null=True, blank=True)
-    department = ForeignKey('Department', on_delete=PROTECT, null=True, blank=True)
+    department = ForeignKey('Department', on_delete=PROTECT, null=False, blank=False, default=get_default_department)
     updated = DateTimeField(auto_now=True)
     created = DateTimeField(auto_now_add=True)
 
@@ -95,14 +112,13 @@ class SubGroup(Model):
         member_list = self.member_set.all().values_list('full_name', flat=True)
         return self.name + '\n' + '\n'.join(member_list)
 
-    @property
-    def members(self):
-        return self.member_set.all()
+    def get_total_members(self):
+        return self.member_set.all().count()
     
-    def get_today_report_total(self, report_name):       
+    def get_report_total(self, report_name, days_ago):       
         count = 0
         for member in self.member_set.all():
-            count += member.get_today_report(report_name)
+            count += member.get_report(report_name, days_ago)
         
         return count
 
@@ -116,7 +132,7 @@ class Member(Model):
     group = CharField(null=True, blank=True, max_length=45,)
     full_id = CharField(null=True, blank=True, max_length=70,)
     duty = CharField(null=True, blank=True, max_length=100,)
-    subgroup = ForeignKey('SubGroup', on_delete=PROTECT, null=True,  blank=True)
+    subgroup = ForeignKey('SubGroup', on_delete=PROTECT, null=False,  blank=False, default=get_default_subgroup)
     updated = DateTimeField(auto_now=True)
     created = DateTimeField(auto_now_add=True)
 
@@ -132,28 +148,10 @@ class Member(Model):
         string_list = underscore_name.split("_")
         name = string_list[0]
         return Member.objects.get(full_name__icontains=name)
-
-    # def get_today_reports_summary(self):
-    #     current_timezone = pytz.timezone(TIME_ZONE)
-    #     date_range = datetime.now().replace(tzinfo=current_timezone) - timedelta(days=1)
-
-    #     lesson_reports = self.report_set.filter(type='lesson').filter(created__gte=date_range).count()
-    #     homework_reports = self.report_set.filter(type='homework').filter(created__gte=date_range).count()
-    #     activity_reports = self.report_set.filter(type='activity').filter(created__gte=date_range).count()
-    #     meeting_reports = self.report_set.filter(type='weekly_meeting').filter(created__gte=date_range).count()
-
-    #     reports = self.report_set.filter(created__gte=date_range).annotate(
-    #         lesson_count=Count('id', filter=Q(type='lesson')),
-    #         homework_count=Count('id', filter=Q(type='homework')),
-    #         activity_count=Count('id', filter=Q(type='activity')),
-    #         meeting_count=Count('id', filter=Q(type='weekly_meeting'))
-    #     )
-        
-    #     return reports
     
-    def get_today_report(self, report_name):
+    def get_report(self, report_name, days_ago):
         current_timezone = pytz.timezone(TIME_ZONE)
-        date_range = datetime.now().replace(tzinfo=current_timezone) - timedelta(days=1)
+        date_range = datetime.now().replace(tzinfo=current_timezone) - timedelta(days=days_ago)
         
         count = self.report_set.filter(name=report_name, created__gte=date_range).count()
         

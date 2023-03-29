@@ -1,20 +1,19 @@
 from django.db import models
 import pytz
-
-from datetime import datetime
+from .constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, ATTENDANCE, PARTICIPATION
 
 from backend.settings import TIME_ZONE
 
 REPORT_NAMES = [
-      ('lesson', 'Lesson'),
-      ('activity', 'Activity'),
-      ('homework', 'Homework'),
-      ('weekly_meeting', 'Weekly Meeting'),
+      (LESSON, LESSON.replace('_', ' ').capitalize()),
+      (ACTIVITY, ACTIVITY.replace('_', ' ').capitalize()),
+      (HOMEWORK, HOMEWORK.replace('_', ' ').capitalize()),
+      (WEEKLY_MEETING, WEEKLY_MEETING),
 ]
 
 REPORT_TYPES = [
-      ('attendance', 'Attendance'),
-      ('participation', 'Participation'),
+      (ATTENDANCE, ATTENDANCE.replace('_', ' ').capitalize()),
+      (PARTICIPATION, PARTICIPATION.replace('_', ' ').capitalize()),
 ]
 
 # Create your models here.
