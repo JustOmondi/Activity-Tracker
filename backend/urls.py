@@ -25,20 +25,15 @@ urlpatterns = [
     # path('', views.index, name='index'),
     path('', views.getIndex,  name='index'),
 
-    path('members/', views.getMembers, name='members'),
-
-    # Example: /member/4
-    path('member/<int:member_id>/', views.getMember, name='members'),
-
-    # Example: /subgroup/4
-    path('subgroups/', views.getSubgroups, name='subgroup'),
-
-    # Example: /subgroup/4
+    path('departments/', views.getDepartments, name='departments'),
+    path('department/<int:department_number>/', views.getDepartment, name='department'),
+    
+    path('subgroups/', views.getSubgroups, name='subgroups'),
     path('subgroup/<int:subgroup_number>/', views.getSubgroup, name='subgroup'),
 
-    # Example: /department/4
-    path('department/<int:department_id>/', views.department, name='department'),
-    
+    path('members/', views.getMembers, name='members'),
+    path('member/<int:member_id>/', views.getMember, name='member'),
+
     path('admin/', admin.site.urls),
 
     path('reports/', include('backend.reports.urls')),

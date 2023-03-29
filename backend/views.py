@@ -6,14 +6,26 @@ import sys
 import json
 import logging
 
-from .structure.models import Member, SubGroup
-from .structure.serializers import MemberSerializer, SubgroupSerializer
+from .structure.models import Member, SubGroup, Department
+from .structure.serializers import DepartmentSerializer, MemberSerializer, SubgroupSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+@api_view(['GET'])
+def getDepartment(request, department_number):
+    department = Department.objects.get(department_number=department_number)
+    serializer = DepartmentSerializer(department, many=False)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getDepartments(request):
+    departments = Department.objects.all()
+    serializer = DepartmentSerializer(departments, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def getMembers(request):
