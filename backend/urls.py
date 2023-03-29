@@ -19,26 +19,27 @@ from django.urls import path, include
 from django.contrib import admin
 from rest_framework import routers
 
-router = routers.DefaultRouter()
-router.register(r'members', views.MemberViewset)
 
 urlpatterns = [
     # Base URL
     # path('', views.index, name='index'),
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('', views.getIndex,  name='index'),
 
-    # Example: /group/4
-    path('group/<int:group_id>/', views.group, name='subgroup'),
+    path('members/', views.getMembers, name='members'),
+
+    # Example: /member/4
+    path('member/<int:member_id>/', views.getMember, name='members'),
+
+    # Example: /subgroup/4
+    path('subgroups/', views.getSubgroups, name='subgroup'),
+
+    # Example: /subgroup/4
+    path('subgroup/<int:subgroup_number>/', views.getSubgroup, name='subgroup'),
 
     # Example: /department/4
     path('department/<int:department_id>/', views.department, name='department'),
-
-    # Example: /subgroup/4
-    path('subgroup/<int:subgroup_id>/', views.subgroup, name='subgroup'),
-
-    # Example: /member/4
-    # path('member/<int:member_id>/', views.member, name='member'),
     
     path('admin/', admin.site.urls),
+
+    path('reports/', include('backend.reports.urls')),
 ]

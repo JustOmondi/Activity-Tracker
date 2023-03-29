@@ -5,14 +5,18 @@ from .constants import SUBGROUP_LEADER_TITLE, GROUP_LEADER_TITLE, DEPARTMENT_LEA
 
 class Group(models.Model):
     name = models.CharField(null=True, blank=True, max_length=110,)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
 class Department(models.Model):
     nickname = models.CharField(null=True, blank=True, max_length=110,)
-    department_id = models.IntegerField(null=False, blank=False)
+    department_number = models.IntegerField(null=False, blank=False)
     department_leader = models.ForeignKey('Member', on_delete=models.PROTECT, related_name="department_leader", null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     @property
     def members_per_subgroup(self):
@@ -64,9 +68,11 @@ class Department(models.Model):
 
 class SubGroup(models.Model):
     nickname = models.CharField(null=True, blank=True, max_length=110,)
-    subgroup_id = models.IntegerField(null=False, blank=False)
+    subgroup_number = models.IntegerField(null=False, blank=False)
     subgroup_leader = models.ForeignKey('Member', on_delete=models.PROTECT, related_name="subgroup_leader", null=True, blank=True)
     department = models.ForeignKey('Department', on_delete=models.PROTECT, null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     @property
     def name(self):
@@ -93,6 +99,8 @@ class Member(models.Model):
     duty = models.CharField(null=True, blank=True, max_length=100,)
     subgroup = models.ForeignKey('SubGroup', on_delete=models.PROTECT, null=True,  blank=True)
     department = models.ForeignKey('Department', on_delete=models.PROTECT, null=True,  blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     @property
     def name(self):
