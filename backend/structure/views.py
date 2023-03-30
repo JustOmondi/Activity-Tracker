@@ -15,34 +15,40 @@ logger = logging.getLogger(__name__)
 def getDepartment(request, department_number):
     department = Department.objects.get(department_number=department_number)
     serializer = DepartmentSerializer(department, many=False)
+    
     return Response(serializer.data)
 
 @api_view(['GET'])
 def getDepartments(request):
     departments = Department.objects.all()
     serializer = DepartmentSerializer(departments, many=True)
+    
     return Response(serializer.data)
 
 @api_view(['GET'])
 def getMembers(request):
     members = Member.objects.all()
     serializer = MemberSerializer(members, many=True)
+    
     return Response(serializer.data)
 
 @api_view(['GET'])
-def getMember(request, member_id):
-    member = Member.objects.get(id=member_id)
+def getMember(request, name):
+    member = Member.objects.get(underscore_name=name)
     serializer = MemberSerializer(member, many=False)
+    
     return Response(serializer.data)
 
 @api_view(['GET'])
 def getSubgroup(request, subgroup_number):
     subgroup = Subgroup.objects.get(subgroup_number=subgroup_number)
     serializer = SubgroupSerializer(subgroup, many=False)
+    
     return Response(serializer.data)
 
 @api_view(['GET'])
 def getSubgroups(request):
     subgroups = Subgroup.objects.all()
     serializer = SubgroupSerializer(subgroups, many=True)
+    
     return Response(serializer.data)

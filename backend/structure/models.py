@@ -219,10 +219,6 @@ class Member(Model):
     def name(self):
         return str(self.full_name.split(' ')[0])
 
-    @property
-    def underscore_name(self):
-        return f'{self.full_name.split(" ")[0]}_{self.full_name.split(" ")[1]}_{self.subgroup.id}'
-
     def get_member_from_string(underscore_name):
         string_list = underscore_name.split("_")
         name = string_list[0]
