@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 import pytz
 from django.db.models import CharField, Count, Case, ForeignKey, Model, PROTECT, When, DateTimeField, IntegerField, Q
+from backend.reports.constants import ACTIVITY, HOMEWORK, LESSON, WEEKLY_MEETING
 
 from backend.settings import TIME_ZONE
 from .constants import SUBGROUP_LEADER_TITLE, GROUP_LEADER_TITLE, DEPARTMENT_LEADER_TITLE, MEMBER_TITLE, UNREGISTERED, YG, MG, WG
@@ -85,6 +86,45 @@ class Department(Model):
         
         return count
     
+    def get_all_report_totals(self):       
+        lesson_count = 0
+        lastweek_lesson_count = 0
+
+        homework_count = 0
+        lastweek_homework_count = 0
+
+        activity_count = 0
+        lastweek_activity_count = 0
+
+        weekly_meeting_count = 0
+        lastweek_weekly_meeting_count = 0
+
+        for subgroup in self.subgroup_set.all():
+            lesson_count += subgroup.get_report_total(LESSON, 0)
+            lastweek_lesson_count += subgroup.get_report_total(LESSON, 7)
+
+            homework_count += subgroup.get_report_total(HOMEWORK, 0)
+            lastweek_homework_count += subgroup.get_report_total(HOMEWORK, 7)
+
+            activity_count += subgroup.get_report_total(ACTIVITY, 0)
+            lastweek_activity_count += subgroup.get_report_total(ACTIVITY, 7)
+
+            weekly_meeting_count += subgroup.get_report_total(WEEKLY_MEETING, 0)
+            lastweek_weekly_meeting_count += subgroup.get_report_total(WEEKLY_MEETING, 7)
+
+        totals = {
+            'lesson_count': lesson_count,
+            'lastweek_lesson_count': lastweek_lesson_count,
+            'homework_count': homework_count,
+            'lastweek_homework_count': lastweek_homework_count,
+            'activity_count': activity_count,
+            'lastweek_activity_count': lastweek_activity_count,
+            'weekly_meeting_count': weekly_meeting_count,
+            'lastweek_weekly_meeting_count': lastweek_weekly_meeting_count
+        }
+        
+        return totals
+    
     def get_total_members(self):
         count = 0
         for subgroup in self.subgroup_set.all():
@@ -121,13 +161,52 @@ class Subgroup(Model):
             count += member.get_report(report_name, days_ago)
         
         return count
+    
+    def get_all_report_totals(self):       
+        lesson_count = 0
+        lastweek_lesson_count = 0
+
+        homework_count = 0
+        lastweek_homework_count = 0
+
+        activity_count = 0
+        lastweek_activity_count = 0
+
+        weekly_meeting_count = 0
+        lastweek_weekly_meeting_count = 0
+
+        for member in self.member_set.all():
+            lesson_count += member.get_report(LESSON, 0)
+            lastweek_lesson_count += member.get_report(LESSON, 7)
+
+            homework_count += member.get_report(HOMEWORK, 0)
+            lastweek_homework_count += member.get_report(HOMEWORK, 7)
+
+            activity_count += member.get_report(ACTIVITY, 0)
+            lastweek_activity_count += member.get_report(ACTIVITY, 7)
+
+            weekly_meeting_count += member.get_report(WEEKLY_MEETING, 0)
+            lastweek_weekly_meeting_count += member.get_report(WEEKLY_MEETING, 7)
+
+        totals = {
+            'lesson_count': lesson_count,
+            'lastweek_lesson_count': lastweek_lesson_count,
+            'homework_count': homework_count,
+            'lastweek_homework_count': lastweek_homework_count,
+            'activity_count': activity_count,
+            'lastweek_activity_count': lastweek_activity_count,
+            'weekly_meeting_count': weekly_meeting_count,
+            'lastweek_weekly_meeting_count': lastweek_weekly_meeting_count
+        }
+        
+        return totals
 
     def __str__(self):
         return self.name
         
 class Member(Model):
     full_name = CharField(null=False, blank=False, max_length=110,)
-    nickname = CharField(null=True, blank=True, max_length=110,)
+    underscore_name = CharField(null=True, blank=True, max_length=110,)
     chat_id = CharField(null=True, blank=True, max_length=110,)
     group = CharField(null=True, blank=True, max_length=45,)
     full_id = CharField(null=True, blank=True, max_length=70,)
@@ -157,6 +236,38 @@ class Member(Model):
         
         return count
 
+    def get_all_reports(self):       
+        lesson_count = self.get_report(LESSON, 0)
+        lastweek_lesson_count = self.get_report(LESSON, 7)
+
+        homework_count = self.get_report(HOMEWORK, 0)
+        lastweek_homework_count = self.get_report(HOMEWORK, 7)
+
+        activity_count = self.get_report(ACTIVITY, 0)
+        lastweek_activity_count = self.get_report(ACTIVITY, 7)
+
+        weekly_meeting_count = self.get_report(WEEKLY_MEETING, 0)
+        lastweek_weekly_meeting_count = self.get_report(WEEKLY_MEETING, 7)            
+
+        totals = {
+            'lesson_count': lesson_count,
+            'lastweek_lesson_count': lastweek_lesson_count,
+            'homework_count': homework_count,
+            'lastweek_homework_count': lastweek_homework_count,
+            'activity_count': activity_count,
+            'lastweek_activity_count': lastweek_activity_count,
+            'weekly_meeting_count': weekly_meeting_count,
+            'lastweek_weekly_meeting_count': lastweek_weekly_meeting_count
+        }
+        
+        return totals
+    
+    def save(self, *args, **kwargs):
+        if self.underscore_name == None:
+            split_fullname = self.full_name.split(" ")
+            self.underscore_name = f'{split_fullname[0]}_{split_fullname[1]}'
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
             return self.full_name

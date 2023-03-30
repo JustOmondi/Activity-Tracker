@@ -11,17 +11,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('name',)
 
 class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
-    lesson_count = serializers.SerializerMethodField()
-    lastweek_lesson_count = serializers.SerializerMethodField()
-
-    homework_count = serializers.SerializerMethodField()
-    lastweek_homework_count = serializers.SerializerMethodField()
-
-    activity_count = serializers.SerializerMethodField()
-    lastweek_activity_count = serializers.SerializerMethodField()
-
-    meeting_count = serializers.SerializerMethodField()
-    lastweek_meeting_count = serializers.SerializerMethodField()
+    report_totals = serializers.SerializerMethodField()
 
     total_members = serializers.SerializerMethodField()
 
@@ -30,55 +20,17 @@ class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'name',
             'total_members',
-            'lesson_count',
-            'lastweek_lesson_count',
-            'homework_count',
-            'lastweek_homework_count',
-            'activity_count',
-            'lastweek_activity_count',
-            'meeting_count',
-            'lastweek_meeting_count',
+            'report_totals',
         )
 
-    def get_lesson_count(self, object):
-        return object.get_report_total(LESSON, 0)
-
-    def get_lastweek_lesson_count(self, object):
-        return object.get_report_total(LESSON, 7)
-    
-    def get_homework_count(self, object):
-        return object.get_report_total(HOMEWORK, 0)
-
-    def get_lastweek_homework_count(self, object):
-        return object.get_report_total(HOMEWORK, 7)
-    
-    def get_activity_count(self, object):
-        return object.get_report_total(ACTIVITY, 0)
-
-    def get_lastweek_activity_count(self, object):
-        return object.get_report_total(ACTIVITY, 7)
-    
-    def get_meeting_count(self, object):
-        return object.get_report_total(WEEKLY_MEETING, 0)
-
-    def get_lastweek_meeting_count(self, object):
-        return object.get_report_total(WEEKLY_MEETING, 7)
+    def get_report_totals(self, object):
+        return object.get_all_report_totals()
 
     def get_total_members(self, object):
         return object.get_total_members()
 
 class SubgroupSerializer(serializers.HyperlinkedModelSerializer):
-    lesson_count = serializers.SerializerMethodField()
-    lastweek_lesson_count = serializers.SerializerMethodField()
-
-    homework_count = serializers.SerializerMethodField()
-    lastweek_homework_count = serializers.SerializerMethodField()
-
-    activity_count = serializers.SerializerMethodField()
-    lastweek_activity_count = serializers.SerializerMethodField()
-
-    meeting_count = serializers.SerializerMethodField()
-    lastweek_meeting_count = serializers.SerializerMethodField()
+    report_totals = serializers.SerializerMethodField()
 
     total_members = serializers.SerializerMethodField()
 
@@ -87,55 +39,17 @@ class SubgroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'name',
             'total_members',
-            'lesson_count',
-            'lastweek_lesson_count',
-            'homework_count',
-            'lastweek_homework_count',
-            'activity_count',
-            'lastweek_activity_count',
-            'meeting_count',
-            'lastweek_meeting_count',
+            'report_totals',
         )
 
-    def get_lesson_count(self, object):
-        return object.get_report_total(LESSON, 0)
-
-    def get_lastweek_lesson_count(self, object):
-        return object.get_report_total(LESSON, 7)
-    
-    def get_homework_count(self, object):
-        return object.get_report_total(HOMEWORK, 0)
-
-    def get_lastweek_homework_count(self, object):
-        return object.get_report_total(HOMEWORK, 7)
-    
-    def get_activity_count(self, object):
-        return object.get_report_total(ACTIVITY, 0)
-
-    def get_lastweek_activity_count(self, object):
-        return object.get_report_total(ACTIVITY, 7)
-    
-    def get_meeting_count(self, object):
-        return object.get_report_total(WEEKLY_MEETING, 0)
-
-    def get_lastweek_meeting_count(self, object):
-        return object.get_report_total(WEEKLY_MEETING, 7)
+    def get_report_totals(self, object):
+        return object.get_all_report_totals()
 
     def get_total_members(self, object):
         return object.get_total_members()
     
 class MemberSerializer(serializers.HyperlinkedModelSerializer):
-    lesson_count = serializers.SerializerMethodField()
-    lastweek_lesson_count = serializers.SerializerMethodField()
-
-    homework_count = serializers.SerializerMethodField()
-    lastweek_homework_count = serializers.SerializerMethodField()
-
-    activity_count = serializers.SerializerMethodField()
-    lastweek_activity_count = serializers.SerializerMethodField()
-
-    meeting_count = serializers.SerializerMethodField()
-    lastweek_meeting_count = serializers.SerializerMethodField()
+    reports = serializers.SerializerMethodField()
 
     subgroup = serializers.SerializerMethodField()
 
@@ -143,39 +57,12 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         model = Member
         fields = (
             'full_name',
-            'lesson_count',
-            'lastweek_lesson_count',
-            'homework_count',
-            'lastweek_homework_count',
-            'activity_count',
-            'lastweek_activity_count',
-            'meeting_count',
-            'lastweek_meeting_count',
+            'subgroup',
+            'reports',
         )
 
-    def get_lesson_count(self, object):
-        return object.get_report(LESSON, 0)
-
-    def get_lastweek_lesson_count(self, object):
-        return object.get_report(LESSON, 7)
-    
-    def get_homework_count(self, object):
-        return object.get_report(HOMEWORK, 0)
-
-    def get_lastweek_homework_count(self, object):
-        return object.get_report(HOMEWORK, 7)
-    
-    def get_activity_count(self, object):
-        return object.get_report(ACTIVITY, 0)
-
-    def get_lastweek_activity_count(self, object):
-        return object.get_report(ACTIVITY, 7)
-    
-    def get_meeting_count(self, object):
-        return object.get_report(WEEKLY_MEETING, 0)
-
-    def get_lastweek_meeting_count(self, object):
-        return object.get_report(WEEKLY_MEETING, 7)
+    def get_reports(self, object):
+        return object.get_all_reports()
     
     def get_subgroup(self, object):
         return object.subgroup.name
