@@ -2,8 +2,8 @@ from backend.settings import TIME_ZONE
 import pytest
 from datetime import datetime, timedelta
 from pytz import timezone
-from .models import Report
-from ..structure.models import Member, Department, Subgroup
+from ..models import Report
+from ...structure.models import Member, Department, Subgroup
 
 @pytest.fixture()
 def subgroup(db):
