@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('structure', '0006_department_nickname_subgroup_nickname'),
+        ('structure', '0004_remove_member_department'),
     ]
 
     operations = [

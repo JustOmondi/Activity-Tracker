@@ -1,6 +1,7 @@
 
-from datetime import datetime, timedelta
+from datetime import datetime
 import pytz
+from django.utils import timezone
 from django.db.models import CharField, Count, Case, ForeignKey, Model, PROTECT, When, DateTimeField, IntegerField, Q
 from backend.reports.constants import ACTIVITY, HOMEWORK, LESSON, WEEKLY_MEETING
 
@@ -44,7 +45,6 @@ class Department(Model):
         
         return member_list
 
-    @property
     def members_per_group(self):
         yg = Member.objects.filter(department__department_number=self.department_number, group=YG)
         wg = Member.objects.filter(department__department_number=self.department_number, group=WG)
@@ -71,11 +71,9 @@ class Department(Model):
         
         return member_list
 
-    @property
     def leaders(self):
         return Member.objects.filter(department_number=self.id, duty=SUBGROUP_LEADER_TITLE)
 
-    @property
     def name(self):
         return f'Department {self.department_number}'
     
@@ -133,7 +131,7 @@ class Department(Model):
         return count
 
     def __str__(self):
-        return self.name
+        return self.name()
 
 class Subgroup(Model):
     nickname = CharField(null=True, blank=True, max_length=110,)
@@ -143,14 +141,12 @@ class Subgroup(Model):
     updated = DateTimeField(auto_now=True)
     created = DateTimeField(auto_now_add=True)
 
-    @property
     def name(self):
         return f'Subgroup {self.subgroup_number}'
 
-    @property
     def members_to_string(self):
         member_list = self.member_set.all().values_list('full_name', flat=True)
-        return self.name + '\n' + '\n'.join(member_list)
+        return self.name() + '\n' + '\n'.join(member_list)
 
     def get_total_members(self):
         return self.member_set.all().count()
@@ -202,7 +198,7 @@ class Subgroup(Model):
         return totals
 
     def __str__(self):
-        return self.name
+        return self.name()
         
 class Member(Model):
     full_name = CharField(null=False, blank=False, max_length=110,)
@@ -215,7 +211,6 @@ class Member(Model):
     updated = DateTimeField(auto_now=True)
     created = DateTimeField(auto_now_add=True)
 
-    @property
     def name(self):
         return str(self.full_name.split(' ')[0])
 
@@ -224,11 +219,14 @@ class Member(Model):
         name = string_list[0]
         return Member.objects.get(full_name__icontains=name)
     
-    def get_report(self, report_name, days_ago):
-        current_timezone = pytz.timezone(TIME_ZONE)
-        date_range = datetime.now().replace(tzinfo=current_timezone) - timedelta(days=days_ago)
+    def get_report(self, report_name, days_ago):      
+        # Get the current datetime in the local timezone
+        now = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+        date_range_start = (now - timezone.timedelta(days=days_ago))
+        date_range_end = date_range_start + timezone.timedelta(days=1)
         
-        count = self.report_set.filter(name=report_name, created__gte=date_range).count()
+        count = self.report_set.filter(name=report_name, created__gte=date_range_start, created__lt=date_range_end).count()
         
         return count
 
@@ -260,7 +258,7 @@ class Member(Model):
     
     def save(self, *args, **kwargs):
         if self.underscore_name == None:
-            split_fullname = self.full_name.split(" ")
+            split_fullname = self.full_name.lower().split(" ")
             self.underscore_name = f'{split_fullname[0]}_{split_fullname[1]}'
 
         super().save(*args, **kwargs)
