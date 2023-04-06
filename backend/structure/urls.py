@@ -9,5 +9,5 @@ urlpatterns = [
     path('subgroup/<int:subgroup_number>/', views.getSubgroup, name='subgroup'),
 
     path('members/', views.getMembers, name='members'),
-    path('member/<int:member_id>/', views.getMember, name='member'),
+    path('member/<str:name>/', views.getMember, name='member'),
 ]
