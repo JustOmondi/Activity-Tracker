@@ -4,3 +4,4 @@ db.sqlite3
 main/__pycache__
 node_modules
 *.sqlite3
+.vscode/settings.json
