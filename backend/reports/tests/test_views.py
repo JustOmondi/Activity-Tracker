@@ -1,6 +1,8 @@
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
+
+from backend.structure.serializers import MemberSerializer
 from ..models import Report
 from ...structure.models import Department, Member, Subgroup
 from ..serializers import ReportSerializer
@@ -86,6 +88,11 @@ class TestDepartmentWeekReport:
             5: {'count': 2},
         }
         assert response.data['reports'] == expected_reports
+
+        members = department.subgroup_set.first().member_set.all()
+        member_data = MemberSerializer(members, many=True).data
+
+        assert response.data['members']  == member_data
 
     def test_get_department_week_report_with_nonexistent_department(self, client):
         url = reverse('department_week_report', args=[999999, LESSON])
