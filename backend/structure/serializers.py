@@ -8,7 +8,7 @@ from .models import Department, Member, Subgroup, Group
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
-        fields = ('name',)
+        fields = ('name')
 
 class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
     report_totals = serializers.SerializerMethodField()
@@ -65,7 +65,7 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         return object.get_all_reports()
     
     def get_subgroup(self, object):
-        return object.subgroup.name
+        return object.subgroup.name()
 
 
 

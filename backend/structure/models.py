@@ -13,7 +13,6 @@ def get_default_department():
     """ get a default value for subgroup department; create new department if not available """
     return Department.objects.get_or_create(department_number=1)[0].id
 
-
 def get_default_subgroup():
     """ get a default value for subgroup department; create new department if not available """
     department = Department.objects.get_or_create(department_number=1)[0]
@@ -58,6 +57,7 @@ class Department(Model):
         
         return count
     
+    # TODO: Refactor get_all_reports to be more extensible and less redundant
     def get_all_report_totals(self):       
         lesson_count = 0
         lastweek_lesson_count = 0
@@ -132,6 +132,7 @@ class Subgroup(Model):
         
         return count
     
+    # TODO: Refactor get_all_reports to be more extensible and less redundant
     def get_all_report_totals(self):       
         lesson_count = 0
         lastweek_lesson_count = 0
@@ -204,6 +205,7 @@ class Member(Model):
         
         return count
 
+    # TODO: Refactor get_all_reports to be more extensible and less redundant
     def get_all_reports(self):       
         lesson_count = self.get_report(LESSON, 0)
         lastweek_lesson_count = self.get_report(LESSON, 7)

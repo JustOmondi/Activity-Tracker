@@ -39,7 +39,7 @@ def report(db, member):
 
 def test_report_str(report):
     report_str = str(report)
-    expected_str = f'{report.member.full_name} - {report.name} - {report.created.astimezone(timezone(TIME_ZONE)).strftime("%d/%m/%Y")}'
+    expected_str = f'{report.member.full_name} - {report.name} - {report.created.strftime("%d/%m/%Y")}'
     assert report_str == expected_str
 
 def test_report_created_date(db, member):
