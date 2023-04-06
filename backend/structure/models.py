@@ -45,32 +45,6 @@ class Department(Model):
         
         return member_list
 
-    def members_per_group(self):
-        yg = Member.objects.filter(department__department_number=self.department_number, group=YG)
-        wg = Member.objects.filter(department__department_number=self.department_number, group=WG)
-        mg = Member.objects.filter(department__department_number=self.department_number, group=MG)
-        unregistered = Member.objects.filter(department__department_number=self.department_number, group=UNREGISTERED)
-
-        member_list = f'Department {self.department_number}\n\n'
-
-        if(yg.count() > 0):
-            member_list += f'{YG} registered: {yg.count()}' + '\n----\n'
-            member_list += '\n'.join(list(yg.values_list("full_name", flat=True))) + '\n\n'
-
-        if(wg.count() > 0):
-            member_list += f'{WG} registered: {wg.count()}' + '\n----\n'
-            member_list += '\n'.join(list(wg.values_list("full_name", flat=True))) + '\n\n'
-
-        if(mg.count() > 0):
-            member_list += f'{MG} registered: {mg.count()}' + '\n----\n'
-            member_list += '\n'.join(list(mg.values_list("full_name", flat=True))) + '\n\n'
-
-        if(unregistered.count() > 0):
-            member_list += f'{UNREGISTERED}: {unregistered.count()}' +'\n----\n'
-            member_list += '\n'.join(list(unregistered.values_list("full_name", flat=True))) + '\n\n'
-        
-        return member_list
-
     def leaders(self):
         return Member.objects.filter(department_number=self.id, duty=SUBGROUP_LEADER_TITLE)
 
@@ -204,7 +178,7 @@ class Member(Model):
     full_name = CharField(null=False, blank=False, max_length=110,)
     underscore_name = CharField(null=True, blank=True, max_length=110,)
     chat_id = CharField(null=True, blank=True, max_length=110,)
-    group = CharField(null=True, blank=True, max_length=45,)
+    group = CharField(null=True, blank=True, max_length=45, default=YG)
     full_id = CharField(null=True, blank=True, max_length=70,)
     duty = CharField(null=True, blank=True, max_length=100,)
     subgroup = ForeignKey('SubGroup', on_delete=PROTECT, null=False,  blank=False, default=get_default_subgroup)
