@@ -1,9 +1,8 @@
 from datetime import datetime
-import json
-from django.http import JsonResponse
 from django.shortcuts import render
 from django.db.models import Count
 from django.db.models.functions import ExtractWeekDay
+from rest_framework import status
 import pytz
 
 from rest_framework.response import Response
@@ -25,7 +24,12 @@ def getReportId(request, id):
 
 @api_view(['GET'])
 def getDepartmentWeekReport(request, dept_number, report_name):
-
+    if (Report.objects.filter(name=report_name).count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if (Department.objects.filter(department_number=dept_number).count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
     if report_name == 'all':
         report_counts_by_day = Report.objects.annotate(
             weekday=ExtractWeekDay('created')
@@ -48,7 +52,7 @@ def getDepartmentWeekReport(request, dept_number, report_name):
 
     reports = {}
     for report_count in report_counts_by_day:
-        reports['item'] = {'name': report_count['name'], 'count': report_count['count'], 'weekday': report_count['weekday']}
+        reports[report_count['weekday']] = {'count': report_count['count']}
 
     members = Member.objects.filter(subgroup__department__department_number=dept_number)
     serializer = MemberSerializer(members, many=True)
@@ -62,6 +66,12 @@ def getDepartmentWeekReport(request, dept_number, report_name):
 
 @api_view(['GET'])
 def getMemberWeekReport(request, member_name, report_name):
+    if (Report.objects.filter(name=report_name).count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if (Member.objects.filter(underscore_name=member_name).count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
     report_counts_by_day = Report.objects.annotate(
         weekday=ExtractWeekDay('created')
     ).values('weekday', 'name').annotate(
@@ -74,7 +84,7 @@ def getMemberWeekReport(request, member_name, report_name):
 
     reports = {}
     for report_count in report_counts_by_day:
-        reports[report_count['weekday']] = {'name': report_count['name'], 'count': report_count['count']}
+        reports[report_count['weekday']] = {'count': report_count['count']}
 
     result = {
         'reports': reports,

@@ -1,15 +1,14 @@
 import pytest
 from ..models import Subgroup, Member, Department
-from backend.settings import TIME_ZONE
 from ...reports.models import Report
 from django.utils import timezone
-from ...reports.constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, report_names
+from ...reports.constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, REPORT_NAMES
 
 TODAY = 0
 LAST_WEEK = 7
 
 def create_all_reports(days_ago, member):
-    for report_name in report_names:
+    for report_name in REPORT_NAMES:
         created_date_time = timezone.now() - timezone.timedelta(days=days_ago)
 
         report = Report.objects.create(
