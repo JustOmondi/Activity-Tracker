@@ -56,10 +56,3 @@ def test_report_updated_date(report):
     report.value = False
     report.save()
     assert (now - report.updated) <= timedelta(seconds=1)
-
-def test_report_value_default(db, member):
-    report = Report.objects.create(
-        name='report name 3',
-        member=member
-    )
-    assert not report.value

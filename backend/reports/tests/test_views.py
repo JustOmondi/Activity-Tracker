@@ -22,7 +22,7 @@ def create_all_reports_for_every_weekday(member):
 
 
 @pytest.mark.django_db
-class TestMemberWeekReport:
+class TestGetMemberWeekReport:
     @pytest.fixture
     def department(self, db):
         department = Department.objects.create(department_number=9)
@@ -61,7 +61,7 @@ class TestMemberWeekReport:
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
 @pytest.mark.django_db
-class TestDepartmentWeekReport:
+class TestGetDepartmentWeekReport:
     @pytest.fixture
     def department(self, db):
         department = Department.objects.create(department_number=9)
@@ -106,3 +106,135 @@ class TestDepartmentWeekReport:
         url = reverse('department_week_report', args=[department.department_number, 'nonexistent_report'])
         response = client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+@pytest.mark.django_db
+class TestUpdateMemberReport:
+    def test_update_existing_report(self, client):
+        """
+        Test updating an existing report with a valid member name, report name, and update value.
+        """
+        department = Department.objects.create(department_number=9)
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+
+        member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+
+        report = Report.objects.create(
+            name=LESSON,
+            member=member1,
+            value=False
+        )
+        url = reverse('update_member_report')
+
+        # Make sure there is an existing report
+        assert Report.objects.count() == 1
+
+        # Update the report value
+        data = {
+            'member_name': member1.underscore_name,
+            'report_name': LESSON,
+            'update_value': 1,
+        }
+        response = client.post(url, data=data)
+
+        # Check response status code and report value
+        assert response.status_code == status.HTTP_200_OK
+        report.refresh_from_db()
+        assert report.value == True
+
+        # Update the report value
+        data = {
+            'member_name': member1.underscore_name,
+            'report_name': LESSON,
+            'update_value': 0,
+        }
+        response = client.post(url, data=data)
+
+        # Check response status code and report value
+        assert response.status_code == status.HTTP_200_OK
+        report.refresh_from_db()
+        assert report.value == False
+
+    def test_create_new_report(self, client):
+        """
+        Test creating a new report with a valid member name, report name, and update value.
+        """
+        department = Department.objects.create(department_number=9)
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+
+        member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+
+        # Make sure the existing report is deleted
+        assert Report.objects.count() == 0
+
+        # Create a new report
+        data = {
+            'member_name': member1.underscore_name,
+            'report_name': LESSON,
+            'update_value': 1,
+        }
+
+        url = reverse('update_member_report')
+
+        response = client.post(url, data=data)
+
+        # Check response status code and report count
+        assert response.status_code == status.HTTP_200_OK
+
+        expected_report = Report.objects.get(name=LESSON, member=member1)
+        assert expected_report.value == True
+
+    def test_update_report_nonexistent_member(self, client):
+        department = Department.objects.create(department_number=9)
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+
+        member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+
+        report = Report.objects.create(
+            name=LESSON,
+            member=member1,
+            value=False
+        )
+
+        assert Report.objects.count() == 1
+
+        # Update the nonexistent report
+        data = {
+            'member_name': 'some_member',
+            'report_name': LESSON,
+            'update_value': 1,
+        }
+
+        url = reverse('update_member_report')
+        response = client.post(url, data=data)
+
+        # Check response status code and report count
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert Report.objects.count() == 1
+
+    def test_update_report_nonexistent_report_name(self, client):
+        department = Department.objects.create(department_number=9)
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+
+        member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+
+        report = Report.objects.create(
+            name=LESSON,
+            member=member1,
+            value=False
+        )
+
+        assert Report.objects.count() == 1
+
+        # Update the nonexistent report
+        data = {
+            'member_name': member1.underscore_name,
+            'report_name': 'some_report',
+            'update_value': 1,
+        }
+
+        url = reverse('update_member_report')
+        response = client.post(url, data=data)
+
+        # Check response status code and report count
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert Report.objects.count() == 1

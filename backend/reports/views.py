@@ -1,13 +1,11 @@
-from datetime import datetime
-from django.shortcuts import render
 from django.db.models import Count
 from django.db.models.functions import ExtractWeekDay
 from rest_framework import status
-import pytz
+from django.utils import timezone
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from backend.settings import TIME_ZONE
+from backend.reports.constants import REPORT_NAMES
 
 from backend.structure.serializers import MemberSerializer
 
@@ -92,11 +90,20 @@ def getMemberWeekReport(request, member_name, report_name):
 
     return Response(result)
 
-@api_view(['GET'])
-def updateMemberReport(request, member_name, report_name, update_value):
-    current_timezone = pytz.timezone(TIME_ZONE)
-    start_of_day=datetime.now().replace(hour=0, minute=0, second=0).replace(tzinfo=current_timezone)
-    end_of_day=datetime.now().replace(hour=23, minute=59, second=59).replace(tzinfo=current_timezone)
+@api_view(['POST'])
+def updateMemberReport(request):
+    member_name = request.data.get('member_name')
+    report_name = request.data.get('report_name')
+    update_value = request.data.get('update_value')
+    
+    if (Member.objects.filter(underscore_name=member_name).count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if (report_name not in REPORT_NAMES):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    start_of_day=timezone.now().replace(hour=0, minute=0, second=0)
+    end_of_day=timezone.now().replace(hour=23, minute=59, second=59)
 
     lookup = Report.objects.filter(
         member__underscore_name=member_name,
@@ -107,15 +114,15 @@ def updateMemberReport(request, member_name, report_name, update_value):
 
     if(lookup.count() == 1):
         report = lookup.first()
-        report.value = True if update_value==1 else False
+        report.value = True if update_value=="1" else False
         report.save()
 
-        return Response({'status': 200})
+        return Response(status=status.HTTP_200_OK)
     
     lookup.delete()
     member = Member.objects.get(underscore_name=member_name)
-    report_value = True if update_value==1 else False
+    report_value = True if update_value=="1" else False
     report = Report.objects.create(name=report_name, member=member, value=report_value)
     report.save()
 
-    return Response({'status': 200})
+    return Response(status=status.HTTP_200_OK)

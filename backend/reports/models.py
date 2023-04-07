@@ -22,7 +22,7 @@ class Report(models.Model):
     member = models.ForeignKey('structure.Member', on_delete=models.PROTECT, blank=False, default=None)
     updated = models.DateTimeField(auto_now=True, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    value = models.BooleanField(blank=True, default=False)
+    value = models.BooleanField(blank=True)
 
     def __str__(self):
       current_timezone = pytz.timezone(TIME_ZONE)
