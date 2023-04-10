@@ -46,10 +46,6 @@ html, body, #root, .App {
     bottom: 0;
 }
 
-.gradient-text {
-    background-image: linear-gradient(90deg, #8cdbff71, #febbcfa3);
-}
-
 .ps-menu-button {
     border-radius: 15px;
 }
@@ -58,10 +54,10 @@ html, body, #root, .App {
     background-color: #000;
 }
 
-.ps-menu-button:hover .ps-menu-label {
+.ps-menu-button:hover .ps-menu-label, .ps-menu-button:hover .ps-menu-icon > svg {
     color: #000;
 }
 
 .ps-menu-button .ps-menu-label {
-    color: #8cdbff;
+    color: #fff;
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Sidebar, Menu, MenuItem, useProSidebar } from 'react-pro-sidebar';
 import {Link} from "react-router-dom";
+import { ArrowLeftOnRectangleIcon, ChartBarIcon, HomeIcon, ListBulletIcon, UsersIcon } from '@heroicons/react/24/outline'
 
 export default function NavSidebar() {
     const { collapseSidebar } = useProSidebar();
@@ -15,13 +16,13 @@ export default function NavSidebar() {
                     borderRight: `0px solid ${sideBarBGColour}`,
                 }}>
                     <Menu>
-                        <MenuItem component={<Link to="/" />}> Home </MenuItem>
-                        <MenuItem component={<Link to="/subgroups" />}> Subgroups </MenuItem>
-                        <MenuItem component={<Link to="/members" />}> Members </MenuItem>
+                        <MenuItem icon={<HomeIcon className='h-6 w-6 text-white'/>} component={<Link to="/" />}> Home </MenuItem>
+                        <MenuItem icon={<ListBulletIcon className='h-6 w-6 text-white'/>} component={<Link to="/subgroups" />}> Subgroups </MenuItem>
+                        <MenuItem icon={<UsersIcon className='h-6 w-6 text-white'/>} component={<Link to="/members" />}> Members </MenuItem>
                     </Menu>
                     <div className='sidebar-footer'>
                         <Menu>
-                            <MenuItem component={<Link to="/" />}> Logout </MenuItem>
+                            <MenuItem icon={<ArrowLeftOnRectangleIcon className='h-6 w-6 text-white'/>} component={<Link to="/" />}> Logout </MenuItem>
                         </Menu>
                     </div>
                     
