@@ -1,6 +1,5 @@
 import { ProSidebarProvider } from 'react-pro-sidebar';
 import './App.css';
-import Header from './components/Header';
 import { Outlet } from "react-router-dom";
 import NavSidebar from './components/NavSidebar';
 
@@ -10,11 +9,11 @@ function App() {
   return (
     <ProSidebarProvider>
       <div className="App">
-        <Header />
         <NavSidebar />
-        My App
         <div className='page'>
-          <Outlet />
+          <div className='page-inner'>
+            <Outlet />
+          </div>
         </div>
       </div>
     </ProSidebarProvider>
