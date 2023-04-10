@@ -9,6 +9,6 @@ urlpatterns = [
     path('', views.getIndex,  name='index'),
 
     path('admin/', admin.site.urls),
-    path('structure/', include('backend.structure.urls')),
-    path('reports/', include('backend.reports.urls')),
+    path('api/structure/', include('backend.structure.urls')),
+    path('api/reports/', include('backend.reports.urls')),
 ]
