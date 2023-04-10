@@ -17,7 +17,6 @@ export default function SubgroupsListPage() {
         setSubgroups(data)
     }
     
-
     return (
         <div>
             <p>SubgroupsPage</p>
