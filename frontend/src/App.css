@@ -21,7 +21,7 @@ html, body, #root, .App {
 .page-inner {
     border-radius: 30px 30px 0 0;
     background: linear-gradient(-45deg, #8cdbff71, #febbcfa3);
-	background-size: 150% 150%;
+	background-size: 300% 300%;
 	animation: gradient 20s ease infinite;
 	height: 100%;
     width: 100%;
@@ -38,4 +38,30 @@ html, body, #root, .App {
 	100% {
 		background-position: 0% 50%;
 	}
+}
+
+.sidebar-footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+.gradient-text {
+    background-image: linear-gradient(90deg, #8cdbff71, #febbcfa3);
+}
+
+.ps-menu-button {
+    border-radius: 15px;
+}
+
+.ps-menu-button:hover {
+    background-color: #000;
+}
+
+.ps-menu-button:hover .ps-menu-label {
+    color: #000;
+}
+
+.ps-menu-button .ps-menu-label {
+    color: #8cdbff;
 }
