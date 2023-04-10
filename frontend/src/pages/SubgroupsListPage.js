@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BASE_API_URL } from '../App'
 
-export default function SubgroupsPage() {
+export default function SubgroupsListPage() {
     const [subgroups, setSubgroups] = useState([])
 
     useEffect(() => {

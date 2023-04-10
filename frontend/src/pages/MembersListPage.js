@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BASE_API_URL } from '../App'
 
-export default function MembersPage() {
+export default function MembersListPage() {
     const [memebrs, setMembers] = useState([])
 
     useEffect(() => {
