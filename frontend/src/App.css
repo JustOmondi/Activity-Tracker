@@ -10,6 +10,10 @@ html, body, #root, .App {
     width: 100%;
 }
 
+p, h3, h2, h1, div {
+    font-family: 'Poppins', sans-serif;
+}
+
 .App {
     display: flex;
     position: relative;
@@ -76,13 +80,9 @@ html, body, #root, .App {
 }
 
 /* Card Item */
-.card-icon-container {
-    /* border-radius: 5px; */
-}
-
-.icon-bg-green {
-    background: linear-gradient(90deg, #00b76b, #019356);
-    box-shadow: 0px 10px 30px -13px #019356;
+.icon-bg-green, .graph-bg-green {
+    background: linear-gradient(180deg, #00b76b, #019356);
+    box-shadow: 0px 10px 30px -10px #00b76b;
 }
 
 .value-color-green {

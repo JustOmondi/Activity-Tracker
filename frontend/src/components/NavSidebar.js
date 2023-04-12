@@ -16,7 +16,7 @@ export default function NavSidebar() {
                     borderRight: `0px solid ${sideBarBGColour}`,
                 }}>
                     <Menu>
-                        <MenuItem icon={<HomeIcon className='h-6 w-6 text-white'/>} component={<Link to="/" />}> Home </MenuItem>
+                        <MenuItem icon={<HomeIcon className='h-6 w-6 text-white'/>} component={<Link to="/home" />}> Home </MenuItem>
                         <MenuItem icon={<ListBulletIcon className='h-6 w-6 text-white'/>} component={<Link to="/subgroups" />}> Subgroups </MenuItem>
                         <MenuItem icon={<UsersIcon className='h-6 w-6 text-white'/>} component={<Link to="/members" />}> Members </MenuItem>
                     </Menu>
