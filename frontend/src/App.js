@@ -12,8 +12,8 @@ function App() {
         <div className='sidebar-page-section w-1/5'>
           <NavSidebar />
         </div>
-        <div className='page  w-4/5'>
-          <div className='page-inner'>
+        <div className='page w-4/5'>
+          <div className='page-inner overflow-auto w-full'>
             <Outlet />
           </div>
         </div>

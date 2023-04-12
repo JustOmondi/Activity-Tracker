@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function InfoCard({icon, title, currentValue, lastweekValue, color}) {
   return (
-    <div className='shadow-lg bg-white p-4 w-1/4 rounded-2xl'>
-        <div className={`card-icon-container rounded-md absolute -mt-9 icon-bg-${color} p-2`}>
+    <div className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative'>
+        <div className={`card-icon-container rounded-md absolute -mt-6 icon-bg-${color} p-2`}>
             {icon}
         </div>
         <div className='flex justify-end'>
