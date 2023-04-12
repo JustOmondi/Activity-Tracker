@@ -10,10 +10,11 @@ export default function NavSidebar() {
 
     return (
         <div className='flex h-full pl-7 pb-7 pt-7'> 
-            <div className='sidebar-container p-4 pt-14 flex h-full rounded-3xl bg-gray-900'>
+            <div className='sidebar-container p-4 pt-14 flex w-full h-full rounded-3xl bg-gray-900'>
                 <Sidebar backgroundColor={sideBarBGColour} rootStyles={{
                     backgroundColor: '#111827',
                     borderRight: `0px solid ${sideBarBGColour}`,
+                    width: '100%'
                 }}>
                     <Menu>
                         <MenuItem icon={<HomeIcon className='h-6 w-6 text-white'/>} component={<Link to="/home" />}> Home </MenuItem>

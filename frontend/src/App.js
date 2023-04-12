@@ -9,8 +9,10 @@ function App() {
   return (
     <ProSidebarProvider>
       <div className="App">
-        <NavSidebar />
-        <div className='page'>
+        <div className='sidebar-page-section w-1/5'>
+          <NavSidebar />
+        </div>
+        <div className='page  w-4/5'>
           <div className='page-inner'>
             <Outlet />
           </div>
