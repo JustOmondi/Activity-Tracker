@@ -93,7 +93,7 @@ p, h3, h2, h1, div {
     box-shadow: 0px 10px 30px -10px #00b76b;
 }
 
-.value-color-green {
+.value-color-green, .text-color-green {
     color:  #00b76b;
 }
 
@@ -103,7 +103,7 @@ p, h3, h2, h1, div {
     box-shadow: 0px 10px 30px -10px #E83875;
 }
 
-.value-color-pink {
+.value-color-pink, .text-color-pink {
     color:  #E83875;
 }
 
@@ -113,7 +113,7 @@ p, h3, h2, h1, div {
     box-shadow: 0px 10px 30px -10px #f09502;
 }
 
-.value-color-orange {
+.value-color-orange, .text-color-orange {
     color:  #f09502;
 }
 
@@ -123,12 +123,18 @@ p, h3, h2, h1, div {
     box-shadow: 0px 10px 30px -10px #029df0;
 }
 
-.value-color-blue {
+.value-color-blue, .text-color-blue {
     color:  #029df0;
 }
 
 
-/* grpah card */
+/* graph card */
 .graph-card {
     width: 30%;
+}
+
+/* Checkbox */
+
+.checkbox-orange .ant-checkbox .ant-checkbox-inner {
+    border-color: #f09502;
 }
