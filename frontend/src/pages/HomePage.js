@@ -20,33 +20,33 @@ export default function HomePage() {
 
         <InfoCard 
           icon={<ChartBarIcon className='h-8 w-8 text-white'/>}
-          title={'Lesson Attendance'}
+          title={'Homework Done'}
           currentValue={10}
           lastweekValue={5}
-          color={'green'}
+          color={'orange'}
         />
 
         <InfoCard 
           icon={<ChartBarIcon className='h-8 w-8 text-white'/>}
-          title={'Lesson Attendance'}
+          title={'Activity Attendance'}
           currentValue={10}
           lastweekValue={5}
-          color={'green'}
+          color={'blue'}
         />
 
         <InfoCard 
           icon={<ChartBarIcon className='h-8 w-8 text-white'/>}
-          title={'Lesson Attendance'}
+          title={'Weekly Meeting'}
           currentValue={10}
           lastweekValue={5}
-          color={'green'}
+          color={'pink'}
         />
       </div>
       <div className='graphs flex w-full justify-evenly flex-wrap mt-14 space-around'>
         <GraphCard
-          color={'green'}
+          color={'blue'}
           icon={<ChartBarIcon className='h-8 w-8 text-white'/>} 
-          title={'Lesson Attendance'} 
+          title={'Activity Attendance'} 
         />
 
         <GraphCard
@@ -56,9 +56,9 @@ export default function HomePage() {
         />
 
         <GraphCard
-          color={'green'}
+          color={'orange'}
           icon={<ChartBarIcon className='h-8 w-8 text-white'/>} 
-          title={'Lesson Attendance'} 
+          title={'Homework Done'} 
         />
       </div>
     </div>
