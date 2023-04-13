@@ -27,8 +27,6 @@ export default function MembersListPage() {
             formattedMembers.push(formattedMember)
         }
         setMembers(formattedMembers)
-
-        console.dir(formattedMembers);
     }
 
     let getMembers = async () => {
@@ -39,7 +37,6 @@ export default function MembersListPage() {
         formatMembers(data);
     }
     
-
     return (
         <div>
             <MembersTable members={members}/>

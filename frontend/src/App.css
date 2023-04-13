@@ -137,16 +137,51 @@ p, h3, h2, h1, div {
 .ant-checkbox:hover .ant-checkbox-inner {
     transform: scale(1.15);
 }
-.checkbox-orange .ant-checkbox .ant-checkbox-inner {
+
+.primary-color {
+    color: #E83875;
+}
+
+.checkbox-orange .ant-checkbox-checked .ant-checkbox-inner,
+.checkbox-orange .ant-checkbox-checked:hover .ant-checkbox-inner,
+.checkbox-orange.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner{
+    background-color: #f09502 !important;
+    border-color: #f09502 !important;
+}
+
+.checkbox-orange .ant-checkbox .ant-checkbox-inner, 
+.checkbox-orange .ant-checkbox:hover .ant-checkbox-inner {
     border-color: #f09502;
 }
 
-.checkbox-green .ant-checkbox .ant-checkbox-inner {
+.checkbox-green .ant-checkbox-checked .ant-checkbox-inner,
+.checkbox-green .ant-checkbox-checked:hover .ant-checkbox-inner,
+.checkbox-green.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #00b76b !important;
+    border-color: #00b76b !important;
+}
+
+.checkbox-green .ant-checkbox .ant-checkbox-inner,
+.checkbox-green .ant-checkbox:hover .ant-checkbox-inner {
     border-color: #00b76b;
+}
+
+.checkbox-pink .ant-checkbox-checked .ant-checkbox-inner,
+.checkbox-pink .ant-checkbox:hover .ant-checkbox-inner,
+.checkbox-pink.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #E83875 !important;
+    border-color: #E83875 !important;
 }
 
 .checkbox-pink .ant-checkbox .ant-checkbox-inner {
     border-color: #E83875;
+}
+
+.checkbox-blue .ant-checkbox-checked .ant-checkbox-inner,
+.checkbox-blue .ant-checkbox:hover .ant-checkbox-inner,
+.checkbox-blue.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #029df0 !important;
+    border-color: #029df0 !important;
 }
 
 .checkbox-blue .ant-checkbox .ant-checkbox-inner {

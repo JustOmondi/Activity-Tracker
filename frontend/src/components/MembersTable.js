@@ -1,5 +1,5 @@
 import React from 'react'
-import { Space, Table, Tag, Checkbox } from 'antd';
+import { Table, Checkbox } from 'antd';
 
 
 
@@ -27,7 +27,7 @@ const columns = [
     render: (details) => {
       const color = details[0]
       const isChecked = true ? details[1] === 1 : false
-      return (<Checkbox className={`checkbox-${color} scale-[1.7]`} onChange={handleOnChange}></Checkbox>)
+      return (<Checkbox defaultChecked={isChecked} className={`checkbox-${color} scale-[1.7]`} onChange={handleOnChange}></Checkbox>)
     }
   },
   {
@@ -37,7 +37,7 @@ const columns = [
     render: (details) => {
       const color = details[0]
       const isChecked = true ? details[1] === 1 : false
-      return (<Checkbox className={`checkbox-${color} scale-[1.7]`} checked={isChecked} onChange={handleOnChange}></Checkbox>)
+      return (<Checkbox defaultChecked={isChecked} className={`checkbox-${color} scale-[1.7]`} onChange={handleOnChange}></Checkbox>)
     }
   },
   {
@@ -47,7 +47,7 @@ const columns = [
     render: (details) => {
       const color = details[0]
       const isChecked = true ? details[1] === 1 : false
-      return (<Checkbox className={`checkbox-${color} scale-[1.7]`} checked={isChecked} onChange={handleOnChange}></Checkbox>)
+      return (<Checkbox defaultChecked={isChecked} className={`checkbox-${color} scale-[1.7]`} onChange={handleOnChange}></Checkbox>)
     }
   },
   {
@@ -57,7 +57,7 @@ const columns = [
     render: (details) => {
       const color = details[0]
       const isChecked = true ? details[1] === 1 : false
-      return (<Checkbox className={`checkbox-${color} scale-[1.7]`} checked={isChecked} onChange={handleOnChange}></Checkbox>)
+      return (<Checkbox defaultChecked={isChecked} className={`checkbox-${color} scale-[1.7]`} onChange={handleOnChange}></Checkbox>)
     }
   },
 ];
