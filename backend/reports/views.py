@@ -92,9 +92,10 @@ def getMemberWeekReport(request, member_name, report_name):
 
 @api_view(['POST'])
 def updateMemberReport(request):
-    member_name = request.data.get('member_name')
-    report_name = request.data.get('report_name')
-    update_value = request.data.get('update_value')
+    # TODO: Figure out why URL params coming through on request.GET instead of request.POST
+    member_name = request.GET.get('member_name')
+    report_name = request.GET.get('report_name')
+    update_value = request.GET.get('update_value')
     
     if (Member.objects.filter(underscore_name=member_name).count() == 0):
         return Response(status=status.HTTP_404_NOT_FOUND)

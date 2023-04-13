@@ -123,18 +123,13 @@ class TestUpdateMemberReport:
             member=member1,
             value=False
         )
-        url = reverse('update_member_report')
-
+        
         # Make sure there is an existing report
         assert Report.objects.count() == 1
 
-        # Update the report value
-        data = {
-            'member_name': member1.underscore_name,
-            'report_name': LESSON,
-            'update_value': 1,
-        }
-        response = client.post(url, data=data)
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&update_value=1'
+
+        response = client.post(url)
 
         # Check response status code and report value
         assert response.status_code == status.HTTP_200_OK
@@ -142,12 +137,8 @@ class TestUpdateMemberReport:
         assert report.value == True
 
         # Update the report value
-        data = {
-            'member_name': member1.underscore_name,
-            'report_name': LESSON,
-            'update_value': 0,
-        }
-        response = client.post(url, data=data)
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&update_value=0'
+        response = client.post(url)
 
         # Check response status code and report value
         assert response.status_code == status.HTTP_200_OK
@@ -166,16 +157,9 @@ class TestUpdateMemberReport:
         # Make sure the existing report is deleted
         assert Report.objects.count() == 0
 
-        # Create a new report
-        data = {
-            'member_name': member1.underscore_name,
-            'report_name': LESSON,
-            'update_value': 1,
-        }
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&update_value=1'
 
-        url = reverse('update_member_report')
-
-        response = client.post(url, data=data)
+        response = client.post(url)
 
         # Check response status code and report count
         assert response.status_code == status.HTTP_200_OK
@@ -198,14 +182,9 @@ class TestUpdateMemberReport:
         assert Report.objects.count() == 1
 
         # Update the nonexistent report
-        data = {
-            'member_name': 'some_member',
-            'report_name': LESSON,
-            'update_value': 1,
-        }
 
-        url = reverse('update_member_report')
-        response = client.post(url, data=data)
+        url = f'{reverse("update_member_report")}?member_name=some_member&report_name={LESSON}&update_value=1'
+        response = client.post(url)
 
         # Check response status code and report count
         assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -225,15 +204,8 @@ class TestUpdateMemberReport:
 
         assert Report.objects.count() == 1
 
-        # Update the nonexistent report
-        data = {
-            'member_name': member1.underscore_name,
-            'report_name': 'some_report',
-            'update_value': 1,
-        }
-
-        url = reverse('update_member_report')
-        response = client.post(url, data=data)
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name=some_report&update_value=1'
+        response = client.post(url)
 
         # Check response status code and report count
         assert response.status_code == status.HTTP_404_NOT_FOUND
