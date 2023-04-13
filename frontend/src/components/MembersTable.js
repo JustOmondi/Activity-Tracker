@@ -18,19 +18,47 @@ const columns = [
   {
     title: 'Subgroup',
     dataIndex: 'subgroup',
-    key: 'age',
+    key: 'subgroup',
   },
   {
-    title: 'Last Week Attended',
-    dataIndex: 'lastweek-attended',
-    key: 'lastweek-attended',
-    render: (lastweekAttended) => (<Checkbox className={`checkbox-${color} scale-[1.7]`} checked={lastweekAttended} disabled={true}></Checkbox>)
+    title: 'Lesson',
+    dataIndex: 'lessonAttendance',
+    key: 'lesson-attendance',
+    render: (details) => {
+      const color = details[0]
+      const isChecked = true ? details[1] === 1 : false
+      return (<Checkbox className={`checkbox-${color} scale-[1.7]`} onChange={handleOnChange}></Checkbox>)
+    }
   },
   {
-    title: 'Attended',
-    dataIndex: 'attended',
-    key: 'attended',
-    render: (attended) => (<Checkbox className={`checkbox-${color} scale-[1.7]`} checked={attended} disabled={false} onChange={handleOnChange}></Checkbox>)
+    title: 'Activity',
+    dataIndex: 'activityAttendance',
+    key: 'activity-attendance',
+    render: (details) => {
+      const color = details[0]
+      const isChecked = true ? details[1] === 1 : false
+      return (<Checkbox className={`checkbox-${color} scale-[1.7]`} checked={isChecked} onChange={handleOnChange}></Checkbox>)
+    }
+  },
+  {
+    title: 'Homework',
+    dataIndex: 'homeworkDone',
+    key: 'homework-done',
+    render: (details) => {
+      const color = details[0]
+      const isChecked = true ? details[1] === 1 : false
+      return (<Checkbox className={`checkbox-${color} scale-[1.7]`} checked={isChecked} onChange={handleOnChange}></Checkbox>)
+    }
+  },
+  {
+    title: 'Meeting',
+    dataIndex: 'meetingAttendance',
+    key: 'meeting-attendance',
+    render: (details) => {
+      const color = details[0]
+      const isChecked = true ? details[1] === 1 : false
+      return (<Checkbox className={`checkbox-${color} scale-[1.7]`} checked={isChecked} onChange={handleOnChange}></Checkbox>)
+    }
   },
 ];
 

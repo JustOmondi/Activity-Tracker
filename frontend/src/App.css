@@ -134,7 +134,21 @@ p, h3, h2, h1, div {
 }
 
 /* Checkbox */
-
+.ant-checkbox:hover .ant-checkbox-inner {
+    transform: scale(1.15);
+}
 .checkbox-orange .ant-checkbox .ant-checkbox-inner {
     border-color: #f09502;
+}
+
+.checkbox-green .ant-checkbox .ant-checkbox-inner {
+    border-color: #00b76b;
+}
+
+.checkbox-pink .ant-checkbox .ant-checkbox-inner {
+    border-color: #E83875;
+}
+
+.checkbox-blue .ant-checkbox .ant-checkbox-inner {
+    border-color: #029df0;
 }
