@@ -1,7 +1,7 @@
 import React from 'react'
 import { Sidebar, Menu, MenuItem, useProSidebar } from 'react-pro-sidebar';
 import {Link} from "react-router-dom";
-import { ArrowLeftOnRectangleIcon, ChartBarIcon, HomeIcon, ListBulletIcon, UsersIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftOnRectangleIcon, HomeIcon, ListBulletIcon, UsersIcon } from '@heroicons/react/24/outline'
 
 export default function NavSidebar() {
     const { collapseSidebar } = useProSidebar();

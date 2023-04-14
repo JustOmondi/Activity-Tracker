@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { Button, Checkbox, Input, Modal, Select } from 'antd';
 
-export default function MemberModal({hideModal, member={name: 'Some Name'}, subgroups}) {
+export default function MemberModal({hideModal, member, subgroups}) {
     const [open, setOpen] = useState(true);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
-    const lessonAttendance = true ? member.lessonAttendance === 1 : false; 
-    const meetingAttendance = true ? member.lessonAttendance === 1 : false; 
-    const homeworkDone = true ? member.lessonAttendance === 1 : false; 
-    const activityAttendance = true ? member.lessonAttendance === 1 : false; 
+    const lessonAttendance = true ? member.lessonAttendance[1] === 1 : false; 
+    const meetingAttendance = true ? member.meetingAttendance[1] === 1 : false; 
+    const homeworkDone = true ? member.homeworkDone[1] === 1 : false; 
+    const activityAttendance = true ? member.activityAttendance[1] === 1 : false; 
 
     const handleOk = () => {
       setConfirmLoading(true);
@@ -61,10 +61,10 @@ export default function MemberModal({hideModal, member={name: 'Some Name'}, subg
             />
           </div>
           <div className='mt-8 flex flex-col justify-center w-full member-modal-checkboxes'>
-            <Checkbox className='ml-2 mb-2 font-bold' defaultChecked={lessonAttendance}>Lesson Attendance</Checkbox>
-            <Checkbox className='ml-0 mb-2 font-bold' defaultChecked={activityAttendance}>Activity Attendance</Checkbox>
-            <Checkbox className='ml-0 mb-2 font-bold' defaultChecked={homeworkDone}>Homework Done</Checkbox>
-            <Checkbox className='ml-0 mb-2 font-bold' defaultChecked={meetingAttendance}>Weekly Meeting</Checkbox>
+            <Checkbox className={`ml-2 mb-2 font-bold checkbox-${member.lessonAttendance[0]}`} defaultChecked={lessonAttendance}>Lesson Attendance</Checkbox>
+            <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.activityAttendance[0]}`} defaultChecked={activityAttendance}>Activity Attendance</Checkbox>
+            <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.homeworkDone[0]}`} defaultChecked={homeworkDone}>Homework Done</Checkbox>
+            <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.meetingAttendance[0]}`} defaultChecked={meetingAttendance}>Weekly Meeting</Checkbox>
           </div>
         </Modal>
       </>

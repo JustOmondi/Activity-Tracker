@@ -201,7 +201,7 @@ class Member(Model):
         date_range_start = (now - timezone.timedelta(days=days_ago))
         date_range_end = date_range_start + timezone.timedelta(days=1)
         
-        count = self.report_set.filter(name=report_name, created__gte=date_range_start, created__lt=date_range_end).count()
+        count = self.report_set.filter(name=report_name, created__gte=date_range_start, created__lt=date_range_end,value=True).count()
         
         return count
 

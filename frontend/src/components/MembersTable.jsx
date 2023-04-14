@@ -154,6 +154,8 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
       <Table
         dataSource={members}
         columns={columns}
+        pagination={false}
+        footer={() => `Total members: ${members.length}`}
         onRow={(record, index) => { return {onClick: handleRowClick}}} 
         onChange={onChange} />
     </>
