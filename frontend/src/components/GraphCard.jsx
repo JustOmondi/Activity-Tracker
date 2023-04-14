@@ -72,7 +72,7 @@ export const data = {
 
 export default function GraphCard({icon, title, currentValue, lastweekValue, color}) {
   return (
-    <div className='graph-card shadow-lg bg-white p-4 mb-8 mt-8 mx-2 rounded-2xl'>
+    <div className='graph-card shadow-lg bg-white p-4 mt-8 mx-2 rounded-2xl'>
         <div className='flex justify-center -mt-16'>
             <div className={`graph-container relative w-full p-3 rounded-2xl graph-bg-${color}`}>
               <Bar options={options} data={data} />

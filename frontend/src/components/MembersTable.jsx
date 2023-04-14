@@ -84,6 +84,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
       title: 'Lesson',
       dataIndex: 'lessonAttendance',
       key: 'lesson-attendance',
+      responsive: ['lg'],
       sorter: (a, b) => parseInt(a.lessonAttendance[1]) - parseInt(b.lessonAttendance[1]),
       render: (details) => {
         const color = details[0]
@@ -100,6 +101,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
       title: 'Activity',
       dataIndex: 'activityAttendance',
       key: 'activity-attendance',
+      responsive: ['lg'],
       sorter: (a, b) => parseInt(a.activityAttendance[1]) - parseInt(b.activityAttendance[1]),
       render: (details) => {
         const color = details[0]
@@ -116,6 +118,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
       title: 'Homework',
       dataIndex: 'homeworkDone',
       key: 'homework-done',
+      responsive: ['lg'],
       sorter: (a, b) => parseInt(a.homeworkDone[1]) - parseInt(b.homeworkDone[1]),
       render: (details) => {
         const color = details[0]
@@ -132,6 +135,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
       title: 'Meeting',
       dataIndex: 'meetingAttendance',
       key: 'meeting-attendance',
+      responsive: ['lg'],
       sorter: (a, b) => parseInt(a.meetingAttendance[1]) - parseInt(b.meetingAttendance[1]),
       render: (details) => {
         const color = details[0]

@@ -30,7 +30,7 @@ export default function MemberModal({hideModal, member, subgroups}) {
     return (
       <>
         <Modal
-          title={`Edit ${member.name}`}
+          title={`Edit Member`}
           style={{ top: 50 }}
           open={open}
           onOk={handleOk}
