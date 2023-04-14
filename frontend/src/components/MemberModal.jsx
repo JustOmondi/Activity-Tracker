@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
-import { Button, Checkbox, Input, Modal, Select } from 'antd';
+import { Button, Checkbox, Input, Modal, Select, Collapse } from 'antd';
+import GraphCard from './GraphCard';
+import { BoltIcon } from '@heroicons/react/24/outline';
 
 export default function MemberModal({hideModal, member, subgroups}) {
     const [open, setOpen] = useState(true);
     const [confirmLoading, setConfirmLoading] = useState(false);
+
+    const { Panel } = Collapse;
 
     const lessonAttendance = true ? member.lessonAttendance[1] === 1 : false; 
     const meetingAttendance = true ? member.meetingAttendance[1] === 1 : false; 
@@ -60,12 +64,26 @@ export default function MemberModal({hideModal, member, subgroups}) {
                 options={subgroups}
             />
           </div>
-          <div className='mt-8 flex flex-col justify-center w-full member-modal-checkboxes'>
+          <div className='hidden mt-8 flex flex-col justify-center w-full member-modal-checkboxes'>
             <Checkbox className={`ml-2 mb-2 font-bold checkbox-${member.lessonAttendance[0]}`} defaultChecked={lessonAttendance}>Lesson Attendance</Checkbox>
             <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.activityAttendance[0]}`} defaultChecked={activityAttendance}>Activity Attendance</Checkbox>
             <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.homeworkDone[0]}`} defaultChecked={homeworkDone}>Homework Done</Checkbox>
             <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.meetingAttendance[0]}`} defaultChecked={meetingAttendance}>Weekly Meeting</Checkbox>
           </div>
+          <Collapse accordion>
+            <Panel header="Lesson" key="1">
+            <p>Something</p>
+            </Panel>
+            <Panel header="Activity" key="2">
+              <p>Something</p>
+            </Panel>
+            <Panel header="Homework" key="3">
+              <p>Something</p>
+            </Panel>
+            <Panel header="Meeting" key="4">
+              <p>Something</p>
+            </Panel>
+          </Collapse>
         </Modal>
       </>
     );
