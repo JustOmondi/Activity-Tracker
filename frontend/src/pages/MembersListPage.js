@@ -4,11 +4,26 @@ import MembersTable from '../components/MembersTable'
 
 export default function MembersListPage() {
     const [members, setMembers] = useState([])
-    
+    const [subgroups, setsubgroups] = useState([])
 
     useEffect(() => {
         getMembers()
+        getSubgroups()
     }, [])
+
+    const formatSubgroups = (data) => {
+        let formattedSubgroups = []
+
+        for (let i = 0; i < data.length; i++) {
+            const name = data[i]['name']
+            const value = name.split(" ")[1]
+
+            let formattedSubgroup = { value: value, label: name }
+
+            formattedSubgroups.push(formattedSubgroup)
+        }
+        setsubgroups(formattedSubgroups)
+    }
 
     function formatMembers(data) {
         let formattedMembers = []
@@ -37,10 +52,19 @@ export default function MembersListPage() {
         let data = await response.json();
         formatMembers(data);
     }
+
+    let getSubgroups = async () => {
+        const URL = `${BASE_API_URL}/structure/subgroups/`
+
+        let response = await fetch(URL);
+        let data = await response.json();
+        console.log(data)
+        formatSubgroups(data);
+    }
     
     return (
         <div>
-            <MembersTable members={members} isLoading={false}/>
+            <MembersTable members={members} subgroups={subgroups} isLoading={false}/>
         </div> 
     )
 }
