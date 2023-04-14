@@ -6,7 +6,7 @@ export default function InfoCard({icon, title, currentValue, lastweekValue, colo
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative'>
+    <div className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative mb-8 2xl:mb-0'>
         <div className={`card-icon-container rounded-md absolute -mt-6 icon-bg-${color} p-2`}>
             {icon}
         </div>

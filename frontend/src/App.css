@@ -34,6 +34,12 @@ p, h3, h2, h1, div {
 	height: 100%;
     width: 100%;
     padding: 30px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none; 
+}
+
+.page-inner::-webkit-scrollbar {
+    display: none;
 }
 
 @keyframes gradient {
@@ -100,6 +106,7 @@ p, h3, h2, h1, div {
 /* Card Item */
 .info-card {
     width: 22%;
+    min-width: 250px;
 }
 
 /* Green */
@@ -146,6 +153,7 @@ p, h3, h2, h1, div {
 /* graph card */
 .graph-card {
     width: 30%;
+    min-width: 280px;
 }
 
 /* Checkbox */
@@ -222,7 +230,8 @@ p, h3, h2, h1, div {
 }
 
 .ant-table-wrapper .ant-table-footer {
-    border-radius: 30px !important;
+    border-bottom-left-radius: 30px !important;
+    border-bottom-right-radius: 30px !important;
 }
 
 /* Modal */
