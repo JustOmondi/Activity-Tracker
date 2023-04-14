@@ -4,6 +4,7 @@ import MembersTable from '../components/MembersTable'
 
 export default function MembersListPage() {
     const [members, setMembers] = useState([])
+    
 
     useEffect(() => {
         getMembers()
@@ -39,7 +40,7 @@ export default function MembersListPage() {
     
     return (
         <div>
-            <MembersTable members={members}/>
+            <MembersTable members={members} isLoading={false}/>
         </div> 
     )
 }

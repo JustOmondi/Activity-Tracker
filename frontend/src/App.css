@@ -64,6 +64,14 @@ p, h3, h2, h1, div {
     transition: all 0.2s ease;
 }
 
+.gradient-button {
+    background-color: #fd99e7;
+    background: linear-gradient(-45deg, #8cdbff, #febbcf);
+    margin-bottom: 10px;
+    background-size: 200% 200%;
+    transition: all 0.2s ease;
+}
+
 .ps-menu-button:hover {
     background-color: transparent;
     background: linear-gradient(-45deg, #8cdbff, #febbcf);
@@ -134,8 +142,12 @@ p, h3, h2, h1, div {
 }
 
 /* Checkbox */
-.ant-checkbox:hover .ant-checkbox-inner {
+/* .ant-checkbox:hover .ant-checkbox-inner {
     transform: scale(1.15);
+} */
+.member-modal-checkboxes .ant-checkbox .ant-checkbox-inner {
+    transform: scale(1.3);
+    margin-right: 5px;
 }
 
 .primary-color {
@@ -186,4 +198,47 @@ p, h3, h2, h1, div {
 
 .checkbox-blue .ant-checkbox .ant-checkbox-inner {
     border-color: #029df0;
+}
+
+/* Table */
+.ant-table-thead tr th:first-child {
+    border-start-start-radius: 30px !important;
+}
+
+.ant-table-thead tr th:last-child {
+    border-start-end-radius: 30px !important;
+}
+
+.ant-table {
+    border-radius: 30px;
+}
+
+/* Modal */
+.ant-modal .ant-modal-content {
+    border-radius: 20px;
+}
+
+/* Ok Button */
+.ok-button {
+    border-color: rgb(34 197 94) !important;
+    background-color: rgb(34 197 94) !important;
+    color: white;
+}
+
+.ok-button:hover {
+    background-color: transparent !important;
+    border-color: rgb(34 197 94) !important;
+    color: rgb(34 197 94) !important;
+}
+
+.cancel-button {
+    border-color: rgb(220 38 38) !important;
+    background-color: transparent !important;
+    color: rgb(220 38 38) !important;
+}
+
+.cancel-button:hover {
+    background-color: rgb(220 38 38) !important;
+    border-color: rgb(220 38 38) !important;
+    color: #ffffff !important;
 }
