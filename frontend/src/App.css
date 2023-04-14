@@ -209,8 +209,8 @@ p, h3, h2, h1, div {
     border-start-end-radius: 30px !important;
 }
 
-.ant-table {
-    border-radius: 30px;
+.ant-table-wrapper .ant-table {
+    border-radius: 30px !important;
 }
 
 /* Modal */
@@ -218,7 +218,11 @@ p, h3, h2, h1, div {
     border-radius: 20px;
 }
 
-/* Ok Button */
+/* Buttons */
+.ant-table-filter-dropdown .ant-btn.ant-btn-primary {
+    background-color: #1677ff;
+}
+
 .ok-button {
     border-color: rgb(34 197 94) !important;
     background-color: rgb(34 197 94) !important;

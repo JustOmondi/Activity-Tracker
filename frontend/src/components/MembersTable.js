@@ -29,12 +29,17 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
     setModalVisible(true)
   }
 
+  const onChange = (pagination, filters, sorter, extra) => {
+    // console.dir(filters);
+  };
 
   const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      sortDirections: ['ascend', 'descend', 'ascend'],
       render: (name) => {
         return (
           <>
@@ -55,6 +60,16 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
       title: 'Subgroup',
       dataIndex: 'subgroup',
       key: 'subgroup',
+      filters: subgroups.map(item => {
+        const {label, ...rest} = item
+        
+        return {text: label, ...rest}
+      }),
+      onFilter: (value, record) => {
+        return `Subgroup ${value}` === record.subgroup
+      },
+      sorter: (a, b) => a.subgroup.localeCompare(b.subgroup),
+      sortDirections: ['ascend', 'descend'],
       render: (text) => {
         return (
           <>
@@ -70,6 +85,7 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
       title: 'Lesson',
       dataIndex: 'lessonAttendance',
       key: 'lesson-attendance',
+      sorter: (a, b) => parseInt(a.lessonAttendance[1]) - parseInt(b.lessonAttendance[1]),
       render: (details) => {
         const color = details[0]
         const isChecked = true ? details[1] === 1 : false
@@ -85,6 +101,7 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
       title: 'Activity',
       dataIndex: 'activityAttendance',
       key: 'activity-attendance',
+      sorter: (a, b) => parseInt(a.activityAttendance[1]) - parseInt(b.activityAttendance[1]),
       render: (details) => {
         const color = details[0]
         const isChecked = true ? details[1] === 1 : false
@@ -100,6 +117,7 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
       title: 'Homework',
       dataIndex: 'homeworkDone',
       key: 'homework-done',
+      sorter: (a, b) => parseInt(a.homeworkDone[1]) - parseInt(b.homeworkDone[1]),
       render: (details) => {
         const color = details[0]
         const isChecked = true ? details[1] === 1 : false
@@ -115,6 +133,7 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
       title: 'Meeting',
       dataIndex: 'meetingAttendance',
       key: 'meeting-attendance',
+      sorter: (a, b) => parseInt(a.meetingAttendance[1]) - parseInt(b.meetingAttendance[1]),
       render: (details) => {
         const color = details[0]
         const isChecked = true ? details[1] === 1 : false
@@ -135,7 +154,8 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
       <Table
         dataSource={members}
         columns={columns}
-        onRow={(record, index) => { return {onClick: handleRowClick}}} />
+        onRow={(record, index) => { return {onClick: handleRowClick}}} 
+        onChange={onChange} />
     </>
     
   )

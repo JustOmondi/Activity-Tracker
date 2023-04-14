@@ -58,7 +58,6 @@ export default function MembersListPage() {
 
         let response = await fetch(URL);
         let data = await response.json();
-        console.log(data)
         formatSubgroups(data);
     }
     

@@ -13,7 +13,6 @@ export default function SubgroupsListPage() {
 
         let response = await fetch(URL);
         let data = await response.json();
-        console.dir(data)
         setSubgroups(data)
     }
     
