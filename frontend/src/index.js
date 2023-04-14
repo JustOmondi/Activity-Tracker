@@ -6,6 +6,7 @@ import SubgroupsListPage from './pages/SubgroupsListPage';
 import MembersListPage from './pages/MembersListPage';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
+import { ProSidebarProvider } from 'react-pro-sidebar';
 
 const router = createBrowserRouter([
   {
@@ -40,7 +41,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ProSidebarProvider>
+      <RouterProvider router={router} />
+    </ProSidebarProvider>
   </React.StrictMode>
 );
 

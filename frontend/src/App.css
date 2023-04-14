@@ -51,8 +51,15 @@ p, h3, h2, h1, div {
 /* Sidebar */
 .sidebar-footer {
     position: absolute;
-    width: 100%;
     bottom: 0;
+}
+
+.ps-sidebar-container {
+    border-radius: 30px;
+    padding-right: 20px;
+    padding-top: 30px;
+    padding-left: 20px;
+    width: 100%;
 }
 
 .ps-menu-button {

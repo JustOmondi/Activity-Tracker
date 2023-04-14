@@ -3,10 +3,9 @@ import { Table, Checkbox, Button, Tooltip, notification, Skeleton} from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import MemberModal from './MemberModal';
 
-export default function MembersTable({members, subgroups, isLoading=true}) {
+export default function MembersTable({members, subgroups, isLoading}) {
   const [modalVisible, setModalVisible] = useState(false)
   const [currentMember, setCurrentMember] = useState({})
-  const [showNotification, setShowNotification] = useState(false)
 
   const handleRowClick = ({target}) => {
     const row = target.closest('tr');
@@ -153,6 +152,7 @@ export default function MembersTable({members, subgroups, isLoading=true}) {
       {modalVisible && <MemberModal className='rounded-sm' hideModal={hideModal} member={currentMember} subgroups={subgroups} />}
       <Table
         dataSource={members}
+        loading={isLoading}
         columns={columns}
         pagination={false}
         footer={() => `Total members: ${members.length}`}

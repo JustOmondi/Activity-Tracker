@@ -5,10 +5,13 @@ import MembersTable from '../components/MembersTable'
 export default function MembersListPage() {
     const [members, setMembers] = useState([])
     const [subgroups, setsubgroups] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         getMembers()
         getSubgroups()
+
+        setIsLoading(false)
     }, [])
 
     const formatSubgroups = (data) => {
@@ -47,15 +50,16 @@ export default function MembersListPage() {
 
     let getMembers = async () => {
         const URL = `${BASE_API_URL}/structure/members/`
-
+        setIsLoading(true)
         let response = await fetch(URL);
         let data = await response.json();
+        
         formatMembers(data);
     }
 
     let getSubgroups = async () => {
         const URL = `${BASE_API_URL}/structure/subgroups/`
-
+        setIsLoading(true)
         let response = await fetch(URL);
         let data = await response.json();
         formatSubgroups(data);
@@ -63,7 +67,7 @@ export default function MembersListPage() {
     
     return (
         <div>
-            <MembersTable members={members} subgroups={subgroups} isLoading={false}/>
+            <MembersTable members={members} subgroups={subgroups} isLoading={isLoading}/>
         </div> 
     )
 }
