@@ -41,6 +41,7 @@ export default function MembersListPage() {
                 activityAttendance: [BLUE, reports['activity_count']],
                 homeworkDone: [ORANGE, reports['homework_count']],
                 meetingAttendance: [PINK, reports['weekly_meeting_count']],
+                reports: reports
             }
 
             formattedMembers.push(formattedMember)

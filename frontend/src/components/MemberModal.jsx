@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Button, Checkbox, Input, Modal, Select, Collapse } from 'antd';
-import GraphCard from './GraphCard';
-import { BoltIcon } from '@heroicons/react/24/outline';
+import { Button, Input, Modal, Select, Collapse } from 'antd';
+import AttendanceWeekView from './AttendanceWeekView';
+
+import { LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../constants';
 
 export default function MemberModal({hideModal, member, subgroups}) {
     const [open, setOpen] = useState(true);
@@ -64,24 +65,19 @@ export default function MemberModal({hideModal, member, subgroups}) {
                 options={subgroups}
             />
           </div>
-          <div className='hidden mt-8 flex flex-col justify-center w-full member-modal-checkboxes'>
-            <Checkbox className={`ml-2 mb-2 font-bold checkbox-${member.lessonAttendance[0]}`} defaultChecked={lessonAttendance}>Lesson Attendance</Checkbox>
-            <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.activityAttendance[0]}`} defaultChecked={activityAttendance}>Activity Attendance</Checkbox>
-            <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.homeworkDone[0]}`} defaultChecked={homeworkDone}>Homework Done</Checkbox>
-            <Checkbox className={`ml-0 mb-2 font-bold checkbox-${member.meetingAttendance[0]}`} defaultChecked={meetingAttendance}>Weekly Meeting</Checkbox>
-          </div>
-          <Collapse accordion>
+
+          <Collapse className='mt-4' accordion>
             <Panel header="Lesson" key="1">
-            <p>Something</p>
+              <AttendanceWeekView attendanceList={lessonAttendance} reportName={LESSON} member={member.name}/>
             </Panel>
             <Panel header="Activity" key="2">
-              <p>Something</p>
+              <AttendanceWeekView attendanceList={activityAttendance} reportName={ACTIVITY} member={member.name}/>
             </Panel>
             <Panel header="Homework" key="3">
-              <p>Something</p>
+              <AttendanceWeekView attendanceList={homeworkAttendance} reportName={HOMEWORK} member={member.name}/>
             </Panel>
             <Panel header="Meeting" key="4">
-              <p>Something</p>
+              <AttendanceWeekView attendanceList={meetingAttendance} reportName={WEEKLY_MEETING} member={member.name}/>
             </Panel>
           </Collapse>
         </Modal>
