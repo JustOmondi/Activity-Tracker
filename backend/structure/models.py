@@ -1,13 +1,10 @@
 
-from datetime import datetime
-import pytz
 from django.utils import timezone
-from django.db.models import CharField, Count, Case, ForeignKey, Model, PROTECT, When, DateTimeField, IntegerField, Q
-from backend.reports.constants import ACTIVITY, HOMEWORK, LESSON, WEEKLY_MEETING
+from django.db.models import CharField, ForeignKey, Model, PROTECT, DateTimeField, IntegerField
+from django.db.models.functions import ExtractWeekDay
+from backend.reports.constants import REPORT_NAMES
 
-from backend.settings import TIME_ZONE
-from .constants import SUBGROUP_LEADER_TITLE, GROUP_LEADER_TITLE, DEPARTMENT_LEADER_TITLE, MEMBER_TITLE, UNREGISTERED, YG, MG, WG
-
+from .constants import SUBGROUP_LEADER_TITLE, YG
 
 def get_default_department():
     """ get a default value for subgroup department; create new department if not available """
@@ -58,42 +55,22 @@ class Department(Model):
         return count
     
     # TODO: Refactor get_all_reports to be more extensible and less redundant
-    def get_all_report_totals(self):       
-        lesson_count = 0
-        lastweek_lesson_count = 0
+    def get_all_report_totals_by_day(self):   
+        totals = {}
 
-        homework_count = 0
-        lastweek_homework_count = 0
+        for report_name in REPORT_NAMES:
+            current_count = 0
+            lastweek_count = 0
 
-        activity_count = 0
-        lastweek_activity_count = 0
+            for subgroup in self.subgroup_set.all():
+                current_count += subgroup.get_report_total(report_name, 0)
+                lastweek_count += subgroup.get_report_total(report_name, 7)
 
-        weekly_meeting_count = 0
-        lastweek_weekly_meeting_count = 0
+            current_key = f'{report_name}_count'
+            lastweek_key = f'lastweek_{report_name}_count'
 
-        for subgroup in self.subgroup_set.all():
-            lesson_count += subgroup.get_report_total(LESSON, 0)
-            lastweek_lesson_count += subgroup.get_report_total(LESSON, 7)
-
-            homework_count += subgroup.get_report_total(HOMEWORK, 0)
-            lastweek_homework_count += subgroup.get_report_total(HOMEWORK, 7)
-
-            activity_count += subgroup.get_report_total(ACTIVITY, 0)
-            lastweek_activity_count += subgroup.get_report_total(ACTIVITY, 7)
-
-            weekly_meeting_count += subgroup.get_report_total(WEEKLY_MEETING, 0)
-            lastweek_weekly_meeting_count += subgroup.get_report_total(WEEKLY_MEETING, 7)
-
-        totals = {
-            'lesson_count': lesson_count,
-            'lastweek_lesson_count': lastweek_lesson_count,
-            'homework_count': homework_count,
-            'lastweek_homework_count': lastweek_homework_count,
-            'activity_count': activity_count,
-            'lastweek_activity_count': lastweek_activity_count,
-            'weekly_meeting_count': weekly_meeting_count,
-            'lastweek_weekly_meeting_count': lastweek_weekly_meeting_count
-        }
+            totals[current_key] = current_count
+            totals[lastweek_key] = lastweek_count
         
         return totals
     
@@ -132,43 +109,22 @@ class Subgroup(Model):
         
         return count
     
-    # TODO: Refactor get_all_reports to be more extensible and less redundant
-    def get_all_report_totals(self):       
-        lesson_count = 0
-        lastweek_lesson_count = 0
+    def get_all_report_totals_by_day(self):  
+        totals = {}
 
-        homework_count = 0
-        lastweek_homework_count = 0
+        for report_name in REPORT_NAMES:
+            current_count = 0
+            lastweek_count = 0
 
-        activity_count = 0
-        lastweek_activity_count = 0
+            for member in self.member_set.all():
+                current_count += member.get_report(report_name, 0)
+                lastweek_count += member.get_report(report_name, 7) 
 
-        weekly_meeting_count = 0
-        lastweek_weekly_meeting_count = 0
+            current_key = f'{report_name}_count'
+            lastweek_key = f'lastweek_{report_name}_count'
 
-        for member in self.member_set.all():
-            lesson_count += member.get_report(LESSON, 0)
-            lastweek_lesson_count += member.get_report(LESSON, 7)
-
-            homework_count += member.get_report(HOMEWORK, 0)
-            lastweek_homework_count += member.get_report(HOMEWORK, 7)
-
-            activity_count += member.get_report(ACTIVITY, 0)
-            lastweek_activity_count += member.get_report(ACTIVITY, 7)
-
-            weekly_meeting_count += member.get_report(WEEKLY_MEETING, 0)
-            lastweek_weekly_meeting_count += member.get_report(WEEKLY_MEETING, 7)
-
-        totals = {
-            'lesson_count': lesson_count,
-            'lastweek_lesson_count': lastweek_lesson_count,
-            'homework_count': homework_count,
-            'lastweek_homework_count': lastweek_homework_count,
-            'activity_count': activity_count,
-            'lastweek_activity_count': lastweek_activity_count,
-            'weekly_meeting_count': weekly_meeting_count,
-            'lastweek_weekly_meeting_count': lastweek_weekly_meeting_count
-        }
+            totals[current_key] = current_count
+            totals[lastweek_key] = lastweek_count
         
         return totals
 
@@ -205,30 +161,18 @@ class Member(Model):
         
         return count
 
-    # TODO: Refactor get_all_reports to be more extensible and less redundant
-    def get_all_reports(self):       
-        lesson_count = self.get_report(LESSON, 0)
-        lastweek_lesson_count = self.get_report(LESSON, 7)
+    def get_all_reports_by_day(self): 
+        totals = {}
 
-        homework_count = self.get_report(HOMEWORK, 0)
-        lastweek_homework_count = self.get_report(HOMEWORK, 7)
+        for report_name in REPORT_NAMES:    
+            current_count = self.get_report(report_name, 0)
+            lastweek_count = self.get_report(report_name, 7)
 
-        activity_count = self.get_report(ACTIVITY, 0)
-        lastweek_activity_count = self.get_report(ACTIVITY, 7)
+            current_key = f'{report_name}_count'
+            lastweek_key = f'lastweek_{report_name}_count'
 
-        weekly_meeting_count = self.get_report(WEEKLY_MEETING, 0)
-        lastweek_weekly_meeting_count = self.get_report(WEEKLY_MEETING, 7)            
-
-        totals = {
-            'lesson_count': lesson_count,
-            'lastweek_lesson_count': lastweek_lesson_count,
-            'homework_count': homework_count,
-            'lastweek_homework_count': lastweek_homework_count,
-            'activity_count': activity_count,
-            'lastweek_activity_count': lastweek_activity_count,
-            'weekly_meeting_count': weekly_meeting_count,
-            'lastweek_weekly_meeting_count': lastweek_weekly_meeting_count
-        }
+            totals[current_key] = current_count
+            totals[lastweek_key] = lastweek_count
         
         return totals
     

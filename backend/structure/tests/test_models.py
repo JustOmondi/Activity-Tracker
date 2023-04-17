@@ -83,7 +83,7 @@ class TestDepartment:
             'lastweek_weekly_meeting_count': 4
         }
         
-        assert department.get_all_report_totals() == expected
+        assert department.get_all_report_totals_by_day() == expected
 
 @pytest.mark.django_db
 class TestSubgroup:
@@ -149,7 +149,7 @@ class TestSubgroup:
             'lastweek_weekly_meeting_count': 2
         }
         
-        assert subgroup.get_all_report_totals() == expected
+        assert subgroup.get_all_report_totals_by_day() == expected
 
 @pytest.mark.django_db
 class TestMember:
@@ -209,7 +209,7 @@ class TestMember:
 
         
         # test that the report totals are correct
-        totals = member.get_all_reports()
+        totals = member.get_all_reports_by_day()
         assert totals['lesson_count'] == 1
         assert totals['lastweek_lesson_count'] == 1
         assert totals['homework_count'] == 1

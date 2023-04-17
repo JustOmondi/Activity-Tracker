@@ -24,7 +24,7 @@ class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
         )
 
     def get_report_totals(self, object):
-        return object.get_all_report_totals()
+        return object.get_all_report_totals_by_day()
 
     def get_total_members(self, object):
         return object.get_total_members()
@@ -43,7 +43,7 @@ class SubgroupSerializer(serializers.HyperlinkedModelSerializer):
         )
 
     def get_report_totals(self, object):
-        return object.get_all_report_totals()
+        return object.get_all_report_totals_by_day()
 
     def get_total_members(self, object):
         return object.get_total_members()
@@ -62,7 +62,7 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         )
 
     def get_reports(self, object):
-        return object.get_all_reports()
+        return object.get_all_reports_by_day()
     
     def get_subgroup(self, object):
         return object.subgroup.name()
