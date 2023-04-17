@@ -1,6 +1,6 @@
 # Report names
 LESSON = 'lesson'
-ACTIVITY = 'acitivty'
+ACTIVITY = 'activity'
 WEEKLY_MEETING = 'weekly_meeting'
 HOMEWORK = 'homework'
 

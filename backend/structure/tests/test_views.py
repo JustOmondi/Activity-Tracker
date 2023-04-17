@@ -9,7 +9,8 @@ class TestDepartmentViews:
     def test_get_department(self, client):
         department = Department.objects.create(department_number=9)
 
-        url = reverse('department', args=[department.department_number])
+        url = f'{reverse("department")}?department_number={department.department_number}'
+
         response = client.get(url)
         
         expected_data = DepartmentSerializer(department).data
@@ -31,6 +32,21 @@ class TestDepartmentViews:
 
 @pytest.mark.django_db
 class TestMemberViews:
+    def test_get_member(self, client):
+        department = Department.objects.create(department_number=8)
+        subgroup = Subgroup.objects.create(subgroup_number=22, department=department)
+
+        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+
+        url = f'{reverse("member")}?name={member.underscore_name}'
+
+        response = client.get(url)
+        
+        expected_data = MemberSerializer(member).data
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == expected_data
+
     def test_get_members(self, client):
         department = Department.objects.create(department_number=7)
         subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
@@ -46,27 +62,14 @@ class TestMemberViews:
         assert response.status_code == status.HTTP_200_OK
         assert response.data == expected_data
 
-    def test_get_member(self, client):
-        department = Department.objects.create(department_number=8)
-        subgroup = Subgroup.objects.create(subgroup_number=22, department=department)
-
-        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
-
-        url = reverse('member', args=[member.underscore_name])
-        response = client.get(url)
-        
-        expected_data = MemberSerializer(member).data
-
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data == expected_data
-
 @pytest.mark.django_db
 class TestSubgroupViews:
     def test_get_subgroup(self, client):
         department = Department.objects.create(department_number=9)
         subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
 
-        url = reverse('subgroup', args=[subgroup.subgroup_number])
+        url = f'{reverse("subgroup")}?subgroup_number={subgroup.subgroup_number}'
+
         response = client.get(url)
         
         expected_data = SubgroupSerializer(subgroup).data

@@ -9,7 +9,7 @@ from backend.reports.constants import REPORT_NAMES
 
 from backend.structure.serializers import MemberSerializer
 
-from ..structure.models import Department, Subgroup, Member
+from ..structure.models import Department, Member
 
 from .models import Report
 from .serializers import ReportSerializer
