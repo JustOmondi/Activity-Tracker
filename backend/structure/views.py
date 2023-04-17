@@ -77,14 +77,14 @@ def getSubgroups(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def getMemberWeekReports(request):
+def getMemberReportsByWeek(request):
     name = request.GET.get('name')
-    member_lookup = Member.objects.filter(underscore_name=name).first()
+    member_lookup = Member.objects.filter(underscore_name=name)
 
     if(member_lookup.count() == 0):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     member = member_lookup.first()
-    result = member.get_reports_for_week(False)
+    result = member.get_all_reports_by_week(False)
     
     return Response(result)

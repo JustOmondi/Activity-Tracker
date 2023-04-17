@@ -9,54 +9,52 @@ from ..serializers import ReportSerializer
 from ..constants import LESSON, REPORT_NAMES
 import pytest
 
-def create_all_reports_for_every_weekday(member):
+def create_all_reports_for_every_day(member):
     for report_name in REPORT_NAMES:
-        for i in range(1,6):
+        for i in range(1,8):
             report = Report.objects.create(
                 name=report_name,
                 member=member,
                 value=True
             )
-            report.created = timezone.now() - timezone.timedelta(days=i)
+            now = timezone.now()
+            start_of_week = now - timezone.timedelta(days=now.weekday())
+            day = start_of_week + timezone.timedelta(days=i-1)
+
+            report.created = day
             report.save()
 
 
 @pytest.mark.django_db
-class TestGetMemberWeekReport:
+class TestGetAllMemberReportsByWeek:
     @pytest.fixture
     def department(self, db):
         department = Department.objects.create(department_number=9)
         return department
     
-    def test_get_member_week_report(self, client, department):
+    def test_get_all_reports_by_week(self, client, department):
         subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
         member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
 
-        create_all_reports_for_every_weekday(member)
+        create_all_reports_for_every_day(member)
 
-        url = reverse('member_week_report', args=[member.underscore_name, LESSON])
+        url = f'{reverse("member_reports_by_week")}?name={member.underscore_name}'
+  
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-        expected_reports = {
-            1: {'count': 1},
-            2: {'count': 1},
-            3: {'count': 1},
-            4: {'count': 1},
-            5: {'count': 1},
-        }
-        assert response.data['reports'] == expected_reports
+        expected = {}
 
-    def test_get_member_week_report_with_nonexistent_member(self, client):
-        url = reverse('member_week_report', args=['nonexistent_member', LESSON])
-        response = client.get(url)
-        assert response.status_code == status.HTTP_404_NOT_FOUND
+        for report_name in REPORT_NAMES:
+            expected[report_name] = {}
+            for i in range(1, 8):
+                expected[report_name][i] = True
 
-    def test_get_member_week_report_with_nonexistent_report(self, client, department):
-        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
-        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+        assert response.data == expected
 
-        url = reverse('member_week_report', args=[member.underscore_name, 'nonexistent_report'])
+    def test_get_all_reports_by_week_with_nonexistent_member(self, client):
+        url = f'{reverse("member_reports_by_week")}?name=nonexistent_member'
+
         response = client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -73,8 +71,8 @@ class TestGetDepartmentWeekReport:
         member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
         member2 = Member.objects.create(full_name='Jane Wilson', subgroup=subgroup)
 
-        create_all_reports_for_every_weekday(member1)
-        create_all_reports_for_every_weekday(member2)
+        create_all_reports_for_every_day(member1)
+        create_all_reports_for_every_day(member2)
 
         url = reverse('department_week_report', args=[department.department_number, LESSON])
         response = client.get(url)

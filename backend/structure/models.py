@@ -176,6 +176,44 @@ class Member(Model):
         
         return totals
     
+    def get_all_reports_by_week(self, get_from_last_week=False):       
+        # Get reports and annotate with the day of the week
+        date_range_end = timezone.now()
+
+        # Get first day of week i.e. Sunday
+        date_range_start = date_range_end - timezone.timedelta(days=date_range_end.weekday())
+
+        if get_from_last_week:
+            # The start of the week for last week would simply be (Sunday - 7 days)
+            date_range_start = date_range_start - timezone.timedelta(days=7)
+
+            # The end of the week wil then be 6 days from Sunday i.e. Saturday
+            date_range_end = date_range_start + timezone.timedelta(days=6)
+
+        # Group reports by name and day of the week
+        report_values_by_day_of_week = {}
+
+        # Initialize the dict by setting all the report values to False for each type of report each day  
+        for report_name in REPORT_NAMES:
+            report_values_by_day_of_week[report_name] = {}
+            for i in range(1, 8):
+                report_values_by_day_of_week[report_name][i] = False
+
+        reports = self.report_set.filter(
+            created__gte=date_range_start,
+            created__lte=date_range_end
+        ).annotate(day_of_week=ExtractWeekDay('created'))
+
+        # Update the dict based on each corresponding report found in the search period
+        for report in reports:
+            report_name = report.name
+            day_of_week = report.day_of_week
+            report_value = report.value
+
+            report_values_by_day_of_week[report_name][day_of_week] = report_value
+
+        return report_values_by_day_of_week
+    
     def save(self, *args, **kwargs):
         if self.underscore_name == None:
             split_fullname = self.full_name.lower().split(" ")

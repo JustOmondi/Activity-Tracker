@@ -10,5 +10,5 @@ urlpatterns = [
 
     path('members/', views.getMembers, name='members'),
     path('member/details/', views.getMember, name='member'),
-    path('member/weekreports/', views.getMemberWeekReports, name='member_week_reports'),
+    path('member/reportsbyweek/', views.getMemberReportsByWeek, name='member_reports_by_week'),
 ]

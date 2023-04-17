@@ -21,6 +21,26 @@ def create_all_reports(days_ago, member):
         report.updated = created_date_time
         report.save()
 
+def create_all_reports_for_week(member):
+    now = timezone.now()
+
+    start_of_week = now - timezone.timedelta(days=now.weekday())
+
+    for report_name in REPORT_NAMES:
+        for i in range(7):
+            # Calculate the date for the current day of the week
+            day = start_of_week + timezone.timedelta(days=i)
+
+            # Create a Report object for the current day
+            report = Report(
+                name=report_name,
+                member=member,
+                value=True,
+            )
+
+            report.created = day
+            report.save()
+
 @pytest.mark.django_db
 class TestDepartment:
 
@@ -56,32 +76,22 @@ class TestDepartment:
         subgroup1 = self.create_subgroup_with_members_and_reports(department, 33)
         subgroup2 = self.create_subgroup_with_members_and_reports(department, 44)
 
-        assert department.get_report_total(LESSON, 0) == 4
-        assert department.get_report_total(LESSON, 7) == 4
-
-        assert department.get_report_total(HOMEWORK, 0) == 4
-        assert department.get_report_total(HOMEWORK, 7) == 4
-
-        assert department.get_report_total(ACTIVITY, 0) == 4
-        assert department.get_report_total(ACTIVITY, 7) == 4
-
-        assert department.get_report_total(WEEKLY_MEETING, 0) == 4
-        assert department.get_report_total(WEEKLY_MEETING, 7) == 4
+        for report_name in REPORT_NAMES:
+            assert department.get_report_total(report_name, TODAY) == 4
+            assert department.get_report_total(report_name, LAST_WEEK) == 4
 
     def test_get_all_report_totals(self, department):
         subgroup1 = self.create_subgroup_with_members_and_reports(department, 33)
         subgroup2 = self.create_subgroup_with_members_and_reports(department, 44)
 
-        expected = {
-            'lesson_count': 4,
-            'lastweek_lesson_count': 4,
-            'homework_count': 4,
-            'lastweek_homework_count': 4,
-            'activity_count': 4,
-            'lastweek_activity_count': 4,
-            'weekly_meeting_count': 4,
-            'lastweek_weekly_meeting_count': 4
-        }
+        expected = {}
+
+        for report_name in REPORT_NAMES:
+            current_key = f'{report_name}_count'
+            lastweek_key = f'lastweek_{report_name}_count'
+
+            expected[current_key] = 4
+            expected[lastweek_key] = 4
         
         assert department.get_all_report_totals_by_day() == expected
 
@@ -117,17 +127,9 @@ class TestSubgroup:
         create_all_reports(TODAY, member1)
         create_all_reports(LAST_WEEK, member1)
 
-        assert subgroup.get_report_total(LESSON, 0) == 1
-        assert subgroup.get_report_total(LESSON, 7) == 1
-
-        assert subgroup.get_report_total(HOMEWORK, 0) == 1
-        assert subgroup.get_report_total(HOMEWORK, 7) == 1
-
-        assert subgroup.get_report_total(ACTIVITY, 0) == 1
-        assert subgroup.get_report_total(ACTIVITY, 7) == 1
-
-        assert subgroup.get_report_total(WEEKLY_MEETING, 0) == 1
-        assert subgroup.get_report_total(WEEKLY_MEETING, 7) == 1
+        for report_name in REPORT_NAMES:
+            assert subgroup.get_report_total(report_name, TODAY) == 1
+            assert subgroup.get_report_total(report_name, LAST_WEEK) == 1
 
     def test_get_all_report_totals(self, subgroup, members):
         member1, member2 = members
@@ -138,16 +140,14 @@ class TestSubgroup:
         create_all_reports(TODAY, member2)
         create_all_reports(LAST_WEEK, member2)
 
-        expected = {
-            'lesson_count': 2,
-            'lastweek_lesson_count': 2,
-            'homework_count': 2,
-            'lastweek_homework_count': 2,
-            'activity_count': 2,
-            'lastweek_activity_count': 2,
-            'weekly_meeting_count': 2,
-            'lastweek_weekly_meeting_count': 2
-        }
+        expected = {}
+
+        for report_name in REPORT_NAMES:
+            current_key = f'{report_name}_count'
+            lastweek_key = f'lastweek_{report_name}_count'
+
+            expected[current_key] = 2
+            expected[lastweek_key] = 2
         
         assert subgroup.get_all_report_totals_by_day() == expected
 
@@ -201,7 +201,7 @@ class TestMember:
         # Check total report count
         assert member.report_set.all().count() == 2
         
-    def test_get_all_reports(self):
+    def test_get_all_reports_by_day(self):
         member = Member.objects.create(full_name='John Smith')
         
         create_all_reports(TODAY, member)
@@ -210,11 +210,24 @@ class TestMember:
         
         # test that the report totals are correct
         totals = member.get_all_reports_by_day()
-        assert totals['lesson_count'] == 1
-        assert totals['lastweek_lesson_count'] == 1
-        assert totals['homework_count'] == 1
-        assert totals['lastweek_homework_count'] == 1
-        assert totals['activity_count'] == 1
-        assert totals['lastweek_activity_count'] == 1
-        assert totals['weekly_meeting_count'] == 1
-        assert totals['lastweek_weekly_meeting_count'] == 1
+
+        for report_name in REPORT_NAMES:
+            current_key = f'{report_name}_count'
+            lastweek_key = f'lastweek_{report_name}_count'
+
+            assert totals[current_key] == 1
+            assert totals[lastweek_key] == 1
+
+    def test_get_all_reports_by_week(self):
+        member = Member.objects.create(full_name='John Smith')
+        
+        create_all_reports_for_week(member)
+                
+        expected = {}
+
+        for report_name in REPORT_NAMES:
+            expected[report_name] = {}
+            for i in range(1, 8):
+                expected[report_name][i] = True
+
+        assert member.get_all_reports_by_week() == expected
