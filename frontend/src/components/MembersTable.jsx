@@ -3,7 +3,7 @@ import { Table, Checkbox, Button, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import MemberModal from './MemberModal';
 
-export default function MembersTable({members, subgroups}) {
+export default function MembersTable({members, subgroups, currentDay}) {
   const [modalVisible, setModalVisible] = useState(false)
   const [currentMember, setCurrentMember] = useState({})
 
@@ -70,8 +70,14 @@ export default function MembersTable({members, subgroups}) {
       title: 'Lesson',
       dataIndex: 'lessonAttendance',
       key: 'lesson-attendance',
+      filters: [
+        {text: 'Checked', value: true},
+        {text: 'Not checked', value: false}
+      ],
+      onFilter: (value, record) => {
+        return value === record.lessonAttendance[1]
+      },
       responsive: ['lg'],
-      sorter: (a, b) => a.lessonAttendance.localeCompare(b.lessonAttendance),
       render: (details) => {
         const color = details[0]
         const isChecked = details[1]
@@ -83,9 +89,15 @@ export default function MembersTable({members, subgroups}) {
     {
       title: 'Activity',
       dataIndex: 'activityAttendance',
+      filters: [
+        {text: 'Checked', value: true},
+        {text: 'Not checked', value: false}
+      ],
       key: 'activity-attendance',
+      onFilter: (value, record) => {
+        return value === record.activityAttendance[1]
+      },
       responsive: ['lg'],
-      sorter: (a, b) => a.activityAttendance.localeCompare(b.activityAttendance),
       render: (details) => {
         const color = details[0]
         const isChecked = details[1]
@@ -98,8 +110,14 @@ export default function MembersTable({members, subgroups}) {
       title: 'Homework',
       dataIndex: 'homeworkAttendance',
       key: 'homework-attendance',
+      filters: [
+        {text: 'Checked', value: true},
+        {text: 'Not checked', value: false}
+      ],
+      onFilter: (value, record) => {
+        return value === record.homeworkAttendance[1]
+      },
       responsive: ['lg'],
-      sorter: (a, b) => a.homeworkDone.localeCompare(b.homeworkDone),
       render: (details) => {
         const color = details[0]
         const isChecked = details[1]
@@ -112,8 +130,14 @@ export default function MembersTable({members, subgroups}) {
       title: 'Meeting',
       dataIndex: 'meetingAttendance',
       key: 'meeting-attendance',
+      filters: [
+        {text: 'Checked', value: true},
+        {text: 'Not checked', value: false}
+      ],
+      onFilter: (value, record) => {
+        return value === record.meetingAttendance[1]
+      },
       responsive: ['lg'],
-      sorter: (a, b) => a.meetingAttendance.localeCompare(b.meetingAttendance),
       render: (details) => {
         const color = details[0]
         const isChecked = details[1]

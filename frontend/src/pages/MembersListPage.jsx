@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { BASE_API_URL, BLUE, ORANGE, GREEN, PINK } from '../constants'
+import { BASE_API_URL, BLUE, ORANGE, GREEN, PINK, LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../constants'
 import { Skeleton} from 'antd';
 import MembersTable from '../components/MembersTable'
 
 export default function MembersListPage() {
     const [members, setMembers] = useState([])
     const [subgroups, setsubgroups] = useState([])
+
+    // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
+    const currentDay = (new Date()).getDay() + 1
 
     useEffect(() => {
         getMembers()
@@ -33,20 +36,20 @@ export default function MembersListPage() {
             const thisWeekReports = data[i]['reports']['this_week']
             const lastWeekReports = data[i]['reports']['last_week']
 
-            // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
-            const currentDay = (new Date()).getDay() + 1
-
             let formattedMember = {
                 key: i,
                 name: data[i]['full_name'],
                 subgroup: data[i]['subgroup'],
-                lessonAttendance: [GREEN, thisWeekReports[currentDay]],
-                activityAttendance: [BLUE, thisWeekReports[currentDay]],
-                homeworkAttendance: [ORANGE, thisWeekReports[currentDay]],
-                meetingAttendance: [PINK, thisWeekReports[currentDay]],
+                lessonAttendance: [GREEN, thisWeekReports[LESSON][currentDay]],
+                activityAttendance: [BLUE, thisWeekReports[ACTIVITY][currentDay]],
+                homeworkAttendance: [ORANGE, thisWeekReports[HOMEWORK][currentDay]],
+                meetingAttendance: [PINK, thisWeekReports[WEEKLY_MEETING][currentDay]],
                 thisWeekReports: thisWeekReports,
                 lastWeekReports: lastWeekReports
             }
+            console.dir(data[i])
+            console.log('////////////////////')
+            console.dir(formattedMember)
 
             formattedMembers.push(formattedMember)
         }
@@ -93,7 +96,7 @@ export default function MembersListPage() {
                     </div>
                 </div>
             )}
-            {(members.length > 0) && <MembersTable members={members} subgroups={subgroups} />}
+            {(members.length > 0) && <MembersTable members={members} subgroups={subgroups} currentDay={currentDay} />}
         </div> 
     )
 }
