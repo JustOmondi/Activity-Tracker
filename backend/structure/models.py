@@ -219,6 +219,12 @@ class Member(Model):
 
         return report_values_by_day_of_week
     
+    def get_all_reports_this_week_and_last_week(self):
+        return {
+            'this_week': self.get_all_reports_by_week(),
+            'last_week': self.get_all_reports_by_week(last_week=True)
+        }
+    
     def save(self, *args, **kwargs):
         if self.underscore_name == None:
             split_fullname = self.full_name.lower().split(" ")

@@ -62,7 +62,7 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         )
 
     def get_reports(self, object):
-        return object.get_all_reports_by_day()
+        return object.get_all_reports_this_week_and_last_week()
     
     def get_subgroup(self, object):
         return object.subgroup.name()
