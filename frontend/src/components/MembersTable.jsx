@@ -85,10 +85,10 @@ export default function MembersTable({members, subgroups, isLoading}) {
       dataIndex: 'lessonAttendance',
       key: 'lesson-attendance',
       responsive: ['lg'],
-      sorter: (a, b) => parseInt(a.lessonAttendance[1]) - parseInt(b.lessonAttendance[1]),
+      sorter: (a, b) => a.lessonAttendance.localeCompare(b.lessonAttendance),
       render: (details) => {
         const color = details[0]
-        const isChecked = true ? details[1] === 1 : false
+        const isChecked = details[1]
         return (
           <>
             {isLoading && <Skeleton.Input active />}
@@ -102,10 +102,10 @@ export default function MembersTable({members, subgroups, isLoading}) {
       dataIndex: 'activityAttendance',
       key: 'activity-attendance',
       responsive: ['lg'],
-      sorter: (a, b) => parseInt(a.activityAttendance[1]) - parseInt(b.activityAttendance[1]),
+      sorter: (a, b) => a.activityAttendance.localeCompare(b.activityAttendance),
       render: (details) => {
         const color = details[0]
-        const isChecked = true ? details[1] === 1 : false
+        const isChecked = details[1]
         return (
           <>
             {isLoading && <Skeleton.Input active />}
@@ -119,10 +119,10 @@ export default function MembersTable({members, subgroups, isLoading}) {
       dataIndex: 'homeworkDone',
       key: 'homework-done',
       responsive: ['lg'],
-      sorter: (a, b) => parseInt(a.homeworkDone[1]) - parseInt(b.homeworkDone[1]),
+      sorter: (a, b) => a.homeworkDone.localeCompare(b.homeworkDone),
       render: (details) => {
         const color = details[0]
-        const isChecked = true ? details[1] === 1 : false
+        const isChecked = details[1]
         return (
           <>
             {isLoading && <Skeleton.Input active />}
@@ -136,10 +136,10 @@ export default function MembersTable({members, subgroups, isLoading}) {
       dataIndex: 'meetingAttendance',
       key: 'meeting-attendance',
       responsive: ['lg'],
-      sorter: (a, b) => parseInt(a.meetingAttendance[1]) - parseInt(b.meetingAttendance[1]),
+      sorter: (a, b) => a.meetingAttendance.localeCompare(b.meetingAttendance),
       render: (details) => {
         const color = details[0]
-        const isChecked = true ? details[1] === 1 : false
+        const isChecked = details[1]
         return (
           <>
             {isLoading && <Skeleton.Input active />}

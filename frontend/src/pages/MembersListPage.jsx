@@ -31,17 +31,22 @@ export default function MembersListPage() {
     function formatMembers(data) {
         let formattedMembers = []
         for (let i = 0; i < data.length; i++) {
-            const reports = data[i]['reports']
+            const thisWeekReports = data[i]['reports']['this_week']
+            const lastWeekReports = data[i]['reports']['last_week']
+
+            // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
+            const currentDay = (new Date()).getDay() + 1
 
             let formattedMember = {
                 key: i,
                 name: data[i]['full_name'],
                 subgroup: data[i]['subgroup'],
-                lessonAttendance: [GREEN, reports['lesson_count']],
-                activityAttendance: [BLUE, reports['activity_count']],
-                homeworkDone: [ORANGE, reports['homework_count']],
-                meetingAttendance: [PINK, reports['weekly_meeting_count']],
-                reports: reports
+                lessonAttendance: [GREEN, thisWeekReports[currentDay]],
+                activityAttendance: [BLUE, thisWeekReports[currentDay]],
+                homeworkDone: [ORANGE, thisWeekReports[currentDay]],
+                meetingAttendance: [PINK, thisWeekReports[currentDay]],
+                thisWeekReports: thisWeekReports,
+                lastWeekReports: lastWeekReports
             }
 
             formattedMembers.push(formattedMember)
