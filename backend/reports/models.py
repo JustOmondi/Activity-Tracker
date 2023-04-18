@@ -24,18 +24,5 @@ class Report(models.Model):
       created_date_with_timezone = self.created.replace(tzinfo=current_timezone)
 
       return f'{self.member.full_name} - {self.name} - {created_date_with_timezone.strftime("%d/%m/%Y")}'
-    
-    def save(self, *args, **kwargs):
-        # Check if there is an existing report with the same attributes
-        existing_report = Report.objects.filter(name=self.name, member=self.member, created__date=self.created.date()).first()
-
-        if existing_report:
-            existing_report.value = self.value
-            existing_report.save()
-
-            raise ValidationError('A report with the same name, member, and date already exists.')
-            
-        else:
-            super().save(*args, **kwargs)
 
 # TODO: Add different kinds of reports e.g. Test Scores
