@@ -79,12 +79,14 @@ def getSubgroups(request):
 @api_view(['GET'])
 def getMemberReportsByWeek(request):
     name = request.GET.get('name')
+    from_lastweek = request.GET.get('from_lastweek')
+
     member_lookup = Member.objects.filter(underscore_name=name)
 
     if(member_lookup.count() == 0):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     member = member_lookup.first()
-    result = member.get_all_reports_by_week(False)
+    result = member.get_all_reports_by_week(from_lastweek == '1')
     
     return Response(result)

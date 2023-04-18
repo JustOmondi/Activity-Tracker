@@ -3,9 +3,10 @@ from django.utils import timezone
 from rest_framework import status
 
 from backend.structure.serializers import MemberSerializer
+from backend.structure.tests.test_models import create_all_reports_for_week
 from ..models import Report
 from ...structure.models import Department, Member, Subgroup
-from ..serializers import ReportSerializer
+
 from ..constants import LESSON, REPORT_NAMES
 import pytest
 
@@ -24,7 +25,6 @@ def create_all_reports_for_every_day(member):
             report.created = day
             report.save()
 
-
 @pytest.mark.django_db
 class TestGetAllMemberReportsByWeek:
     @pytest.fixture
@@ -32,17 +32,47 @@ class TestGetAllMemberReportsByWeek:
         department = Department.objects.create(department_number=9)
         return department
     
-    def test_get_all_reports_by_week(self, client, department):
+    def test_get_all_reports_by_week_of_current_week(self, client, department):
         subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
         member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
 
-        create_all_reports_for_every_day(member)
+        create_all_reports_for_week(member)
 
-        url = f'{reverse("member_reports_by_week")}?name={member.underscore_name}'
+        url = f'{reverse("member_reports_by_week")}?name={member.underscore_name}&from_lastweek=0'
   
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
+                
+        expected = {}
 
+        current_weekday = timezone.now().isoweekday()
+
+        for report_name in REPORT_NAMES:
+            expected[report_name] = {}
+            for i in range(1, 8):
+                """ 
+                Only reports from the beginning of the week to 
+                the current weekday should have a value of True from what is returned
+                from the get_all_reports_by_week() function
+                """
+                if(i <= current_weekday): 
+                    expected[report_name][i] = True
+                else:
+                    expected[report_name][i] = False
+
+        assert response.data == expected
+
+    def test_get_all_reports_by_week_of_last_week(self, client, department):
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+
+        create_all_reports_for_week(member, lastweek=True)
+
+        url = f'{reverse("member_reports_by_week")}?name={member.underscore_name}&from_lastweek=1'
+  
+        response = client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+                
         expected = {}
 
         for report_name in REPORT_NAMES:

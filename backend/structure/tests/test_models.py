@@ -3,6 +3,8 @@ from ..models import Subgroup, Member, Department
 from ...reports.models import Report
 from django.utils import timezone
 from ...reports.constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, REPORT_NAMES
+import logging
+log = logging.getLogger("mylogger")
 
 TODAY = 0
 LAST_WEEK = 7
@@ -21,18 +23,27 @@ def create_all_reports(days_ago, member):
         report.updated = created_date_time
         report.save()
 
-def create_all_reports_for_week(member):
-    now = timezone.now()
+def create_all_reports_for_week(member, lastweek=False):
+    now = timezone.now().replace(hour=0, minute=0, second=5)
 
     start_of_week = now - timezone.timedelta(days=now.weekday())
 
+    loop_range = now.isoweekday()
+
+    if (lastweek):
+        start_of_week = start_of_week - timezone.timedelta(days=7)
+        loop_range = 7
+
+    # print(f'/////////// Now weekday = {now.strftime("%m/%d/%Y, %H:%M:%S")} weekday = {now.isoweekday()} ///////////////////')
+    # print(f'/////////// Start of week = {start_of_week.strftime("%m/%d/%Y, %H:%M:%S")} ///////////////////')
+
     for report_name in REPORT_NAMES:
-        for i in range(7):
+        for i in range(loop_range):
             # Calculate the date for the current day of the week
             day = start_of_week + timezone.timedelta(days=i)
-
+            # print(f'/////////// Day = {day.strftime("%m/%d/%Y, %H:%M:%S")} i = {i}///////////////////')
             # Create a Report object for the current day
-            report = Report(
+            report = Report.objects.create(
                 name=report_name,
                 member=member,
                 value=True,
@@ -40,6 +51,8 @@ def create_all_reports_for_week(member):
 
             report.created = day
             report.save()
+
+            # print(f'/////////// Report Created = {report.created.strftime("%m/%d/%Y, %H:%M:%S")} ///////////////////')
 
 @pytest.mark.django_db
 class TestDepartment:
@@ -218,10 +231,34 @@ class TestMember:
             assert totals[current_key] == 1
             assert totals[lastweek_key] == 1
 
-    def test_get_all_reports_by_week(self):
+    def test_get_all_reports_by_week_of_current_week(self):
         member = Member.objects.create(full_name='John Smith')
         
         create_all_reports_for_week(member)
+                
+        expected = {}
+
+        current_weekday = timezone.now().isoweekday()
+
+        for report_name in REPORT_NAMES:
+            expected[report_name] = {}
+            for i in range(1, 8):
+                """ 
+                Only reports from the beginning of the week to 
+                the current weekday should have a value of True from what is returned
+                from the get_all_reports_by_week() function
+                """
+                if(i <= current_weekday): 
+                    expected[report_name][i] = True
+                else:
+                    expected[report_name][i] = False
+
+        assert member.get_all_reports_by_week() == expected
+
+    def test_get_all_reports_by_week_of_last_week(self):
+        member = Member.objects.create(full_name='John Smith')
+        
+        create_all_reports_for_week(member, lastweek=True)
                 
         expected = {}
 
@@ -230,4 +267,5 @@ class TestMember:
             for i in range(1, 8):
                 expected[report_name][i] = True
 
-        assert member.get_all_reports_by_week() == expected
+        assert member.get_all_reports_by_week(last_week=True) == expected
+
