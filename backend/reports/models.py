@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 import pytz
 from .constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, ATTENDANCE, PARTICIPATION
 
@@ -11,12 +12,6 @@ REPORT_NAMES = [
       (WEEKLY_MEETING, WEEKLY_MEETING),
 ]
 
-REPORT_TYPES = [
-      (ATTENDANCE, ATTENDANCE.replace('_', ' ').capitalize()),
-      (PARTICIPATION, PARTICIPATION.replace('_', ' ').capitalize()),
-]
-
-# Create your models here.
 class Report(models.Model):
     name = models.CharField(null=True, blank=True, max_length=50, choices=REPORT_NAMES)
     member = models.ForeignKey('structure.Member', on_delete=models.PROTECT, blank=False, default=None)
@@ -29,5 +24,18 @@ class Report(models.Model):
       created_date_with_timezone = self.created.replace(tzinfo=current_timezone)
 
       return f'{self.member.full_name} - {self.name} - {created_date_with_timezone.strftime("%d/%m/%Y")}'
+    
+    def save(self, *args, **kwargs):
+        # Check if there is an existing report with the same attributes
+        existing_report = Report.objects.filter(name=self.name, member=self.member, created__date=self.created.date()).first()
+
+        if existing_report:
+            existing_report.value = self.value
+            existing_report.save()
+
+            raise ValidationError('A report with the same name, member, and date already exists.')
+            
+        else:
+            super().save(*args, **kwargs)
 
 # TODO: Add different kinds of reports e.g. Test Scores
