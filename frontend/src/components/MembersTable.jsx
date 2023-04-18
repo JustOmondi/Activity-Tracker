@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Checkbox, Button, Tooltip, notification, Skeleton} from 'antd';
+import { Table, Checkbox, Button, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import MemberModal from './MemberModal';
 
-export default function MembersTable({members, subgroups, isLoading}) {
+export default function MembersTable({members, subgroups}) {
   const [modalVisible, setModalVisible] = useState(false)
   const [currentMember, setCurrentMember] = useState({})
 
@@ -28,10 +28,6 @@ export default function MembersTable({members, subgroups, isLoading}) {
     setModalVisible(true)
   }
 
-  const onChange = (pagination, filters, sorter, extra) => {
-    // console.dir(filters);
-  };
-
   const columns = [
     {
       title: 'Name',
@@ -41,17 +37,12 @@ export default function MembersTable({members, subgroups, isLoading}) {
       sortDirections: ['ascend', 'descend', 'ascend'],
       render: (name) => {
         return (
-          <>
-            {isLoading && <Skeleton.Input active />}
-            {!isLoading && (
-              <div className='flex items-center'>
-                <Tooltip title="Update">
-                  <Button className='bg-stone-950 shadow-md flex justify-center pt-2 mr-3' type="primary" shape="circle" icon={<EditOutlined />} onClick={handleButtonClick}/>
-                </Tooltip>
-                <h3>{name}</h3>
-              </div>
-            )}
-          </>
+          <div className='flex items-center'>
+            <Tooltip title="Update">
+              <Button className='bg-stone-950 shadow-md flex justify-center pt-2 mr-3' type="primary" shape="circle" icon={<EditOutlined />} onClick={handleButtonClick}/>
+            </Tooltip>
+            <h3>{name}</h3>
+          </div>
         )
       }
     },
@@ -71,12 +62,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
       sortDirections: ['ascend', 'descend'],
       render: (text) => {
         return (
-          <>
-            {isLoading && <Skeleton.Input active />}
-            {!isLoading && (
-              <h3>{text}</h3>
-            )}
-          </>
+          <h3>{text}</h3>
         )
       }
     },
@@ -90,10 +76,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
         const color = details[0]
         const isChecked = details[1]
         return (
-          <>
-            {isLoading && <Skeleton.Input active />}
-            {!isLoading && <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>}
-          </>
+          <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>
         )
       }
     },
@@ -107,10 +90,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
         const color = details[0]
         const isChecked = details[1]
         return (
-          <>
-            {isLoading && <Skeleton.Input active />}
-            {!isLoading && <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>}
-          </>
+          <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>
         )
       }
     },
@@ -124,10 +104,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
         const color = details[0]
         const isChecked = details[1]
         return (
-          <>
-            {isLoading && <Skeleton.Input active />}
-            {!isLoading && <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>}
-          </>
+          <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>
         )
       }
     },
@@ -141,10 +118,7 @@ export default function MembersTable({members, subgroups, isLoading}) {
         const color = details[0]
         const isChecked = details[1]
         return (
-          <>
-            {isLoading && <Skeleton.Input active />}
-            {!isLoading && <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>}
-          </>
+          <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>
         )
       }
     },
@@ -154,14 +128,13 @@ export default function MembersTable({members, subgroups, isLoading}) {
   return (
     <>
       {modalVisible && <MemberModal className='rounded-sm' hideModal={hideModal} member={currentMember} subgroups={subgroups} />}
+      
       <Table
-        dataSource={members}
-        loading={isLoading}
-        columns={columns}
-        pagination={false}
-        footer={() => `Total members: ${members.length}`}
-        onRow={(record, index) => { return {onClick: handleRowClick}}} 
-        onChange={onChange} />
+          dataSource={members}
+          columns={columns}
+          pagination={false}
+          footer={() => `Total members: ${members.length}`}
+          onRow={(record, index) => { return {onClick: handleRowClick}}} />
     </>
     
   )

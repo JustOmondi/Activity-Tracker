@@ -12,7 +12,7 @@ export default function AttendanceWeekView({attendance, reportName, member, colo
                     const dayOfWeek = index + 1
                     const checked = attendance.thisWeek[dayOfWeek]
                     const color = attendance.color
-                    const classes = `ml-2 mb-2 font-bold checkbox-${color}`
+                    const classes = `ml-2 mb-2 font-bold scale-[1.2] checkbox-${color}`
 
                     return(
                         <Checkbox key={index} className={classes} defaultChecked={checked}>{item}</Checkbox>
@@ -26,7 +26,7 @@ export default function AttendanceWeekView({attendance, reportName, member, colo
                     const dayOfWeek = index + 1
                     const checked = attendance.lastWeek[dayOfWeek]
                     const color = attendance.color
-                    const classes = `ml-2 mb-2 font-bold checkbox-${color}`
+                    const classes = `ml-2 mb-2 font-bold scale-[1.2] checkbox-${color}`
 
                     return(
                         <Checkbox key={index} className={classes} disabled defaultChecked={checked}>{item}</Checkbox>

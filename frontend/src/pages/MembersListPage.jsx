@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { BASE_API_URL, BLUE, ORANGE, GREEN, PINK } from '../constants'
+import { Skeleton} from 'antd';
 import MembersTable from '../components/MembersTable'
 
 export default function MembersListPage() {
     const [members, setMembers] = useState([])
     const [subgroups, setsubgroups] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         getMembers()
         getSubgroups()
-
-        setIsLoading(false)
     }, [])
 
     const formatSubgroups = (data) => {
@@ -28,7 +26,7 @@ export default function MembersListPage() {
         setsubgroups(formattedSubgroups)
     }
 
-    function formatMembers(data) {
+    const formatMembers = (data) => {
         let formattedMembers = []
 
         for (let i = 0; i < data.length; i++) {
@@ -36,9 +34,8 @@ export default function MembersListPage() {
             const lastWeekReports = data[i]['reports']['last_week']
 
             // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
-            // const currentDay = (new Date()).getDay() + 1
+            const currentDay = (new Date()).getDay() + 1
 
-            const currentDay=1
             let formattedMember = {
                 key: i,
                 name: data[i]['full_name'],
@@ -56,26 +53,47 @@ export default function MembersListPage() {
         setMembers(formattedMembers)
     }
 
-    let getMembers = async () => {
+    const getMembers = async () => {
         const URL = `${BASE_API_URL}/structure/members/`
-        setIsLoading(true)
+
         let response = await fetch(URL);
         let data = await response.json();
         
-        formatMembers(data);
+        await formatMembers(data);
     }
 
-    let getSubgroups = async () => {
+    const getSubgroups = async () => {
         const URL = `${BASE_API_URL}/structure/subgroups/`
-        setIsLoading(true)
+
         let response = await fetch(URL);
         let data = await response.json();
-        formatSubgroups(data);
+        
+        await formatSubgroups(data);
     }
     
     return (
         <div>
-            <MembersTable members={members} subgroups={subgroups} isLoading={isLoading}/>
+            {(members.length == 0) && (
+                <div className='rounded-2xl bg-white p-4 w-full'>
+                    <div className='flex justify-between m-4 flex-wrap'>
+                        <Skeleton.Input className='mb-2 md:mb-0' active />
+                        <Skeleton.Input className='mb-2 md:mb-0' active />
+                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                    </div>
+                    <div className='flex justify-between m-4 flex-wrap'>
+                        <Skeleton.Input className='mb-2 md:mb-0' active />
+                        <Skeleton.Input className='mb-2 md:mb-0' active />
+                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                    </div>
+                </div>
+            )}
+            {(members.length > 0) && <MembersTable members={members} subgroups={subgroups} />}
         </div> 
     )
 }
