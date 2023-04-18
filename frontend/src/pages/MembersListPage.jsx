@@ -30,20 +30,22 @@ export default function MembersListPage() {
 
     function formatMembers(data) {
         let formattedMembers = []
+
         for (let i = 0; i < data.length; i++) {
             const thisWeekReports = data[i]['reports']['this_week']
             const lastWeekReports = data[i]['reports']['last_week']
 
             // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
-            const currentDay = (new Date()).getDay() + 1
+            // const currentDay = (new Date()).getDay() + 1
 
+            const currentDay=1
             let formattedMember = {
                 key: i,
                 name: data[i]['full_name'],
                 subgroup: data[i]['subgroup'],
                 lessonAttendance: [GREEN, thisWeekReports[currentDay]],
                 activityAttendance: [BLUE, thisWeekReports[currentDay]],
-                homeworkDone: [ORANGE, thisWeekReports[currentDay]],
+                homeworkAttendance: [ORANGE, thisWeekReports[currentDay]],
                 meetingAttendance: [PINK, thisWeekReports[currentDay]],
                 thisWeekReports: thisWeekReports,
                 lastWeekReports: lastWeekReports

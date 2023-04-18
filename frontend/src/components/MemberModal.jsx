@@ -10,10 +10,29 @@ export default function MemberModal({hideModal, member, subgroups}) {
 
     const { Panel } = Collapse;
 
-    const lessonAttendance = true ? member.lessonAttendance[1] === 1 : false; 
-    const meetingAttendance = true ? member.meetingAttendance[1] === 1 : false; 
-    const homeworkDone = true ? member.homeworkDone[1] === 1 : false; 
-    const activityAttendance = true ? member.activityAttendance[1] === 1 : false; 
+    const lessonAttendance = {
+      'thisWeek': member.thisWeekReports[LESSON], 
+      'lastWeek': member.lastWeekReports[LESSON],
+      'color': member.lessonAttendance[0]
+    }
+
+    const meetingAttendance = {
+      'thisWeek': member.thisWeekReports[WEEKLY_MEETING], 
+      'lastWeek': member.lastWeekReports[WEEKLY_MEETING],
+      'color': member.meetingAttendance[0]
+    }
+
+    const homeworkAttendance = {
+      'thisWeek': member.thisWeekReports[HOMEWORK], 
+      'lastWeek': member.lastWeekReports[HOMEWORK],
+      'color': member.homeworkAttendance[0]
+    }
+
+    const activityAttendance = {
+      'thisWeek': member.thisWeekReports[ACTIVITY], 
+      'lastWeek': member.lastWeekReports[ACTIVITY],
+      'color': member.activityAttendance[0]
+    }
 
     const handleOk = () => {
       setConfirmLoading(true);
@@ -68,16 +87,16 @@ export default function MemberModal({hideModal, member, subgroups}) {
 
           <Collapse className='mt-4' accordion>
             <Panel header="Lesson" key="1">
-              <AttendanceWeekView attendanceList={lessonAttendance} reportName={LESSON} member={member.name}/>
+              <AttendanceWeekView attendance={lessonAttendance} reportName={LESSON} member={member.name}/>
             </Panel>
             <Panel header="Activity" key="2">
-              <AttendanceWeekView attendanceList={activityAttendance} reportName={ACTIVITY} member={member.name}/>
+              <AttendanceWeekView attendance={activityAttendance} reportName={ACTIVITY} member={member.name}/>
             </Panel>
             <Panel header="Homework" key="3">
-              <AttendanceWeekView attendanceList={homeworkAttendance} reportName={HOMEWORK} member={member.name}/>
+              <AttendanceWeekView attendance={homeworkAttendance} reportName={HOMEWORK} member={member.name}/>
             </Panel>
             <Panel header="Meeting" key="4">
-              <AttendanceWeekView attendanceList={meetingAttendance} reportName={WEEKLY_MEETING} member={member.name}/>
+              <AttendanceWeekView attendance={meetingAttendance} reportName={WEEKLY_MEETING} member={member.name}/>
             </Panel>
           </Collapse>
         </Modal>

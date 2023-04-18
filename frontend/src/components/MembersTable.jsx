@@ -116,8 +116,8 @@ export default function MembersTable({members, subgroups, isLoading}) {
     },
     {
       title: 'Homework',
-      dataIndex: 'homeworkDone',
-      key: 'homework-done',
+      dataIndex: 'homeworkAttendance',
+      key: 'homework-attendance',
       responsive: ['lg'],
       sorter: (a, b) => a.homeworkDone.localeCompare(b.homeworkDone),
       render: (details) => {
