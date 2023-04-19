@@ -3,15 +3,14 @@ import { Checkbox } from 'antd';
 import { BASE_API_URL } from '../constants'
 import { capitalize } from '../utils';
 
-export default function CustomCheckbox({item, isChecked, showMessage, hideMessage, classes, reportName, member}) {
+export default function CustomCheckbox({item, isChecked, showMessage, hideMessage, classes, reportName, memberName}) {
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(isChecked);
 
     const updateReportValue = (newChecked) => {
         const updateValue = newChecked ? 1 : 0
-        const member_underscore_name = member.toLowerCase().replace(' ', '_')
 
-        const url = `${BASE_API_URL}/reports/update-report-value?member_name=${member_underscore_name}&report_name=${reportName}&update_value=${updateValue}`
+        const url = `${BASE_API_URL}/reports/update-report-value?member_name=${memberName}&report_name=${reportName}&update_value=${updateValue}`
 
         showMessage('loading', `Updating ${capitalize(reportName)} attendance`)
 

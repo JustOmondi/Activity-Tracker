@@ -1,30 +1,13 @@
 import React from 'react'
-import { Checkbox, Card, message } from 'antd';
+import { Checkbox, Card } from 'antd';
 import CustomCheckbox from './CustomCheckbox';
 
-export default function AttendanceWeekView({attendance, reportName, member, color}) {
-    const [messageApi, contextHolder] = message.useMessage();
-
-    const showMessage = (type, message) => {
-        const duration = type === 'loading' ? 0 : 5
-        
-        messageApi.open({
-            type: type,
-            content: message,
-            duration: duration,
-        });
-    }
-
-    const hideMessage = () => {
-        messageApi.destroy()
-    }
-
+export default function AttendanceWeekView({attendance, reportName, memberName, hideMessage, showMessage}) {
     const daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
     const checkboxClasses = 'mr-1 font-bold scale-[1.3]'
   
     return (
         <div>
-            {contextHolder}
             <h3>This week:</h3>
             <Card style={{width: '100%', justifyContent: 'space-evenly'}}>
                 {daysOfWeek.map((item, index) => {
@@ -38,7 +21,7 @@ export default function AttendanceWeekView({attendance, reportName, member, colo
                             isChecked={checked}
                             item={item}
                             classes={`${checkboxClasses} checkbox-${color}`}
-                            member={member}
+                            memberName={memberName}
                             reportName={reportName}
                             showMessage={showMessage}
                             hideMessage={hideMessage}>
