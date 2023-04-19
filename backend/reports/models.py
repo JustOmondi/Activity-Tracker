@@ -1,6 +1,5 @@
 from django.db import models
-from django.forms import ValidationError
-import pytz
+
 from .constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, ATTENDANCE, PARTICIPATION
 
 from backend.settings import TIME_ZONE
@@ -20,9 +19,6 @@ class Report(models.Model):
     value = models.BooleanField(blank=True)
 
     def __str__(self):
-      current_timezone = pytz.timezone(TIME_ZONE)
-      created_date_with_timezone = self.created.replace(tzinfo=current_timezone)
-
-      return f'{self.member.full_name} - {self.name} - {created_date_with_timezone.strftime("%d/%m/%Y")}'
+      return f'{self.member.full_name} - {self.name} - {self.created.strftime("%d/%m/%Y")}'
 
 # TODO: Add different kinds of reports e.g. Test Scores
