@@ -86,16 +86,16 @@ export default function MemberModal({hideModal, member, subgroups}) {
           </div>
 
           <Collapse className='mt-4' accordion>
-            <Panel header="Lesson" key="1">
+            <Panel header={<h3 className='font-bold'>Lesson Attendance</h3>} key="1">
               <AttendanceWeekView attendance={lessonAttendance} reportName={LESSON} member={member.name}/>
             </Panel>
-            <Panel header="Activity" key="2">
+            <Panel header={<h3 className='font-bold'>Activity Attendance</h3>} key="2">
               <AttendanceWeekView attendance={activityAttendance} reportName={ACTIVITY} member={member.name}/>
             </Panel>
-            <Panel header="Homework" key="3">
+            <Panel header={<h3 className='font-bold'>Homework Done</h3>} key="3">
               <AttendanceWeekView attendance={homeworkAttendance} reportName={HOMEWORK} member={member.name}/>
             </Panel>
-            <Panel header="Meeting" key="4">
+            <Panel header={<h3 className='font-bold'>Weekly Meeting Attendance</h3>} key="4">
               <AttendanceWeekView attendance={meetingAttendance} reportName={WEEKLY_MEETING} member={member.name}/>
             </Panel>
           </Collapse>

@@ -3,7 +3,7 @@ import { Checkbox, Card } from 'antd';
 
 export default function AttendanceWeekView({attendance, reportName, member, color}) {
     const daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-    const classes = 'mr-1 font-bold scale-[1.1]'
+    const classes = 'mr-1 font-bold scale-[1.3]'
 
     return (
         <div>
