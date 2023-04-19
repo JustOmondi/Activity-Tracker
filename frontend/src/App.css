@@ -235,8 +235,24 @@ p, h3, h2, h1, div {
 }
 
 /* Modal */
+.ant-modal .ant-card-body {
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .ant-modal .ant-modal-content {
     border-radius: 20px;
+}
+
+.ant-modal .ant-checkbox-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ant-modal .ant-checkbox-wrapper .ant-checkbox-input {
+    /* margin-left: 10px;
+    margin-bottom: 25px; */
 }
 
 /* Buttons */
