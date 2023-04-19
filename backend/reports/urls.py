@@ -6,5 +6,5 @@ urlpatterns = [
     path('<int:id>', views.getReportId, name='report'),
     path('department-week/<str:dept_number>/<str:report_name>', views.getDepartmentWeekReport, name='department_week_report'),
     path('member-week/<str:member_name>/<str:report_name>', views.getMemberWeekReport, name='member_week_report'),
-    path('member-update', views.updateMemberReport, name='update_member_report'),
+    path('update-report-value', views.updateReportValue, name='update_member_report'),
 ]

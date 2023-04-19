@@ -47,9 +47,6 @@ export default function MembersListPage() {
                 thisWeekReports: thisWeekReports,
                 lastWeekReports: lastWeekReports
             }
-            console.dir(data[i])
-            console.log('////////////////////')
-            console.dir(formattedMember)
 
             formattedMembers.push(formattedMember)
         }
@@ -76,7 +73,7 @@ export default function MembersListPage() {
     
     return (
         <div>
-            {(members.length == 0) && (
+            {(members.length === 0) && (
                 <div className='rounded-2xl bg-white p-4 w-full'>
                     <div className='flex justify-between m-4 flex-wrap'>
                         <Skeleton.Input className='mb-2 md:mb-0' active />

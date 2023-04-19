@@ -283,3 +283,9 @@ p, h3, h2, h1, div {
     border-color: rgb(220 38 38) !important;
     color: #ffffff !important;
 }
+
+/* Message Box */
+.ant-message-notice .ant-message-notice-content {
+    background-color: #000;
+    color: #fff;
+}

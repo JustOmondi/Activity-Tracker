@@ -91,7 +91,7 @@ def getMemberWeekReport(request, member_name, report_name):
     return Response(result)
 
 @api_view(['POST'])
-def updateMemberReport(request):
+def updateReportValue(request):
     # TODO: Figure out why URL params coming through on request.GET instead of request.POST
     member_name = request.GET.get('member_name')
     report_name = request.GET.get('report_name')
