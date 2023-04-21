@@ -226,10 +226,9 @@ class Member(Model):
         }
     
     def save(self, *args, **kwargs):
-        if self.underscore_name == None:
-            split_fullname = self.full_name.lower().split(" ")
-            self.underscore_name = f'{split_fullname[0]}_{split_fullname[1]}'
-
+        split_fullname = self.full_name.lower().split(" ")
+        self.underscore_name = f'{split_fullname[0]}_{split_fullname[1]}'
+            
         super().save(*args, **kwargs)
 
     def __str__(self):

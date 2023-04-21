@@ -10,5 +10,6 @@ urlpatterns = [
 
     path('members/', views.getMembers, name='members'),
     path('member/details/', views.getMember, name='member'),
+    path('member/update', views.updateMember, name='member'),
     path('member/reportsbyweek/', views.getMemberReportsByWeek, name='member_reports_by_week'),
 ]

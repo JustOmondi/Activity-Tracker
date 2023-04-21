@@ -90,3 +90,31 @@ def getMemberReportsByWeek(request):
     result = member.get_all_reports_by_week(from_lastweek == '1')
     
     return Response(result)
+
+@api_view(['POST'])
+def updateMember(request):
+    name = request.GET.get('name')
+    new_name = request.GET.get('new_name')
+    new_subgroup = request.GET.get('new_subgroup')
+
+    member_lookup = Member.objects.filter(underscore_name=name)
+
+    if(member_lookup.count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    member = member_lookup.first()
+
+    if new_name:
+        member.full_name = new_name.replace('_', ' ').title()
+
+    if new_subgroup:
+        subgroup_lookup = Subgroup.objects.filter(subgroup_number=int(new_subgroup))
+
+        if(subgroup_lookup.count() == 0):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+        member.subgroup = subgroup_lookup.first()
+
+    member.save()
+    
+    return Response(status=status.HTTP_200_OK)
