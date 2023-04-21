@@ -4,210 +4,231 @@ import AttendanceWeekView from './AttendanceWeekView';
 
 import { BASE_API_URL, LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../constants';
 
+import { setMemberUpdated } from '../app/mainSlice';
+import { useDispatch } from 'react-redux'
+
 export default function MemberModal({hideModal, member, subgroups}) {
-    const [open, setOpen] = useState(true);
-    const [newNameUnderscore, setNewNameUnderscore] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
+  const memberNameUnderscore = member.name.toLowerCase().replace(' ', '_')
 
-    const [messageApi, contextHolder] = message.useMessage();
+  const [open, setOpen] = useState(true);
+  const [newNameUnderscore, setNewNameUnderscore] = useState(memberNameUnderscore);
+  const [currentSubgroup, setMemberSubgroup] = useState(member.subgroup);
+  const [isLoading, setIsLoading] = useState(false)
 
-    const showMessage = (type, message) => {
-        const duration = type === 'loading' ? 0 : 5
-        
-        messageApi.open({
-            type: type,
-            content: message,
-            duration: duration,
-        });
-    }
+  const [messageApi, contextHolder] = message.useMessage();
+  
+  const dispatch = useDispatch()
 
-    const hideMessage = () => {
-        messageApi.destroy()
-    }
+  const showMessage = (type, message) => {
+      const duration = type === 'loading' ? 0 : 5
+      
+      messageApi.open({
+          type: type,
+          content: message,
+          duration: duration,
+      });
+  }
 
-    const { Panel } = Collapse;
+  const hideMessage = () => {
+      messageApi.destroy()
+  }
 
-    const lessonAttendance = {
-      'thisWeek': member.thisWeekReports[LESSON], 
-      'lastWeek': member.lastWeekReports[LESSON],
-      'color': member.lessonAttendance[0]
-    }
+  const { Panel } = Collapse;
 
-    const meetingAttendance = {
-      'thisWeek': member.thisWeekReports[WEEKLY_MEETING], 
-      'lastWeek': member.lastWeekReports[WEEKLY_MEETING],
-      'color': member.meetingAttendance[0]
-    }
+  const lessonAttendance = {
+    'thisWeek': member.thisWeekReports[LESSON], 
+    'lastWeek': member.lastWeekReports[LESSON],
+    'color': member.lessonAttendance[0]
+  }
 
-    const homeworkAttendance = {
-      'thisWeek': member.thisWeekReports[HOMEWORK], 
-      'lastWeek': member.lastWeekReports[HOMEWORK],
-      'color': member.homeworkAttendance[0]
-    }
+  const meetingAttendance = {
+    'thisWeek': member.thisWeekReports[WEEKLY_MEETING], 
+    'lastWeek': member.lastWeekReports[WEEKLY_MEETING],
+    'color': member.meetingAttendance[0]
+  }
 
-    const activityAttendance = {
-      'thisWeek': member.thisWeekReports[ACTIVITY], 
-      'lastWeek': member.lastWeekReports[ACTIVITY],
-      'color': member.activityAttendance[0]
-    }
+  const homeworkAttendance = {
+    'thisWeek': member.thisWeekReports[HOMEWORK], 
+    'lastWeek': member.lastWeekReports[HOMEWORK],
+    'color': member.homeworkAttendance[0]
+  }
 
-    
-    const handleNameInputChange = ({target}) => {
-      const name = target.value.toLowerCase().replace(' ', '_')
-      setNewNameUnderscore(name)
-    }
+  const activityAttendance = {
+    'thisWeek': member.thisWeekReports[ACTIVITY], 
+    'lastWeek': member.lastWeekReports[ACTIVITY],
+    'color': member.activityAttendance[0]
+  }
 
-    const handleSubgroupSelectChange = (value) => {
-      console.log(value)
-    }
+  
+  const handleNameInputChange = ({target}) => {
+    const name = target.value.toLowerCase().replace(' ', '_')
+    setNewNameUnderscore(name)
+  }
 
-    const handleNameUpdateClick = () => {
-      const url = `${BASE_API_URL}/structure/member/update?member_name=${member.name}&new_name=${newNameUnderscore}`
+  const handleSubgroupSelectChange = (value) => {
+    setMemberSubgroup(value)
+  }
 
-      setIsLoading(true)
-      showMessage('loading', 'Updating member name')
+  const handleNameUpdateClick = () => {
+    const url = `${BASE_API_URL}/structure/member/update?name=${memberNameUnderscore}&new_name=${newNameUnderscore}`
 
-      fetch(url, {method: 'POST'})
-      .then(response => {
-          hideMessage()
+    setIsLoading(true)
+    showMessage('loading', 'Updating member name')
 
-          if (response.status === '200') {
-              const message = 'Name updated successfully'
+    fetch(url, {method: 'POST'})
+    .then(async (response) => {
+        hideMessage()
 
-              showMessage('success', message)
+        if (response.status === 200) {
+            const message = 'Name updated successfully'
 
-          } else {
-              const message = 'Update failed. Please try again'
+            showMessage('success', message)
 
-              showMessage('error', message)
-          }
+            if(memberNameUnderscore !== newNameUnderscore) {
+              // Update redux store to indicate a member has been updated 
+              dispatch(setMemberUpdated(true))
+            }
+            
+        } else {
+            const message = 'Update failed. Please try again'
 
-          setIsLoading(false)
-      })
-      .catch(error => {
-          hideMessage()
+            showMessage('error', message)
+        }
 
-          const message = 'Update failed. Please try again'
+        setIsLoading(false)
+    })
+    .catch(error => {
+        hideMessage()
+        console.log(error)
+        const message = 'Update failed. Please try again'
 
-          setIsLoading(false)
-          showMessage('error', message)
-      })
-    };
+        setIsLoading(false)
+        showMessage('error', message)
+    })
+  };
 
-    const handleSubgroupUpdateClick = () => {
-      const url = `${BASE_API_URL}/structure/member/update?member_name=${member.name}&new_subgroup=${newNameUnderscore}`
+  const handleSubgroupUpdateClick = () => {
+    const url = `${BASE_API_URL}/structure/member/update?name=${memberNameUnderscore}&new_subgroup=${currentSubgroup}`
 
-      setIsLoading(true)
-      showMessage('loading', 'Updating member subgroup')
+    setIsLoading(true)
+    showMessage('loading', 'Updating member subgroup')
 
-      fetch(url, {method: 'POST'})
-      .then(response => {
-          hideMessage()
+    fetch(url, {method: 'POST'})
+    .then(async (response) => {
+        hideMessage()
 
-          if (response.status === '200') {
-              const message = 'Subgroup updated successfully'
+        console.log(response.status)
 
-              showMessage('success', message)
+        if (response.status === 200) {
+            const message = 'Subgroup updated successfully'
 
-          } else {
-              const message = 'Update failed. Please try again'
+            showMessage('success', message)
 
-              showMessage('error', message)
-          }
-
-          setIsLoading(false)
-      })
-      .catch(error => {
-          hideMessage()
-
-          const message = 'Update failed. Please try again'
-
-          setIsLoading(false)
-          showMessage('error', message)
-      })
-    };
-
-    const handleCancel = () => {
-        setOpen(false);
-    };
-
-    const afterClose = () => {
-        hideModal()
-        setOpen(true);
-    }
-
-    return (
-      <>
-        {contextHolder}
-        <Modal
-          title={`Edit Member`}
-          style={{ top: 50 }}
-          open={open}
-          afterClose={hideModal}
-          onCancel={handleCancel}
-
-          footer={[
-            <Button key="cancel" className='cancel-button' onClick={handleCancel}>
-              Cancel
-            </Button>
-          ]}
-        >
-          <div className='flex items-center mt-8'>
-            <h3 className='mr-3 font-bold'>Name:</h3> 
-            <Space.Compact style={{ width: '100%' }}>
-              <Input defaultValue={member.name} onChange={handleNameInputChange}/>
-              <Button disabled={isLoading} className='ok-button' onClick={handleNameUpdateClick}>Update</Button>
-            </Space.Compact>
-          </div>
-          <div className='flex items-center mt-8'>
-            <h3 className='mr-3 font-bold'>Subgroup:</h3>
-            <Space.Compact style={{ width: '100%' }}>
-              <Select
-                  defaultValue={member.subgroup}
-                  style={{ width: 120 }}
-                  options={subgroups}
-                  onChange={handleSubgroupSelectChange}
-              />
-              <Button disabled={isLoading} className='ok-button' onClick={handleSubgroupUpdateClick}>Update</Button>
-            </Space.Compact>
+            if(member.subgroup !== currentSubgroup) {
+               // Update redux store to indicate a member has been updated 
+              dispatch(setMemberUpdated(true))
+            }
            
-          </div>
+        } else {
+            const message = 'Update failed. Please try again'
 
-          <Collapse className='mt-4' accordion>
-            <Panel header={<h3 className='font-bold'>Lesson Attendance</h3>} key="1">
-              <AttendanceWeekView
-                showMessage={showMessage}
-                hideMessage={hideMessage}
-                attendance={lessonAttendance}
-                reportName={LESSON}
-                memberName={newNameUnderscore}/>
-            </Panel>
-            <Panel header={<h3 className='font-bold'>Activity Attendance</h3>} key="2">
-              <AttendanceWeekView
-                showMessage={showMessage}
-                hideMessage={hideMessage}
-                attendance={activityAttendance}
-                reportName={ACTIVITY}
-                memberName={newNameUnderscore}/>
-            </Panel>
-            <Panel header={<h3 className='font-bold'>Homework Done</h3>} key="3">
-              <AttendanceWeekView
-                showMessage={showMessage}
-                hideMessage={hideMessage}
-                attendance={homeworkAttendance}
-                reportName={HOMEWORK}
-                memberName={newNameUnderscore}/>
-            </Panel>
-            <Panel header={<h3 className='font-bold'>Weekly Meeting Attendance</h3>} key="4">
-              <AttendanceWeekView
-                showMessage={showMessage}
-                hideMessage={hideMessage}
-                attendance={meetingAttendance}
-                reportName={WEEKLY_MEETING}
-                memberName={newNameUnderscore}/>
-            </Panel>
-          </Collapse>
-        </Modal>
-      </>
-    );
+            showMessage('error', message)
+        }
+
+        setIsLoading(false)
+    })
+    .catch(error => {
+      console.log(error)
+        hideMessage()
+
+        const message = 'Update failed. Please try again'
+
+        setIsLoading(false)
+        showMessage('error', message)
+    })
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const afterClose = () => {
+    hideModal()
+    setOpen(true);
+  }
+
+  return (
+    <>
+      {contextHolder}
+      <Modal
+        title={`Edit Member`}
+        style={{ top: 50 }}
+        open={open}
+        afterClose={afterClose}
+        onCancel={handleCancel}
+
+        footer={[
+          <Button key="cancel" className='cancel-button' onClick={handleCancel}>
+            Close
+          </Button>
+        ]}
+      >
+        <div className='flex items-center mt-8'>
+          <h3 className='mr-3 font-bold'>Name:</h3> 
+          <Space.Compact style={{ width: '100%' }}>
+            <Input defaultValue={member.name} onChange={handleNameInputChange}/>
+            <Button disabled={isLoading} className='ok-button' onClick={handleNameUpdateClick}>Update</Button>
+          </Space.Compact>
+        </div>
+        <div className='flex items-center mt-8'>
+          <h3 className='mr-3 font-bold'>Subgroup:</h3>
+          <Space.Compact style={{ width: '100%' }}>
+            <Select
+                defaultValue={member.subgroup}
+                style={{ width: 120 }}
+                options={subgroups}
+                onChange={handleSubgroupSelectChange}
+            />
+            <Button disabled={isLoading} className='ok-button' onClick={handleSubgroupUpdateClick}>Update</Button>
+          </Space.Compact>
+          
+        </div>
+
+        <Collapse className='mt-4' accordion>
+          <Panel header={<h3 className='font-bold'>Lesson Attendance</h3>} key="1">
+            <AttendanceWeekView
+              showMessage={showMessage}
+              hideMessage={hideMessage}
+              attendance={lessonAttendance}
+              reportName={LESSON}
+              memberName={newNameUnderscore}/>
+          </Panel>
+          <Panel header={<h3 className='font-bold'>Activity Attendance</h3>} key="2">
+            <AttendanceWeekView
+              showMessage={showMessage}
+              hideMessage={hideMessage}
+              attendance={activityAttendance}
+              reportName={ACTIVITY}
+              memberName={newNameUnderscore}/>
+          </Panel>
+          <Panel header={<h3 className='font-bold'>Homework Done</h3>} key="3">
+            <AttendanceWeekView
+              showMessage={showMessage}
+              hideMessage={hideMessage}
+              attendance={homeworkAttendance}
+              reportName={HOMEWORK}
+              memberName={newNameUnderscore}/>
+          </Panel>
+          <Panel header={<h3 className='font-bold'>Weekly Meeting Attendance</h3>} key="4">
+            <AttendanceWeekView
+              showMessage={showMessage}
+              hideMessage={hideMessage}
+              attendance={meetingAttendance}
+              reportName={WEEKLY_MEETING}
+              memberName={newNameUnderscore}/>
+          </Panel>
+        </Collapse>
+      </Modal>
+    </>
+  );
 }

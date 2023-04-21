@@ -8,6 +8,9 @@ import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import { ProSidebarProvider } from 'react-pro-sidebar';
 
+import store from './app/store'
+import { Provider } from 'react-redux'
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -41,9 +44,11 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ProSidebarProvider>
-      <RouterProvider router={router} />
-    </ProSidebarProvider>
+    <Provider store={store}>
+      <ProSidebarProvider>
+        <RouterProvider router={router} />
+      </ProSidebarProvider>
+    </Provider>
   </React.StrictMode>
 );
 

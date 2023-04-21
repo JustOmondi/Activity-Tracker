@@ -15,6 +15,12 @@ export default function MembersListPage() {
         getSubgroups()
     }, [])
 
+    const reloadTableData = async () => {
+        setMembers([])
+        getMembers()
+        getSubgroups()   
+    }
+
     const formatSubgroups = (data) => {
         let formattedSubgroups = []
 
@@ -59,7 +65,7 @@ export default function MembersListPage() {
         let response = await fetch(URL);
         let data = await response.json();
         
-        await formatMembers(data);
+        formatMembers(data);
     }
 
     const getSubgroups = async () => {
@@ -68,7 +74,7 @@ export default function MembersListPage() {
         let response = await fetch(URL);
         let data = await response.json();
         
-        await formatSubgroups(data);
+        formatSubgroups(data);
     }
     
     return (
@@ -93,7 +99,7 @@ export default function MembersListPage() {
                     </div>
                 </div>
             )}
-            {(members.length > 0) && <MembersTable members={members} subgroups={subgroups} currentDay={currentDay} />}
+            {(members.length > 0) && <MembersTable members={members} subgroups={subgroups} currentDay={currentDay} reloadTableData={reloadTableData}/>}
         </div> 
     )
 }

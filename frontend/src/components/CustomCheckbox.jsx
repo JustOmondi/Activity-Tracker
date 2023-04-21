@@ -3,9 +3,14 @@ import { Checkbox } from 'antd';
 import { BASE_API_URL } from '../constants'
 import { capitalize } from '../utils';
 
-export default function CustomCheckbox({item, isChecked, showMessage, hideMessage, classes, reportName, memberName}) {
+import { setMemberUpdated } from '../app/mainSlice';
+import { useDispatch } from 'react-redux'
+
+export default function CustomCheckbox({item, isChecked, showMessage, hideMessage, classes, reportName, memberName }) {
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(isChecked);
+
+    const dispatch = useDispatch()
 
     const updateReportValue = (newChecked) => {
         const updateValue = newChecked ? 1 : 0
@@ -17,14 +22,17 @@ export default function CustomCheckbox({item, isChecked, showMessage, hideMessag
         setIsLoading(true)
 
         fetch(url, {method: 'POST'})
-        .then(response => {
+        .then(async (response) => {
             hideMessage()
 
-            if (response.status == '200') {
+            if (response.status === 200) {
                 const message = `${capitalize(reportName)} attendance updated successfully`
 
                 setChecked(newChecked)
                 showMessage('success', message)
+
+                // Update redux store to indicate a member has been updated 
+                dispatch(setMemberUpdated(true))
 
             } else {
                 const message = 'Update failed. Please try again'

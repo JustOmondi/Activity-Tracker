@@ -3,9 +3,16 @@ import { Table, Checkbox, Button, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import MemberModal from './MemberModal';
 
-export default function MembersTable({members, subgroups, currentDay}) {
+import { setMemberUpdated } from '../app/mainSlice';
+import { useSelector, useDispatch } from 'react-redux'
+
+export default function MembersTable({members, subgroups, currentDay, reloadTableData}) {
   const [modalVisible, setModalVisible] = useState(false)
   const [currentMember, setCurrentMember] = useState({})
+
+  const memberUpdated = useSelector((state) => state.memberUpdated.value)
+
+  const dispatch = useDispatch()
 
   const handleRowClick = ({target}) => {
     const row = target.closest('tr');
@@ -22,6 +29,11 @@ export default function MembersTable({members, subgroups, currentDay}) {
 
   const hideModal = () => {
     setModalVisible(false)
+
+    if(memberUpdated) {
+      dispatch(setMemberUpdated(false))
+      reloadTableData();
+    }
   }
 
   const showModal = () => {
@@ -147,7 +159,6 @@ export default function MembersTable({members, subgroups, currentDay}) {
       }
     },
   ];
-
 
   return (
     <>
