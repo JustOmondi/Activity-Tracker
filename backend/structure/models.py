@@ -2,7 +2,7 @@
 from django.utils import timezone
 from django.db.models import CharField, ForeignKey, Model, PROTECT, DateTimeField, IntegerField
 from django.db.models.functions import ExtractIsoWeekDay
-from backend.reports.constants import REPORT_NAMES
+from ..reports.constants import REPORT_NAMES
 
 from .constants import SUBGROUP_LEADER_TITLE, YG
 
