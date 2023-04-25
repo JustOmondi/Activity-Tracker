@@ -16,14 +16,6 @@ def get_default_subgroup():
     subgroup = Subgroup.objects.get_or_create(subgroup_number=1, department=department)[0]
     return subgroup.id
 
-class Group(Model):
-    name = CharField(null=True, blank=True, max_length=110,)
-    updated = DateTimeField(auto_now=True)
-    created = DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
 class Department(Model):
     nickname = CharField(null=True, blank=True, max_length=110,)
     department_number = IntegerField(null=False, blank=False)

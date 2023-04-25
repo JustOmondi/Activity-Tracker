@@ -3,12 +3,7 @@ from rest_framework import serializers
 
 from ..reports.constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING
 
-from .models import Department, Member, Subgroup, Group
-
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ('name')
+from .models import Department, Member, Subgroup
 
 class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
     report_totals = serializers.SerializerMethodField()
