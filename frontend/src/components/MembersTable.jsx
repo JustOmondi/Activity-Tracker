@@ -6,7 +6,7 @@ import MemberModal from './MemberModal';
 import { setMemberUpdated } from '../app/mainSlice';
 import { useSelector, useDispatch } from 'react-redux'
 
-export default function MembersTable({members, subgroups, currentDay, reloadTableData}) {
+export default function MembersTable({members, subgroups, reloadTableData}) {
   const [modalVisible, setModalVisible] = useState(false)
   const [currentMember, setCurrentMember] = useState({})
 

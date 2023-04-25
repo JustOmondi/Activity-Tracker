@@ -99,7 +99,7 @@ export default function MembersListPage() {
                     </div>
                 </div>
             )}
-            {(members.length > 0) && <MembersTable members={members} subgroups={subgroups} currentDay={currentDay} reloadTableData={reloadTableData}/>}
+            {(members.length > 0) && <MembersTable members={members} subgroups={subgroups} reloadTableData={reloadTableData}/>}
         </div> 
     )
 }

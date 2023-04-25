@@ -12,10 +12,12 @@ export default function CustomCheckbox({item, isChecked, showMessage, hideMessag
 
     const dispatch = useDispatch()
 
+    const currentDay = (new Date()).getDay() + 1
+
     const updateReportValue = (newChecked) => {
         const updateValue = newChecked ? 1 : 0
 
-        const url = `${BASE_API_URL}/reports/update-report-value?member_name=${memberName}&report_name=${reportName}&update_value=${updateValue}`
+        const url = `${BASE_API_URL}/reports/update/value?member_name=${memberName}&report_name=${reportName}&value=${updateValue}&day=${currentDay}`
 
         showMessage('loading', `Updating ${capitalize(reportName)} attendance`)
 
