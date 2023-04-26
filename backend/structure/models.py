@@ -195,9 +195,9 @@ class Member(Model):
                 report_values_by_day_of_week[report_name][i] = False
 
         reports = self.report_set.filter(
-            created__gte=date_range_start,
-            created__lte=date_range_end
-        ).annotate(day_of_week=ExtractIsoWeekDay('created'))
+            report_date__gte=date_range_start,
+            report_date__lte=date_range_end
+        ).annotate(day_of_week=ExtractIsoWeekDay('report_date'))
 
         # Update the dict based on each corresponding report found in the search period
         for report in reports:

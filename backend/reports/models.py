@@ -15,21 +15,20 @@ REPORT_NAMES = [
 class Report(models.Model):
       name = models.CharField(null=True, blank=True, max_length=50, choices=REPORT_NAMES)
       member = models.ForeignKey('structure.Member', on_delete=models.PROTECT, blank=False, default=None)
-      updated = models.DateTimeField(auto_now=True, null=True, blank=True)
+      report_date = models.DateField(null=True, blank=True)
       created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-      day = models.IntegerField(null=True, blank=True)
       value = models.BooleanField(blank=True)
 
       class Meta:
-            unique_together = ('name', 'member', 'day')
-
-      def save(self, *args, **kwargs):
-            self.day = self.created.isoweekday()
-            
-            super().save(*args, **kwargs)
+            unique_together = ('name', 'member', 'report_date')
 
       def __str__(self):
+            date = ''
+            
+            if self.report_date:
+                  date = self.report_date.strftime("%d/%m/%Y")
+
             attendance = '✅' if self.value else '🚫'
-            return f'{self.member.full_name} - {self.name} - {self.created.strftime("%d/%m/%Y")} - {attendance}'
+            return f'{self.member.full_name} - {self.name} - {date} - {attendance}'
 
 # TODO: Add different kinds of reports e.g. Test Scores
