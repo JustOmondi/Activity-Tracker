@@ -20,6 +20,7 @@ export default function AttendanceWeekView({attendance, reportName, memberName, 
                             key={index}
                             isChecked={checked}
                             item={item}
+                            dayOfWeek={dayOfWeek}
                             classes={`${checkboxClasses} checkbox-${color}`}
                             memberName={memberName}
                             reportName={reportName}

@@ -8,7 +8,7 @@ export default function MembersListPage() {
     const [subgroups, setsubgroups] = useState([])
 
     // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
-    const currentDay = (new Date()).getDay() + 1
+    const currentDay = (new Date()).getDay()
 
     useEffect(() => {
         getMembers()
@@ -56,20 +56,20 @@ export default function MembersListPage() {
 
             formattedMembers.push(formattedMember)
         }
+        
         setMembers(formattedMembers)
     }
 
     const getMembers = async () => {
-        const URL = `${BASE_API_URL}/structure/members/`
+        const URL = `${BASE_API_URL}/structure/members`
 
         let response = await fetch(URL);
         let data = await response.json();
-        
         formatMembers(data);
     }
 
     const getSubgroups = async () => {
-        const URL = `${BASE_API_URL}/structure/subgroups/`
+        const URL = `${BASE_API_URL}/structure/subgroups`
 
         let response = await fetch(URL);
         let data = await response.json();

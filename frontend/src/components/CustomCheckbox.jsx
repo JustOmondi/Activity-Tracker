@@ -6,18 +6,18 @@ import { capitalize } from '../utils';
 import { setMemberUpdated } from '../app/mainSlice';
 import { useDispatch } from 'react-redux'
 
-export default function CustomCheckbox({item, isChecked, showMessage, hideMessage, classes, reportName, memberName }) {
+export default function CustomCheckbox({item, isChecked, dayOfWeek, showMessage, hideMessage, classes, reportName, memberName }) {
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(isChecked);
 
     const dispatch = useDispatch()
 
-    const currentDay = (new Date()).getDay() + 1
+    const currentDay = (new Date()).getDay()
 
     const updateReportValue = (newChecked) => {
         const updateValue = newChecked ? 1 : 0
 
-        const url = `${BASE_API_URL}/reports/update/value?member_name=${memberName}&report_name=${reportName}&value=${updateValue}&day=${currentDay}`
+        const url = `${BASE_API_URL}/reports/update/value?member_name=${memberName}&report_name=${reportName}&value=${updateValue}&day=${dayOfWeek}`
 
         showMessage('loading', `Updating ${capitalize(reportName)} attendance`)
 
@@ -64,7 +64,7 @@ export default function CustomCheckbox({item, isChecked, showMessage, hideMessag
     return (
         <Checkbox 
             className={classes}
-            disabled={isLoading}
+            disabled={isLoading || dayOfWeek > currentDay}
             checked={checked}
             defaultChecked={isChecked}
             onChange={handleChange}>
