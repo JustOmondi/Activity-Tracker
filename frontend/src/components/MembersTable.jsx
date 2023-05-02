@@ -6,7 +6,7 @@ import MemberModal from './MemberModal';
 import { setMemberUpdated } from '../app/mainSlice';
 import { useSelector, useDispatch } from 'react-redux'
 
-export default function MembersTable({members, subgroups, reloadTableData}) {
+export default function MembersTable({members, subgroups, reloadTableData, showMessage, hideMessage}) {
   const [modalVisible, setModalVisible] = useState(false)
   const [currentMember, setCurrentMember] = useState({})
 
@@ -162,7 +162,7 @@ export default function MembersTable({members, subgroups, reloadTableData}) {
 
   return (
     <>
-      {modalVisible && <MemberModal className='rounded-sm' hideModal={hideModal} member={currentMember} subgroups={subgroups} />}
+      {modalVisible && <MemberModal className='rounded-sm' hideModal={hideModal} member={currentMember} subgroups={subgroups} showMessage={showMessage} hideMessage={hideMessage} />}
       
       <Table
           dataSource={members}

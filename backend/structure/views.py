@@ -68,6 +68,21 @@ def getMember(request):
     
     return Response(serializer.data)
 
+@api_view(['GET', 'POST'])
+def addMember(request):
+    name = request.GET.get('name')
+    subgroup = request.GET.get('subgroup')
+
+    formatted_name = name.replace('_', ' ').title()
+    subgroup_lookup = Subgroup.objects.filter(subgroup_number=subgroup)
+
+    if(subgroup_lookup.count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    Member.objects.create(full_name=formatted_name, subgroup=subgroup_lookup.first())
+    
+    return Response(status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 def getSubgroup(request):
     subgroup_number = request.GET.get('subgroup_number')

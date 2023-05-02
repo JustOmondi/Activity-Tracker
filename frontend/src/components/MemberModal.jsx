@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Input, Modal, Select, Collapse, Space, message } from 'antd';
+import { Button, Input, Modal, Select, Collapse, Space } from 'antd';
 import AttendanceWeekView from './AttendanceWeekView';
 
 import { BASE_API_URL, LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../constants';
@@ -7,7 +7,7 @@ import { BASE_API_URL, LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../con
 import { setMemberUpdated } from '../app/mainSlice';
 import { useDispatch } from 'react-redux'
 
-export default function MemberModal({hideModal, member, subgroups}) {
+export default function MemberModal({hideModal, member, subgroups, showMessage, hideMessage}) {
   const memberNameUnderscore = member.name.toLowerCase().replace(' ', '_')
 
   const [open, setOpen] = useState(true);
@@ -15,23 +15,7 @@ export default function MemberModal({hideModal, member, subgroups}) {
   const [currentSubgroup, setMemberSubgroup] = useState(member.subgroup);
   const [isLoading, setIsLoading] = useState(false)
 
-  const [messageApi, contextHolder] = message.useMessage();
-  
   const dispatch = useDispatch()
-
-  const showMessage = (type, message) => {
-      const duration = type === 'loading' ? 0 : 5
-      
-      messageApi.open({
-          type: type,
-          content: message,
-          duration: duration,
-      });
-  }
-
-  const hideMessage = () => {
-      messageApi.destroy()
-  }
 
   const { Panel } = Collapse;
 
@@ -99,7 +83,6 @@ export default function MemberModal({hideModal, member, subgroups}) {
     })
     .catch(error => {
         hideMessage()
-        console.log(error)
         const message = 'Update failed. Please try again'
 
         setIsLoading(false)
@@ -159,7 +142,6 @@ export default function MemberModal({hideModal, member, subgroups}) {
 
   return (
     <>
-      {contextHolder}
       <Modal
         title='Edit Member'
         style={{ top: 50 }}

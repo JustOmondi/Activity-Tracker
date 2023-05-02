@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { BASE_API_URL, BLUE, ORANGE, GREEN, PINK, LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../constants'
-import { Button, Input, Modal, Select, Collapse, Space, message, Skeleton } from 'antd';
+import { Button, Input, Modal, Select, Space, message, Skeleton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import MembersTable from '../components/MembersTable'
+
+import { setMemberUpdated } from '../app/mainSlice';
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function MembersListPage() {
     const [members, setMembers] = useState([])
@@ -10,6 +13,25 @@ export default function MembersListPage() {
     const [addMemberModalVisible, setAddMemberModalVisible] = useState(false)
     const [newMemberName, setNewMemberName] = useState('')
     const [newMemberSubgroup, setNewMemberSubgroup] = useState('')
+
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const dispatch = useDispatch()
+    const memberUpdated = useSelector((state) => state.memberUpdated.value)
+
+    const showMessage = (type, message) => {
+        const duration = type === 'loading' ? 0 : 5
+        
+        messageApi.open({
+            type: type,
+            content: message,
+            duration: duration,
+        });
+    }
+
+    const hideMessage = () => {
+        messageApi.destroy()
+    }
 
 
     // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
@@ -90,8 +112,43 @@ export default function MembersListPage() {
         setAddMemberModalVisible(false)
     }
 
+    const handleAfterClose = () => {
+        if(memberUpdated) {
+            dispatch(setMemberUpdated(false))
+            reloadTableData();
+        }
+    }
+
     const handleOkClick = () => {
-        setAddMemberModalVisible(false)
+        if(newMemberName === '' || !newMemberSubgroup) {
+            showMessage('error', 'Please make sure all fields are filled in')
+        } else {
+            const underscoreName = newMemberName.toLowerCase().replace(' ', '_')
+
+            const url = `${BASE_API_URL}/structure/member/add?name=${underscoreName}&subgroup=${newMemberSubgroup}`
+
+            showMessage('loading', 'Adding new member')
+
+            fetch(url, {method: 'POST'})
+            .then(async (response) => {
+                hideMessage()
+
+                if (response.status === 200) {
+                    const message = 'Member added successfully'
+
+                    showMessage('success', message)
+
+                    dispatch(setMemberUpdated(true))
+                
+                } else {
+                    const message = 'Adding new member failed. Please try again'
+
+                    showMessage('error', message)
+                }
+                
+                setAddMemberModalVisible(false)
+            })
+        }
     }
 
     const handleNameInputChange = ({target}) => {
@@ -126,6 +183,7 @@ export default function MembersListPage() {
             )}
             {(members.length > 0) && (
                 <>
+                    {contextHolder}
                     <Button 
                         className='bg-white shadow-md rounded-xl mb-6 flex items-center mr-3' 
                         onClick={handleAddMemberClick}
@@ -135,6 +193,7 @@ export default function MembersListPage() {
                     <Modal
                         title="Add New Member"
                         open={addMemberModalVisible}
+                        afterClose={handleAfterClose}
                         onOk={handleOkClick}
                         onCancel={handleCancelClick}
                         footer={[
@@ -164,7 +223,7 @@ export default function MembersListPage() {
                             </Space.Compact>
                         </div>
                     </Modal>
-                    <MembersTable members={members} subgroups={subgroups} reloadTableData={reloadTableData}/>
+                    <MembersTable members={members} subgroups={subgroups} reloadTableData={reloadTableData} showMessage={showMessage} hideMessage={hideMessage} />
                 </>
                 
             )}

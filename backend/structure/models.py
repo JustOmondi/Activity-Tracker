@@ -270,9 +270,14 @@ class Member(Model):
         }
     
     def save(self, *args, **kwargs):
-        split_fullname = self.full_name.lower().split(" ")
-        self.underscore_name = f'{split_fullname[0]}_{split_fullname[1]}'
+        existing_member_lookup = Member.objects.filter(full_name=self.full_name, subgroup=self.subgroup)
+
+        if(existing_member_lookup.exists()):
+            self.full_name = f'{self.full_name} {existing_member_lookup.count() + 1}'
             
+        split_fullname = self.full_name.lower().split(" ")
+        self.underscore_name = '_'.join(split_fullname)
+
         super().save(*args, **kwargs)
 
     def __str__(self):
