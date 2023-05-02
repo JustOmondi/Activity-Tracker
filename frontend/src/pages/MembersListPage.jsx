@@ -33,7 +33,6 @@ export default function MembersListPage() {
         messageApi.destroy()
     }
 
-
     // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
     const currentDay = (new Date()).getDay()
 

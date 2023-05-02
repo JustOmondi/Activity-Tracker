@@ -11,4 +11,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/structure/', include('backend.structure.urls')),
     path('api/reports/', include('backend.reports.urls')),
+    path('api/logs', views.getLogs, name='logs')
 ]
