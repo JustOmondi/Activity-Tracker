@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { Divider, Form, Radio, Skeleton, Space, Switch } from 'antd';
 
-export default function InfoCard({icon, title, currentValue, lastweekValue, color}) {
-
-  const [loading, setLoading] = useState(false);
+export default function InfoCard({icon, title, currentValue, lastweekValue, color, loading}) {
 
   return (
     <div className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative mb-8 2xl:mb-0'>

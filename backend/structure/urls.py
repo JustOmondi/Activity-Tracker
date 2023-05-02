@@ -4,6 +4,7 @@ from django.urls import path
 urlpatterns = [
     path('departments', views.getDepartments, name='departments'),
     path('department/details', views.getDepartment, name='department'),
+    path('department/reportsbyweek', views.getDepartmentReportsByWeek, name='department'),
     
     path('subgroups', views.getSubgroups, name='subgroups'),
     path('subgroup/details', views.getSubgroup, name='subgroup'),

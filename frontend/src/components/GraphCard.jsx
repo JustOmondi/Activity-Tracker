@@ -18,64 +18,65 @@ ChartJS.register(
   Tooltip,
 );
 
-export const options = {
-  responsive: true,
-  barThickness: '8',
-  color: '#fff',
-  plugins: {
-    legend: {
-      display: false,
-    }
-  },
-  scales: {
-    x: {
-      ticks: {
-        color: '#fff'
+
+export default function GraphCard({icon, title, graphData, color}) {
+  const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+  const config = {
+    labels,
+    datasets: [
+      {
+        label: 'Last week',
+        data: graphData['last_week'],
+        backgroundColor: '#ffffff70',
       },
-      grid: {
+      {
+        label: 'This week',
+        data: graphData['this_week'],
+        backgroundColor: '#fff',
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    barThickness: '8',
+    color: '#fff',
+    plugins: {
+      legend: {
         display: false,
       }
     },
-    y: {
-      min: 0,
-      max: 10,
-      ticks: {
-        color: '#fff',
-        stepSize: 2,
+    scales: {
+      x: {
+        ticks: {
+          color: '#fff'
+        },
+        grid: {
+          display: false,
+        }
       },
-      grid: {
-        borderDash: 8,
-        color: '#ffffff20',
-
+      y: {
+        min: 0,
+        max: 10,
+        ticks: {
+          color: '#fff',
+          stepSize: 2,
+        },
+        grid: {
+          borderDash: 8,
+          color: '#ffffff20',
+  
+        }
       }
     }
-  }
-};
+  };
 
-const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Last week',
-      data: [4, 6, 10, 3, 6, 9, 10],
-      backgroundColor: '#ffffff70',
-    },
-    {
-      label: 'This week',
-      data: [4, 6, 10, 3, 6, 9, 10].reverse(),
-      backgroundColor: '#fff',
-    },
-  ],
-};
-
-export default function GraphCard({icon, title, currentValue, lastweekValue, color}) {
   return (
     <div className='graph-card shadow-lg bg-white p-4 mt-8 mx-2 rounded-2xl'>
         <div className='flex justify-center -mt-16'>
             <div className={`graph-container relative w-full p-3 rounded-2xl graph-bg-${color}`}>
-              <Bar options={options} data={data} />
+              <Bar options={options} data={config} />
             </div>
         </div>
         <div className='flex justify-left mt-5'>

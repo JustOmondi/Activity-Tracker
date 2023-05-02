@@ -34,6 +34,20 @@ def getDepartments(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+def getDepartmentReportsByWeek(request):
+    dept_number = request.GET.get('dept_number')
+
+    department_lookup = Department.objects.filter(department_number=dept_number)
+
+    if(department_lookup.count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    department = department_lookup.first()
+    result = department.get_all_reports_this_week_and_last_week()
+    
+    return Response(result)
+
+@api_view(['GET'])
 def getMembers(request):
     members = Member.objects.all()
     serializer = MemberSerializer(members, many=True)

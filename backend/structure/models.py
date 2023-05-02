@@ -2,6 +2,8 @@
 from django.utils import timezone
 from django.db.models import CharField, ForeignKey, Model, PROTECT, DateTimeField, IntegerField
 from django.db.models.functions import ExtractIsoWeekDay
+
+from ..reports.models import Report
 from ..reports.constants import REPORT_NAMES
 
 from .constants import SUBGROUP_LEADER_TITLE, YG
@@ -73,6 +75,56 @@ class Department(Model):
 
         return count
 
+    def get_all_reports_by_week(self, last_week=False):       
+        # Get reports and annotate with the day of the week
+        date_range_end = timezone.now().replace(hour=23, minute=59, second=59)        
+
+        # Get first day of week i.e. Sunday
+        date_range_start = date_range_end - timezone.timedelta(days=date_range_end.weekday())
+        date_range_start = date_range_start.replace(hour=0, minute=0, second=0)
+
+        if last_week:
+            # The start of the week for last week would simply be (Sunday - 7 days)
+            date_range_start = date_range_start - timezone.timedelta(days=7)
+
+            # The end of the week wil then be 6 days from Sunday i.e. Saturday
+            date_range_end = date_range_start + timezone.timedelta(days=7)
+
+        # print(f'/////////// FUNCTION: Start of week = {date_range_start.strftime("%m/%d/%Y, %H:%M:%S")} ///////////////////')
+        # print(f'/////////// FUNCTION: Date Range End = {date_range_end.strftime("%m/%d/%Y, %H:%M:%S")} ISOweekday = {date_range_end.isoweekday()} ///////////////////')
+        # Group reports by name and day of the week
+        report_values_by_day_of_week = {}
+
+        # Initialize the dict by setting all the report values to False for each type of report each day  
+        for report_name in REPORT_NAMES:
+            report_values_by_day_of_week[report_name] = {}
+            for i in range(1, 8):
+                report_values_by_day_of_week[report_name][i] = 0
+
+        reports = Report.objects.filter(
+            report_date__gte=date_range_start,
+            report_date__lte=date_range_end,
+            member__subgroup__department__department_number=self.department_number,
+        ).annotate(day_of_week=ExtractIsoWeekDay('report_date'))
+
+        # Update the dict based on each corresponding report found in the search period
+        for report in reports:
+            report_name = report.name
+            day_of_week = int(report.day_of_week)
+            report_value = report.value
+
+            # print(f'/////////// FUNCTION: Report Created = {report.created.strftime("%m/%d/%Y, %H:%M:%S")} DAY OF WEEK = {day_of_week} DAY={report.created.isoweekday()}///////////////////')
+
+            report_values_by_day_of_week[report_name][day_of_week] += 1 if report_value else 0
+
+        return report_values_by_day_of_week
+    
+    def get_all_reports_this_week_and_last_week(self):
+        return {
+            'this_week': self.get_all_reports_by_week(),
+            'last_week': self.get_all_reports_by_week(last_week=True)
+        }
+    
     def __str__(self):
         return self.name()
 
