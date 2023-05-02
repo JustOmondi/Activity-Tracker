@@ -161,7 +161,7 @@ export default function MemberModal({hideModal, member, subgroups}) {
     <>
       {contextHolder}
       <Modal
-        title={`Edit Member`}
+        title='Edit Member'
         style={{ top: 50 }}
         open={open}
         afterClose={afterClose}

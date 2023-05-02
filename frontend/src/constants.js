@@ -9,3 +9,8 @@ export const LESSON = 'lesson'
 export const ACTIVITY = 'activity'
 export const WEEKLY_MEETING = 'weekly_meeting'
 export const HOMEWORK = 'homework'
+
+export const THIS_WEEK = 'this_week'
+export const LAST_WEEK = 'last_week'
+
+export const REPORT_NAMES = [LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING]
