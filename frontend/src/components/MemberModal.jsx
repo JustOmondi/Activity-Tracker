@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Input, Modal, Select, Collapse, Space } from 'antd';
+import { Button, Input, Modal, Select, Collapse, Space, Popconfirm  } from 'antd';
 import AttendanceWeekView from './AttendanceWeekView';
 
 import { BASE_API_URL, LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../constants';
@@ -12,7 +12,7 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
 
   const [open, setOpen] = useState(true);
   const [newNameUnderscore, setNewNameUnderscore] = useState(memberNameUnderscore);
-  const [currentSubgroup, setMemberSubgroup] = useState(member.subgroup);
+  const [currentSubgroup, setMemberSubgroup] = useState(member.subgroup.split(' ')[1]);
   const [isLoading, setIsLoading] = useState(false)
 
   const dispatch = useDispatch()
@@ -68,6 +68,7 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
 
             showMessage('success', message)
 
+            setOpen(false);
             if(memberNameUnderscore !== newNameUnderscore) {
               // Update redux store to indicate a member has been updated 
               dispatch(setMemberUpdated(true))
@@ -135,6 +136,41 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
     setOpen(false);
   };
 
+  const handleRemoveMemberClick = () => {
+    const url = `${BASE_API_URL}/structure/member/remove?name=${memberNameUnderscore}&subgroup=${currentSubgroup}`
+
+    setIsLoading(true)
+    showMessage('loading', 'Removing member')
+
+    fetch(url, {method: 'POST'})
+    .then(async (response) => {
+        hideMessage()
+
+        if (response.status === 200) {
+            const message = 'Member removed successfully'
+
+            showMessage('success', message)
+
+            setOpen(false);
+            dispatch(setMemberUpdated(true))
+            
+        } else {
+            const message = 'Member removal failed. Please try again'
+
+            showMessage('error', message)
+        }
+
+        setIsLoading(false)
+    })
+    .catch(error => {
+        hideMessage()
+        const message = 'Member removal failed. Please try again'
+
+        setIsLoading(false)
+        showMessage('error', message)
+    })
+  };
+
   const afterClose = () => {
     hideModal()
     setOpen(true);
@@ -150,6 +186,17 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
         onCancel={handleCancel}
 
         footer={[
+          <Popconfirm
+            title={`Remove ${member.name}`}
+            description={`Are you sure you would like to remove this member?`}
+            onConfirm={handleRemoveMemberClick}
+            onCancel={() => {}}
+            okText="Yes"
+            cancelText="No">
+            <Button key="remove" type='default'>
+              Remove Member
+            </Button>
+          </Popconfirm>,
           <Button key="cancel" className='cancel-button' onClick={handleCancel}>
             Close
           </Button>

@@ -13,5 +13,6 @@ urlpatterns = [
     path('member/details', views.getMember, name='member_details'),
     path('member/update', views.updateMember, name='member_update'),
     path('member/add', views.addMember, name='member_add'),
+    path('member/remove', views.removeMember, name='member_remove'),
     path('member/reportsbyweek', views.getMemberReportsByWeek, name='member_reports_by_week'),
 ]

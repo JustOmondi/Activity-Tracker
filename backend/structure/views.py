@@ -83,6 +83,20 @@ def addMember(request):
     
     return Response(status=status.HTTP_200_OK)
 
+@api_view(['GET', 'POST'])
+def removeMember(request):
+    name = request.GET.get('name')
+    subgroup_number = request.GET.get('subgroup')
+
+    member_lookup = Member.objects.filter(underscore_name=name,  subgroup__subgroup_number=subgroup_number)
+
+    if(member_lookup.count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    member_lookup.first().delete()
+
+    return Response(status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 def getSubgroup(request):
     subgroup_number = request.GET.get('subgroup_number')

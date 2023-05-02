@@ -43,9 +43,13 @@ export default function MembersListPage() {
     }, [])
 
     const reloadTableData = async () => {
-        setMembers([])
-        getMembers()
-        getSubgroups()   
+        // Delay reload for 3 seconds to allow any notifications to show
+
+        setTimeout(() => {
+            setMembers([])
+            getMembers()
+            getSubgroups()   
+          }, 2000);
     }
 
     const formatSubgroups = (data) => {
@@ -121,7 +125,7 @@ export default function MembersListPage() {
 
     const handleOkClick = () => {
         if(newMemberName === '' || !newMemberSubgroup) {
-            showMessage('error', 'Please make sure all fields are filled in')
+            showMessage('error', 'Please check that all fields are filled in')
         } else {
             const underscoreName = newMemberName.toLowerCase().replace(' ', '_')
 
@@ -185,8 +189,9 @@ export default function MembersListPage() {
                 <>
                     {contextHolder}
                     <Button 
-                        className='bg-white shadow-md rounded-xl mb-6 flex items-center mr-3' 
+                        className='bg-black text-white shadow-md rounded-xl mb-6 flex items-center mr-3' 
                         onClick={handleAddMemberClick}
+                        type='primary'
                         icon={<PlusOutlined />}>
                         Add Member
                     </Button>
@@ -197,9 +202,6 @@ export default function MembersListPage() {
                         onOk={handleOkClick}
                         onCancel={handleCancelClick}
                         footer={[
-                            <Button key="cancel" className='cancel-button'  onClick={handleCancelClick}>
-                                Cancel
-                            </Button>,
                             <Button key="ok" className='ok-button' onClick={handleOkClick}>
                                 Submit
                             </Button>
