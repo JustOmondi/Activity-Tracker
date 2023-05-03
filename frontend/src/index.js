@@ -2,14 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import SubgroupsListPage from './pages/SubgroupsListPage';
-import MembersListPage from './pages/MembersListPage';
 import ErrorPage from './pages/ErrorPage';
+import FortnightGraph from './pages/FortnightGraph';
 import HomePage from './pages/HomePage';
+import MembersListPage from './pages/MembersListPage';
+import SubgroupsListPage from './pages/SubgroupsListPage';
+
 import { ProSidebarProvider } from 'react-pro-sidebar';
 
 import store from './app/store'
 import { Provider } from 'react-redux'
+
 
 const router = createBrowserRouter([
   {
@@ -18,7 +21,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "home/",
+        path: "dashboard/",
         element: <HomePage />,
       },
       {
@@ -26,16 +29,12 @@ const router = createBrowserRouter([
         element: <MembersListPage />,
       },
       {
-        path: "member/:memberId",
-        element: <MembersListPage />,
-      },
-      {
         path: "subgroups/",
         element: <SubgroupsListPage />,
       },
       {
-        path: "department/:departmentId",
-        element: <MembersListPage />,
+        path: "reports/",
+        element: <FortnightGraph />,
       },
     ],
   },

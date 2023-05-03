@@ -52,16 +52,10 @@ export default function RecentChanges({changes, title}) {
     }
 
   return (
-    <>
-    
-
     <Collapse accordion>
         <Panel header={<h2 className='font-bold text-md'>{title}</h2>}>
         <Timeline items={changes.map(formatChanges)} />
         </Panel>
     </Collapse>
-    
-    </>
-    
   )
 }

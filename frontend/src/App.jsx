@@ -18,7 +18,6 @@ function App() {
             <Bars3Icon onClick={() => {toggleSidebar()}} fill='#fff' className='h-8 w-8 text-black'/>
             <HomeIcon onClick={() => {toggleSidebar()}} fill='#fff' className='h-8 w-8 text-black'/>
             <WrenchIcon onClick={() => {toggleSidebar()}} fill='#fff' className='h-8 w-8 text-black'/>
-            
           </div>
           <div className='page-inner overflow-auto w-full'>
             <Outlet />
