@@ -43,7 +43,7 @@ def getLogs(request):
             if model_name == 'Report':
                 report = Report.all_items.get(id=log.object_pk)
                 member_name = report.member.full_name
-                report_name = report.name
+                report_name = report.name.replace('_', ' ')
                 report_date = report.report_date
 
                 report_data.append({'member_name': member_name, 'report_name': report_name, 'report_date': report_date, 'changes': []})
@@ -52,7 +52,7 @@ def getLogs(request):
                 for key in changes:
                     report_data[report_count]['changes'].append({
                         'action': action,
-                        'item': key,
+                        'item': key.replace('_', ' '),
                         'previous_value': changes.get(key)[0],
                         'new_value': changes.get(key)[1]
                     })
@@ -69,7 +69,7 @@ def getLogs(request):
                         action = 'removed'
                     member_data[member_count]['changes'].append({
                         'action': action,
-                        'item': key,
+                        'item': key.replace('_', ' '),
                         'previous_value': changes.get(key)[0],
                         'new_value': changes.get(key)[1]
                     })

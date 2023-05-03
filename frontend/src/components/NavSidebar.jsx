@@ -9,7 +9,7 @@ export default function NavSidebar({toggleSidebar}) {
     const [activeLink, setActiveLink] = useState(window.location.pathname)
 
     const handleLinkClick = ({target}) => {
-        if(window.innerWidth < 600) {
+        if(window.innerWidth < 900) {
             toggleSidebar()
         }
 
