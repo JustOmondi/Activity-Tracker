@@ -188,9 +188,10 @@ export default function MembersListPage() {
                 <>
                     {contextHolder}
                     <Button 
-                        className='bg-black text-white shadow-md rounded-xl mb-6 flex items-center mr-3' 
+                        className='bg-black text-white shadow-md rounded-2xl mb-6 flex items-center mr-3' 
                         onClick={handleAddMemberClick}
                         type='primary'
+                        size='large'
                         icon={<PlusOutlined />}>
                         Add Member
                     </Button>

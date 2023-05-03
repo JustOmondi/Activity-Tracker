@@ -8,7 +8,7 @@ import { setMemberUpdated } from '../app/mainSlice';
 import { useDispatch } from 'react-redux'
 
 export default function MemberModal({hideModal, member, subgroups, showMessage, hideMessage}) {
-  const memberNameUnderscore = member.name.toLowerCase().replace(' ', '_')
+  const memberNameUnderscore = member.name.toLowerCase().replaceAll(' ', '_')
 
   const [open, setOpen] = useState(true);
   const [newNameUnderscore, setNewNameUnderscore] = useState(memberNameUnderscore);

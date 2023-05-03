@@ -3,15 +3,21 @@ import InfoCard from '../components/InfoCard'
 import { BuildingOfficeIcon, UsersIcon, BoltIcon, BookOpenIcon } from '@heroicons/react/24/outline'
 import GraphCard from '../components/GraphCard'
 import { ACTIVITY, HOMEWORK, LESSON, REPORT_NAMES, THIS_WEEK, LAST_WEEK, WEEKLY_MEETING, BASE_API_URL } from '../constants'
-import { Skeleton } from 'antd'
+import { Skeleton  } from 'antd'
+import RecentChanges from '../components/RecentChanges'
 
 export default function HomePage() {
   const [reportTotalsForWeek, setReportTotalsForWeek] = useState({})
   const [reportTotalsForToday, setReportTotalsForToday] = useState({})
+  const [memberChanges, setMemberChanges] = useState([])
+  const [reportChanges, setReportChanges] = useState([])
 
   useEffect(() => {
     getReports()
+    getRecentChanges()
   }, [])
+
+  console.log(memberChanges.length)
 
 
   const formatReports = (data) => {
@@ -35,10 +41,6 @@ export default function HomePage() {
       setReportTotalsForWeek(formattedReports)
       
       setReportTotalsForToday(formattedReportsForToday)
-
-      console.dir(formattedReports)
-
-      console.log(reportTotalsForToday[LESSON][THIS_WEEK])
   }
 
   const getReports = async () => {
@@ -49,14 +51,21 @@ export default function HomePage() {
     formatReports(data);
   }
 
+  const getRecentChanges = async () => {
+    const URL = `${BASE_API_URL}/logs`
+
+    let response = await fetch(URL);
+    let data = await response.json();
+    
+    setMemberChanges(data['member_changes'])
+    setReportChanges(data['report_changes'])
+  }
+
   const getInfoCardSkeleton = () => {
     return (
       <div className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative mb-8 2xl:mb-0'>
-        <div className='flex justify-end'>
-            <Skeleton.Input active />
-        </div>
         <div>
-          <div className='flex w-full justify-between mt-3'>
+          <div className='flex w-full justify-between'>
             <Skeleton.Input active />
             <div><Skeleton.Avatar shape={'square'} size={'medium'} active /></div>
           </div>
@@ -156,6 +165,16 @@ export default function HomePage() {
             graphData={reportTotalsForWeek[HOMEWORK]}
           />
         )}
+      </div>
+      <div className='flex w-full justify-evenly space-around mt-12'>
+        <div className='shadow-lg bg-white p-6 m-1 rounded-2xl w-full mx-6'>
+          {memberChanges.length === 0 && <Skeleton  active paragraph={{ rows: 2 }} />}
+          {memberChanges.length !== 0 && (<RecentChanges changes={memberChanges} title={'Member Chages'}/>)}
+        </div>
+        <div className='shadow-lg bg-white p-6 m-1 rounded-2xl w-full mx-6'>
+          {reportChanges.length === 0 && <Skeleton  active paragraph={{ rows: 2 }} />}
+          {reportChanges.length !== 0 && (<RecentChanges changes={reportChanges} title={'Report Chages'}/>)}
+        </div>
       </div>
     </div>
   )

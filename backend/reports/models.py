@@ -35,4 +35,4 @@ class Report(BaseModel):
 
 # TODO: Add different kinds of reports e.g. Test Scores
 
-auditlog.register(Report, serialize_data=True)
+auditlog.register(Report, serialize_data=True, exclude_fields=['is_deleted', 'updated', 'created', 'report_date'])

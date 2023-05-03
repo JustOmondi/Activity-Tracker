@@ -25,7 +25,6 @@ def get_default_subgroup():
 class Department(BaseModel):
     nickname = CharField(null=True, blank=True, max_length=110,)
     department_number = IntegerField(null=False, blank=False)
-    department_leader = ForeignKey('Member', on_delete=PROTECT, related_name="department_leader", null=True, blank=True)
     updated = DateTimeField(auto_now=True)
     created = DateTimeField(auto_now_add=True)
 
@@ -135,7 +134,6 @@ class Department(BaseModel):
 class Subgroup(BaseModel):
     nickname = CharField(null=True, blank=True, max_length=110,)
     subgroup_number = IntegerField(null=False, blank=False)
-    subgroup_leader = ForeignKey('Member', on_delete=PROTECT, related_name="subgroup_leader", null=True, blank=True)
     department = ForeignKey('Department', on_delete=PROTECT, null=False, blank=False, default=get_default_department)
     updated = DateTimeField(auto_now=True)
     created = DateTimeField(auto_now_add=True)
@@ -183,7 +181,6 @@ class Member(BaseModel):
     full_name = CharField(null=False, blank=False, max_length=110,)
     underscore_name = CharField(null=True, blank=True, max_length=110,)
     chat_id = CharField(null=True, blank=True, max_length=110,)
-    group = CharField(null=True, blank=True, max_length=45, default=YG)
     full_id = CharField(null=True, blank=True, max_length=70,)
     duty = CharField(null=True, blank=True, max_length=100,)
     subgroup = ForeignKey('SubGroup', on_delete=PROTECT, null=False,  blank=False, default=get_default_subgroup)
@@ -274,13 +271,14 @@ class Member(BaseModel):
         }
     
     def save(self, *args, **kwargs):
-        split_fullname = self.full_name.lower().split(" ")
-        underscore_name = '_'.join(split_fullname)
+        if not self.pk:
+            split_fullname = self.full_name.lower().split(" ")
+            underscore_name = '_'.join(split_fullname)
 
-        existing_member_lookup = Member.objects.filter(underscore_name=underscore_name, subgroup=self.subgroup, is_deleted=False)
+            existing_member_lookup = Member.objects.filter(underscore_name=underscore_name, subgroup=self.subgroup, is_deleted=False)
 
-        if(existing_member_lookup.exists()):
-            self.full_name = f'{self.full_name} {existing_member_lookup.count() + 1}'
+            if(existing_member_lookup.exists()):
+                self.full_name = f'{self.full_name} {existing_member_lookup.count() + 1}'
 
         split_fullname = self.full_name.lower().split(" ")
         self.underscore_name = '_'.join(split_fullname)
@@ -290,6 +288,6 @@ class Member(BaseModel):
     def __str__(self):
             return self.full_name
     
-auditlog.register(Department, serialize_data=True)
-auditlog.register(Subgroup, serialize_data=True)
-auditlog.register(Member, serialize_data=True)
+auditlog.register(Department, serialize_data=True, exclude_fields=['is_deleted', 'updated', 'created'])
+auditlog.register(Subgroup, serialize_data=True, exclude_fields=['is_deleted', 'updated', 'created'])
+auditlog.register(Member, serialize_data=True, exclude_fields=['underscore_name', 'updated', 'created'])
