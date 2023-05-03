@@ -5,6 +5,7 @@ urlpatterns = [
     path('departments', views.getDepartments, name='departments'),
     path('department/details', views.getDepartment, name='department_details'),
     path('department/reportsbyweek', views.getDepartmentReportsByWeek, name='department_reports_by_week'),
+    path('department/reports-by-fortnight', views.getDepartmentReportsByFortnight, name='department_reports_by_fortnight'),
     
     path('subgroups', views.getSubgroups, name='subgroups'),
     path('subgroup/details', views.getSubgroup, name='subgroup'),

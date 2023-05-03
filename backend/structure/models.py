@@ -122,6 +122,36 @@ class Department(BaseModel):
 
         return report_values_by_day_of_week
     
+    def get_reports_by_fornight(self, report_name):       
+        date_range_end = timezone.now().replace(hour=23, minute=59, second=59)        
+
+
+        date_range_start = date_range_end - timezone.timedelta(days=14)
+        date_range_start = date_range_start.replace(hour=0, minute=0, second=0)
+
+        values = []
+        labels = []
+
+        for date in (date_range_start + timezone.timedelta(days=n) for n in range(14)):
+            reports = Report.objects.filter(
+                report_date=date,
+                name=report_name
+            )
+
+            total = 0
+
+            for report in reports:
+                if report.value:
+                    total += 1
+
+            values.append(total)
+            labels.append(date.strftime('%d %b'))
+
+        return {
+            'values': values,
+            'labels': labels
+        }
+    
     def get_all_reports_this_week_and_last_week(self):
         return {
             'this_week': self.get_all_reports_by_week(),

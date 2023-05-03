@@ -2,6 +2,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 import logging
 
+from backend.reports.constants import REPORT_NAMES
+
 from .models import Member, Subgroup, Department
 from .serializers import DepartmentSerializer, MemberSerializer, SubgroupSerializer
 
@@ -44,6 +46,24 @@ def getDepartmentReportsByWeek(request):
 
     department = department_lookup.first()
     result = department.get_all_reports_this_week_and_last_week()
+    
+    return Response(result)
+
+@api_view(['GET'])
+def getDepartmentReportsByFortnight(request):
+    report_name = request.GET.get('report_name')
+    dept_number = request.GET.get('dept_number')
+
+    if report_name not in REPORT_NAMES:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    department_lookup = Department.objects.filter(department_number=dept_number)
+
+    if(department_lookup.count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    department = department_lookup.first()
+    result = department.get_reports_by_fornight(report_name)
     
     return Response(result)
 
