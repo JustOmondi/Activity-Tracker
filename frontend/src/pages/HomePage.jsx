@@ -17,9 +17,6 @@ export default function HomePage() {
     getRecentChanges()
   }, [])
 
-  console.log(memberChanges.length)
-
-
   const formatReports = (data) => {
       let formattedReports = {}
       let formattedReportsForToday = {}
@@ -97,6 +94,7 @@ export default function HomePage() {
             currentValue={reportTotalsForToday[LESSON][THIS_WEEK]}
             lastweekValue={reportTotalsForToday[LESSON][LAST_WEEK]}
             color={'green'}
+            link={'/reports?name=lesson'}
           />
         )}
         
@@ -108,6 +106,7 @@ export default function HomePage() {
             currentValue={reportTotalsForToday[HOMEWORK][THIS_WEEK]}
             lastweekValue={reportTotalsForToday[HOMEWORK][LAST_WEEK]}
             color={'orange'}
+            link={'/reports?name=homework'}
           />
         )}
         
@@ -119,6 +118,7 @@ export default function HomePage() {
             currentValue={reportTotalsForToday[ACTIVITY][THIS_WEEK]}
             lastweekValue={reportTotalsForToday[ACTIVITY][LAST_WEEK]}
             color={'blue'}
+            link={'/reports?name=activity'}
           />
         )}
         
@@ -131,6 +131,7 @@ export default function HomePage() {
             lastweekValue={reportTotalsForToday[WEEKLY_MEETING][LAST_WEEK]}
             loading={!reportTotalsForToday.hasOwnProperty(WEEKLY_MEETING)}
             color={'pink'}
+            link={'/reports?name=weekly_meeting'}
           />
         )}
         
@@ -143,6 +144,7 @@ export default function HomePage() {
             icon={<BoltIcon fill='#fff' className='h-8 w-8 text-white'/>} 
             title={'Activity Attendance'} 
             graphData={reportTotalsForWeek[ACTIVITY]}
+            link={'/reports?name=activity'}
           />
         )}
         
@@ -153,6 +155,7 @@ export default function HomePage() {
             icon={<BuildingOfficeIcon fill='#fff' className='h-8 w-8 text-white'/>} 
             title={'Lesson Attendance'} 
             graphData={reportTotalsForWeek[LESSON]}
+            link={'/reports?name=lesson'}
           />
         )}
 
@@ -163,17 +166,18 @@ export default function HomePage() {
             icon={<BookOpenIcon fill='#fff' className='h-8 w-8 text-white'/>} 
             title={'Homework Done'} 
             graphData={reportTotalsForWeek[HOMEWORK]}
+            link={'/reports?name=homework'}
           />
         )}
       </div>
-      <div className='flex w-full justify-evenly space-around mt-12'>
-        <div className='shadow-lg bg-white p-6 m-1 rounded-2xl w-full mx-6'>
+      <div className='flex w-full justify-evenly space-around mt-0 xl:mt-12 flex-wrap xl:flex-nowrap'>
+        <div className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
           {memberChanges.length === 0 && <Skeleton  active paragraph={{ rows: 2 }} />}
-          {memberChanges.length !== 0 && (<RecentChanges changes={memberChanges} title={'Member Chages'}/>)}
+          {memberChanges.length !== 0 && <RecentChanges changes={memberChanges} title={'Member Chages'}/>}
         </div>
-        <div className='shadow-lg bg-white p-6 m-1 rounded-2xl w-full mx-6'>
+        <div className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
           {reportChanges.length === 0 && <Skeleton  active paragraph={{ rows: 2 }} />}
-          {reportChanges.length !== 0 && (<RecentChanges changes={reportChanges} title={'Report Chages'}/>)}
+          {reportChanges.length !== 0 && <RecentChanges changes={reportChanges} title={'Report Chages'}/>}
         </div>
       </div>
     </div>

@@ -1,10 +1,22 @@
-import React from 'react'
-import { Sidebar, Menu, MenuItem, useProSidebar } from 'react-pro-sidebar';
+import React, {useState} from 'react'
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import {Link} from "react-router-dom";
 import { ArrowLeftOnRectangleIcon, HomeIcon, ListBulletIcon, UsersIcon } from '@heroicons/react/24/outline'
 
-export default function NavSidebar({collapse}) {
+export default function NavSidebar({toggleSidebar}) {
     const sideBarBGColour = '#111827';
+
+    const [activeLink, setActiveLink] = useState(window.location.pathname)
+
+    const handleLinkClick = ({target}) => {
+        if(window.innerWidth < 600) {
+            toggleSidebar()
+        }
+
+        setActiveLink(`/${target.innerHTML.toLowerCase()}`)
+    }
+
+    const iconClasses = 'h-6 w-6 text-white'
 
     return (
         <Sidebar backgroundColor={sideBarBGColour} customBreakPoint="1024px" rootStyles={{
@@ -15,12 +27,11 @@ export default function NavSidebar({collapse}) {
             borderRight: `0px solid ${sideBarBGColour}`,
         }}>
            <Menu>
-                <MenuItem icon={<HomeIcon className='h-6 w-6 text-white'/>} component={<Link to="/home" />}> Home </MenuItem>
-                <MenuItem icon={<ListBulletIcon className='h-6 w-6 text-white'/>} component={<Link to="/subgroups" />}> Subgroups </MenuItem>
-                <MenuItem icon={<UsersIcon className='h-6 w-6 text-white'/>} component={<Link to="/members" />}> Members </MenuItem>
-                <MenuItem className='absolute bottom-0' icon={<ArrowLeftOnRectangleIcon className='h-6 w-6 text-white'/>} component={<Link to="/" />}> Logout </MenuItem>
-            </Menu>
-            
+                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/dashboard' ? 'active' : ''}`} icon={<HomeIcon className={iconClasses}/>} component={<Link to='/dashboard' />}>Dashboard</MenuItem>
+                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/subgroups' ? 'active' : ''}`} icon={<ListBulletIcon className={iconClasses}/>} component={<Link to='/subgroups' />}>Subgroups</MenuItem>
+                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/members' ? 'active' : ''}`} icon={<UsersIcon className={iconClasses}/>} component={<Link to='/members' />}>Members</MenuItem>
+                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/'}`} icon={<ArrowLeftOnRectangleIcon className={iconClasses}/>} component={<Link to='/' />}>Logout</MenuItem>
+            </Menu> 
         </Sidebar>
     )
 }

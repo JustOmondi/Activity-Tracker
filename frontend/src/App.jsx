@@ -11,7 +11,7 @@ function App() {
   return (
       <div className="App">
         <div className='sidebar-page-section'>
-          <NavSidebar className=' h-full' />
+          <NavSidebar className=' h-full' toggleSidebar={toggleSidebar}/>
         </div>
         <div className='page h-full pt-8 px-6'>
           <div className='lg:hidden mb-4 w-full flex justify-between'>

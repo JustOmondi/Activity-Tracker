@@ -86,14 +86,19 @@ p, h3, h2, h1, div {
     transition: all 0.2s ease;
 }
 
-.ps-menu-button:hover {
+.ps-menu-button:hover, .active .ps-menu-button {
     background-color: transparent;
     background: linear-gradient(-45deg, #8cdbff, #febbcf);
     background-size: 200% 200%;
     animation: gradient 8s ease infinite;
+    color: #000;
 }
 
 .ps-menu-button:hover .ps-menu-label, .ps-menu-button:hover .ps-menu-icon > svg {
+    color: #000;
+}
+
+.active .ps-menu-button .ps-menu-label, .active .ps-menu-button .ps-menu-icon > svg {
     color: #000;
 }
 
