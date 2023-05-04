@@ -63,11 +63,10 @@ class Department(BaseModel):
                 current_count += subgroup.get_report_total(report_name, 0)
                 lastweek_count += subgroup.get_report_total(report_name, 7)
 
-            current_key = f'{report_name}_count'
-            lastweek_key = f'lastweek_{report_name}_count'
-
-            totals[current_key] = current_count
-            totals[lastweek_key] = lastweek_count
+            totals[report_name] = {
+                'this_week': current_count,
+                'last_week': lastweek_count
+            }
         
         return totals
     
@@ -196,11 +195,10 @@ class Subgroup(BaseModel):
                 current_count += member.get_report(report_name, 0)
                 lastweek_count += member.get_report(report_name, 7) 
 
-            current_key = f'{report_name}_count'
-            lastweek_key = f'lastweek_{report_name}_count'
-
-            totals[current_key] = current_count
-            totals[lastweek_key] = lastweek_count
+            totals[report_name] = {
+                'this_week': current_count,
+                'last_week': lastweek_count
+            }
         
         return totals
 

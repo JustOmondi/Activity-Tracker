@@ -37,7 +37,7 @@ def getLogs(request):
         elif log.action == 2:
             action = 'removed'
         else:
-            action = 'accessed' 
+            action = 'N/A' 
 
         if log.object_pk:
             if model_name == 'Report':
