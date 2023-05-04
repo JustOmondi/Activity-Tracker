@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Input, Modal, Select, Collapse, Space, Popconfirm  } from 'antd';
 import AttendanceWeekView from './AttendanceWeekView';
 
-import { BASE_API_URL, LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../constants';
+import { BASE_API_URL, getAllReportItems } from '../Config';
 
 import { setMemberUpdated } from '../app/mainSlice';
 import { useDispatch } from 'react-redux'
@@ -19,31 +19,14 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
 
   const { Panel } = Collapse;
 
-  const lessonAttendance = {
-    'thisWeek': member.thisWeekReports[LESSON], 
-    'lastWeek': member.lastWeekReports[LESSON],
-    'color': member.lessonAttendance[0]
+  const getAttendance = (reportName, reportColor) => {
+    return {
+      'thisWeek': member.thisWeekReports[reportName], 
+      'lastWeek': member.lastWeekReports[reportName],
+      'color': reportColor
+    }
   }
 
-  const meetingAttendance = {
-    'thisWeek': member.thisWeekReports[WEEKLY_MEETING], 
-    'lastWeek': member.lastWeekReports[WEEKLY_MEETING],
-    'color': member.meetingAttendance[0]
-  }
-
-  const homeworkAttendance = {
-    'thisWeek': member.thisWeekReports[HOMEWORK], 
-    'lastWeek': member.lastWeekReports[HOMEWORK],
-    'color': member.homeworkAttendance[0]
-  }
-
-  const activityAttendance = {
-    'thisWeek': member.thisWeekReports[ACTIVITY], 
-    'lastWeek': member.lastWeekReports[ACTIVITY],
-    'color': member.activityAttendance[0]
-  }
-
-  
   const handleNameInputChange = ({target}) => {
     const name = target.value.toLowerCase().replace(' ', '_')
     setNewNameUnderscore(name)
@@ -200,8 +183,7 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
           <Button key="cancel" className='cancel-button' onClick={handleCancel}>
             Close
           </Button>
-        ]}
-      >
+        ]}>
         <div className='flex items-center mt-8'>
           <h3 className='mr-3 font-bold'>Name:</h3> 
           <Space.Compact style={{ width: '100%' }}>
@@ -216,46 +198,25 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
                 defaultValue={member.subgroup}
                 style={{ width: 120 }}
                 options={subgroups}
-                onChange={handleSubgroupSelectChange}
-            />
+                onChange={handleSubgroupSelectChange} />
             <Button disabled={isLoading} className='ok-button' onClick={handleSubgroupUpdateClick}>Update</Button>
           </Space.Compact>
           
         </div>
 
         <Collapse className='mt-4' accordion>
-          <Panel header={<h3 className='font-bold'>Lesson Attendance</h3>} key="1">
-            <AttendanceWeekView
-              showMessage={showMessage}
-              hideMessage={hideMessage}
-              attendance={lessonAttendance}
-              reportName={LESSON}
-              memberName={newNameUnderscore}/>
-          </Panel>
-          <Panel header={<h3 className='font-bold'>Activity Attendance</h3>} key="2">
-            <AttendanceWeekView
-              showMessage={showMessage}
-              hideMessage={hideMessage}
-              attendance={activityAttendance}
-              reportName={ACTIVITY}
-              memberName={newNameUnderscore}/>
-          </Panel>
-          <Panel header={<h3 className='font-bold'>Homework Done</h3>} key="3">
-            <AttendanceWeekView
-              showMessage={showMessage}
-              hideMessage={hideMessage}
-              attendance={homeworkAttendance}
-              reportName={HOMEWORK}
-              memberName={newNameUnderscore}/>
-          </Panel>
-          <Panel header={<h3 className='font-bold'>Weekly Meeting Attendance</h3>} key="4">
-            <AttendanceWeekView
-              showMessage={showMessage}
-              hideMessage={hideMessage}
-              attendance={meetingAttendance}
-              reportName={WEEKLY_MEETING}
-              memberName={newNameUnderscore}/>
-          </Panel>
+          {getAllReportItems().map((reportItem, index) => {
+              return (
+                <Panel header={<h3 className='font-bold'>{reportItem.title}</h3>} key={index}>
+                  <AttendanceWeekView
+                    showMessage={showMessage}
+                    hideMessage={hideMessage}
+                    attendance={getAttendance(reportItem.name, reportItem.color)}
+                    reportName={reportItem.name}
+                    memberName={newNameUnderscore} />
+                </Panel>
+              )
+          })}
         </Collapse>
       </Modal>
     </>

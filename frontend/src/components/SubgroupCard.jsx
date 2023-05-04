@@ -1,4 +1,5 @@
 import React from 'react'
+import { Tooltip } from 'antd';
 import {CaretRightOutlined, ClockCircleFilled} from '@ant-design/icons';
 import { LAST_WEEK, THIS_WEEK, getAllReportItems } from '../Config';
 
@@ -24,10 +25,14 @@ export default function SubgroupCard({name, totalMembers, totals}) {
                     <div>
                         <div className={titleClasses}>{reportItem.title}</div>
                         <div className={summaryClasses}>
-                            <CaretRightOutlined /> 
-                            <div className={`value-color-${reportItem.color} mr-5 ml-1`}>{totals[reportItem.name][THIS_WEEK]}</div>
-                            <ClockCircleFilled />
-                            <div className='text-gray-500 ml-1'>{totals[reportItem.name][LAST_WEEK]}</div>
+                            <Tooltip className='flex items-center' title="This Week">
+                                <CaretRightOutlined /> 
+                                <div className={`value-color-${reportItem.color} mr-5 ml-1`}>{totals[reportItem.name][THIS_WEEK]}</div>
+                            </Tooltip>
+                            <Tooltip className='flex items-center' title="Last Week">
+                                <ClockCircleFilled />
+                                <div className='text-gray-500 ml-2'>{totals[reportItem.name][LAST_WEEK]}</div>
+                            </Tooltip>
                         </div>
                     </div>
                 </div>
