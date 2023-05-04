@@ -27,7 +27,7 @@ export default function SubgroupsListPage() {
             )}    
             
             {subgroups.length !== 0 && subgroups.map((subgroup, index) => (
-                <SubgroupCard key={index} name={subgroup.name} totalMembers={subgroup.total_members}/>
+                <SubgroupCard key={index} name={subgroup.name} totalMembers={subgroup.total_members} totals={subgroup.report_totals}/>
             ))}
         </div>
         

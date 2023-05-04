@@ -42,13 +42,9 @@ export default function MembersListPage() {
     }, [])
 
     const reloadTableData = async () => {
-        // Delay reload for 3 seconds to allow any notifications to show
-
-        setTimeout(() => {
-            setMembers([])
-            getMembers()
-            getSubgroups()   
-          }, 2000);
+        setMembers([])
+        getMembers()
+        getSubgroups()
     }
 
     const formatSubgroups = (data) => {
@@ -161,27 +157,26 @@ export default function MembersListPage() {
     const handleSubgroupSelectChange = (value) => {
         setNewMemberSubgroup(value)
     }
+
+    const getTableRowSkeleton = () => {
+        return (
+            <div className='flex justify-between m-4 flex-wrap'>
+                <Skeleton.Input className='mb-2 md:mb-0' active />
+                <Skeleton.Input className='mb-2 md:mb-0' active />
+                <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+                <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
+            </div>
+        )
+    }
     
     return (
         <div>
             {(members.length === 0) && (
                 <div className='rounded-2xl bg-white p-4 w-full shadow-lg'>
-                    <div className='flex justify-between m-4 flex-wrap'>
-                        <Skeleton.Input className='mb-2 md:mb-0' active />
-                        <Skeleton.Input className='mb-2 md:mb-0' active />
-                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
-                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
-                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
-                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
-                    </div>
-                    <div className='flex justify-between m-4 flex-wrap'>
-                        <Skeleton.Input className='mb-2 md:mb-0' active />
-                        <Skeleton.Input className='mb-2 md:mb-0' active />
-                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
-                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
-                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
-                        <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
-                    </div>
+                    {getTableRowSkeleton()}
+                    {getTableRowSkeleton()}
                 </div>
             )}
             {(members.length > 0) && (
@@ -226,8 +221,7 @@ export default function MembersListPage() {
                         </div>
                     </Modal>
                     <MembersTable members={members} subgroups={subgroups} reloadTableData={reloadTableData} showMessage={showMessage} hideMessage={hideMessage} />
-                </>
-                
+                </>   
             )}
         </div> 
     )

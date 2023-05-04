@@ -21,7 +21,7 @@ ChartJS.register(
   Tooltip,
 );
 
-export default function FortnightGraph({icon}) {
+export default function FortnightGraph() {
   const [values, setValues] = useState([])
   const [labels, setLabels] = useState([])
 
