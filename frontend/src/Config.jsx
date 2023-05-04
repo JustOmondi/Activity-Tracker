@@ -17,6 +17,9 @@ export const LAST_WEEK = 'last_week'
 
 export const REPORT_NAMES = [LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING]
 
+const FEATURED_TILES = [LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING]
+const FEATURED_GRAPHS = [LESSON, ACTIVITY, HOMEWORK]
+
 const iconClasses = 'h-8 w-8 text-white'
 const fillColor = '#ffffff'
 
@@ -47,5 +50,29 @@ export const REPORTS = {
     },
 }
 
-export const FEATURED_TILES = [LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING]
-export const FEATURED_GRAPHS = [LESSON, ACTIVITY, HOMEWORK]
+export const getFeaturedTiles = () => {
+    const items = []
+      for (let reportName of FEATURED_TILES) {
+          const report = REPORTS[reportName]
+          items.push(report)
+      }
+    return items
+}
+
+export const getFeaturedGraphs = () => {
+    const items = []
+      for (let reportName of FEATURED_GRAPHS) {
+          const report = REPORTS[reportName]
+          items.push(report)
+      }
+    return items
+}
+
+export const getAllReportItems = () => {
+    const items = []
+      for (let reportName in REPORTS) {
+          const report = REPORTS[reportName]
+          items.push(report)
+      }
+    return items
+}

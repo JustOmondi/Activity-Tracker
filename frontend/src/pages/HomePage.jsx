@@ -3,7 +3,7 @@ import InfoCard from '../components/InfoCard'
 import GraphCard from '../components/GraphCard'
 import { Skeleton  } from 'antd'
 import RecentChanges from '../components/RecentChanges'
-import { REPORT_NAMES, THIS_WEEK, LAST_WEEK, BASE_API_URL, FEATURED_GRAPHS, FEATURED_TILES, REPORTS } from '../Config'
+import { REPORT_NAMES, THIS_WEEK, LAST_WEEK, BASE_API_URL, getFeaturedTiles, getFeaturedGraphs } from '../Config'
 
 export default function HomePage() {
   const [reportTotalsForWeek, setReportTotalsForWeek] = useState({})
@@ -80,24 +80,6 @@ export default function HomePage() {
         </div>
       </div>
     )
-  }
-
-  const getFeaturedTiles = () => {
-    const items = []
-      for (let reportName of FEATURED_TILES) {
-          const report = REPORTS[reportName]
-          items.push(report)
-      }
-    return items
-  }
-
-  const getFeaturedGraphs = () => {
-    const items = []
-      for (let reportName of FEATURED_GRAPHS) {
-          const report = REPORTS[reportName]
-          items.push(report)
-      }
-    return items
   }
 
   return (
