@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Table, Checkbox, Button, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
+import { getAllReportItems } from '../Config'
 import MemberModal from './MemberModal';
 
 import { setMemberUpdated } from '../app/mainSlice';
@@ -23,7 +24,7 @@ export default function MembersTable({members, subgroups, reloadTableData, showM
     showModal()
   }
 
-  const handleButtonClick = ({target}) => {
+  const handleButtonClick = () => {
     showModal()
   }
 
@@ -38,6 +39,33 @@ export default function MembersTable({members, subgroups, reloadTableData, showM
 
   const showModal = () => {
     setModalVisible(true)
+  }
+
+  const getReportColumns = () => {
+    const columns = []
+
+    for(let reportItem of getAllReportItems()) {
+      columns.push({
+        title: reportItem.title.split(' ')[0],
+        dataIndex: `${reportItem.title}Attendance`,
+        key: `${reportItem.title}-attendance`,
+        filters: [
+          {text: 'Checked', value: true},
+          {text: 'Not checked', value: false}
+        ],
+        onFilter: (value, record) => {
+          return value === record.lessonAttendance[1]
+        },
+        responsive: ['lg'],
+        render: (isChecked) => {
+          return (
+            <Checkbox checked={isChecked} className={`checkbox-${reportItem.color} scale-[1.7]`}></Checkbox>
+          )
+        }
+      })
+    }
+
+    return columns
   }
 
   const columns = [
@@ -78,86 +106,7 @@ export default function MembersTable({members, subgroups, reloadTableData, showM
         )
       }
     },
-    {
-      title: 'Lesson',
-      dataIndex: 'lessonAttendance',
-      key: 'lesson-attendance',
-      filters: [
-        {text: 'Checked', value: true},
-        {text: 'Not checked', value: false}
-      ],
-      onFilter: (value, record) => {
-        return value === record.lessonAttendance[1]
-      },
-      responsive: ['lg'],
-      render: (details) => {
-        const color = details[0]
-        const isChecked = details[1]
-        return (
-          <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>
-        )
-      }
-    },
-    {
-      title: 'Activity',
-      dataIndex: 'activityAttendance',
-      filters: [
-        {text: 'Checked', value: true},
-        {text: 'Not checked', value: false}
-      ],
-      key: 'activity-attendance',
-      onFilter: (value, record) => {
-        return value === record.activityAttendance[1]
-      },
-      responsive: ['lg'],
-      render: (details) => {
-        const color = details[0]
-        const isChecked = details[1]
-        return (
-          <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>
-        )
-      }
-    },
-    {
-      title: 'Homework',
-      dataIndex: 'homeworkAttendance',
-      key: 'homework-attendance',
-      filters: [
-        {text: 'Checked', value: true},
-        {text: 'Not checked', value: false}
-      ],
-      onFilter: (value, record) => {
-        return value === record.homeworkAttendance[1]
-      },
-      responsive: ['lg'],
-      render: (details) => {
-        const color = details[0]
-        const isChecked = details[1]
-        return (
-          <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>
-        )
-      }
-    },
-    {
-      title: 'Meeting',
-      dataIndex: 'meetingAttendance',
-      key: 'meeting-attendance',
-      filters: [
-        {text: 'Checked', value: true},
-        {text: 'Not checked', value: false}
-      ],
-      onFilter: (value, record) => {
-        return value === record.meetingAttendance[1]
-      },
-      responsive: ['lg'],
-      render: (details) => {
-        const color = details[0]
-        const isChecked = details[1]
-        return (
-          <Checkbox checked={isChecked} className={`checkbox-${color} scale-[1.7]`}></Checkbox>
-        )
-      }
-    },
+    ...getReportColumns()
   ];
 
   return (
@@ -169,7 +118,7 @@ export default function MembersTable({members, subgroups, reloadTableData, showM
           columns={columns}
           pagination={false}
           footer={() => `Total members: ${members.length}`}
-          onRow={(record, index) => { return {onClick: handleRowClick}}} />
+          onRow={() => { return {onClick: handleRowClick}}} />
     </>
     
   )

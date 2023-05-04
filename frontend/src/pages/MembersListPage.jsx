@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BASE_API_URL, BLUE, ORANGE, GREEN, PINK, LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING } from '../constants'
+import { BASE_API_URL, getAllReportItems } from '../Config'
 import { Button, Input, Modal, Select, Space, message, Skeleton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import MembersTable from '../components/MembersTable'
@@ -72,12 +72,12 @@ export default function MembersListPage() {
                 key: i,
                 name: data[i]['full_name'],
                 subgroup: data[i]['subgroup'],
-                lessonAttendance: [GREEN, thisWeekReports[LESSON][currentDay]],
-                activityAttendance: [BLUE, thisWeekReports[ACTIVITY][currentDay]],
-                homeworkAttendance: [ORANGE, thisWeekReports[HOMEWORK][currentDay]],
-                meetingAttendance: [PINK, thisWeekReports[WEEKLY_MEETING][currentDay]],
                 thisWeekReports: thisWeekReports,
                 lastWeekReports: lastWeekReports
+            }
+
+            for(let reportItem of getAllReportItems()) {
+                formattedMember[`${reportItem.name}Attendance`] = thisWeekReports[reportItem.name][currentDay]
             }
 
             formattedMembers.push(formattedMember)
