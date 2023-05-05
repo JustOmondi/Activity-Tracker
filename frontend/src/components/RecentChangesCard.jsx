@@ -3,7 +3,7 @@ import { Collapse, Timeline  } from 'antd'
 import { capitalize } from '../utils'
 import { CloseCircleFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
 
-export default function RecentChanges({changes, title}) {
+export default function RecentChangesCard({changes, title}) {
 
     const { Panel } = Collapse;
 

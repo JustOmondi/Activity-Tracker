@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import InfoCard from '../components/InfoCard'
-import GraphCard from '../components/GraphCard'
+import ReportTile from '../components/ReportTile'
+import ReportGraphTile from '../components/ReportGraphTile'
 import { Skeleton  } from 'antd'
-import RecentChanges from '../components/RecentChanges'
+import RecentChangesCard from '../components/RecentChangesCard'
 import { REPORT_NAMES, THIS_WEEK, LAST_WEEK, BASE_API_URL, getFeaturedTiles, getFeaturedGraphs } from '../Config'
 
-export default function HomePage() {
+export default function Dashboard() {
   const [reportTotalsForWeek, setReportTotalsForWeek] = useState({})
   const [reportTotalsForToday, setReportTotalsForToday] = useState({})
   const [memberChanges, setMemberChanges] = useState([])
@@ -90,7 +90,7 @@ export default function HomePage() {
               <>
                 {!reportTotalsForToday.hasOwnProperty(reportItem.name) && getInfoCardSkeleton()}
                 {reportTotalsForToday.hasOwnProperty(reportItem.name) && (
-                  <InfoCard 
+                  <ReportTile 
                     key={index}
                     icon={reportItem.icon}
                     title={reportItem.title}
@@ -110,7 +110,7 @@ export default function HomePage() {
               <>
                 {!reportTotalsForWeek.hasOwnProperty(reportItem.name) && getGraphCardSkeleton()}
                 {reportTotalsForWeek.hasOwnProperty(reportItem.name) && (
-                  <GraphCard
+                  <ReportGraphTile
                     key={index}
                     color={reportItem.color}
                     icon={reportItem.icon}
@@ -126,11 +126,11 @@ export default function HomePage() {
       <div className='flex w-full justify-evenly space-around mt-0 xl:mt-12 flex-wrap xl:flex-nowrap'>
         <div className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
           {memberChanges.length === 0 && <Skeleton  active paragraph={{ rows: 2 }} />}
-          {memberChanges.length !== 0 && <RecentChanges changes={memberChanges} title={'Member Changes'}/>}
+          {memberChanges.length !== 0 && <RecentChangesCard changes={memberChanges} title={'Member Changes'}/>}
         </div>
         <div className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
           {reportChanges.length === 0 && <Skeleton  active paragraph={{ rows: 2 }} />}
-          {reportChanges.length !== 0 && <RecentChanges changes={reportChanges} title={'Report Changes'}/>}
+          {reportChanges.length !== 0 && <RecentChangesCard changes={reportChanges} title={'Report Changes'}/>}
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Skeleton } from 'antd';
 import { Link } from "react-router-dom";
 
-export default function InfoCard({icon, title, currentValue, lastweekValue, color, loading, link}) {
+export default function ReportTile({icon, title, currentValue, lastweekValue, color, loading, link}) {
 
   return (
     <Link to={link}>

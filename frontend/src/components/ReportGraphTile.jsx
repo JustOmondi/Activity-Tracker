@@ -20,7 +20,7 @@ ChartJS.register(
 );
 
 
-export default function GraphCard({icon, title, graphData, color, link}) {
+export default function ReportGraphTile({icon, title, graphData, color, link}) {
   const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   const config = {

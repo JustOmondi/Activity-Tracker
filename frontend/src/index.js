@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ErrorPage from './pages/ErrorPage';
-import FortnightGraph from './pages/FortnightGraph';
-import HomePage from './pages/HomePage';
-import MembersListPage from './pages/MembersListPage';
-import SubgroupsListPage from './pages/SubgroupsListPage';
+import FortnightOverviewPage from './pages/FortnightOverviewPage';
+import Dashboard from './pages/Dashboard';
+import MembersPage from './pages/MembersPage';
+import SubgroupsPage from './pages/SubgroupsPage';
 
 import { ProSidebarProvider } from 'react-pro-sidebar';
 
@@ -22,19 +22,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "dashboard/",
-        element: <HomePage />,
+        element: <Dashboard />,
       },
       {
         path: "members/",
-        element: <MembersListPage />,
+        element: <MembersPage />,
       },
       {
         path: "subgroups/",
-        element: <SubgroupsListPage />,
+        element: <SubgroupsPage />,
       },
       {
         path: "reports/",
-        element: <FortnightGraph />,
+        element: <FortnightOverviewPage />,
       },
     ],
   },

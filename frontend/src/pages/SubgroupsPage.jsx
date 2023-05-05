@@ -3,7 +3,7 @@ import { BASE_API_URL } from '../constants'
 import SubgroupCard from '../components/SubgroupCard'
 import { Skeleton  } from 'antd'
 
-export default function SubgroupsListPage() {
+export default function SubgroupsPage() {
     const [subgroups, setSubgroups] = useState([])
 
     useEffect(() => {

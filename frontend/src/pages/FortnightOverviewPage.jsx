@@ -19,7 +19,7 @@ ChartJS.register(
   Tooltip,
 );
 
-export default function FortnightGraph() {
+export default function FortnightOverviewPage() {
   const [values, setValues] = useState([])
   const [labels, setLabels] = useState([])
 
