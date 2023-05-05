@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { BASE_API_URL } from '../constants'
-import { BuildingOfficeIcon, UsersIcon, BoltIcon, BookOpenIcon } from '@heroicons/react/24/outline'
-import { capitalize } from '../utils';
+import { BASE_API_URL, REPORTS } from '../Config'
 
 import {
   Chart as ChartJS,
@@ -28,8 +26,7 @@ export default function FortnightGraph() {
   const queryParameters = new URLSearchParams(window.location.search)
 
   const reportName = queryParameters.get('name') ? queryParameters.get('name') : 'lesson'
-  const color = 'blue'
-  const title = `${capitalize(reportName.replaceAll('_', ' '))} Attendance`
+  const reportConfig = REPORTS[reportName]
 
   useEffect(() => {
     getReports()
@@ -53,8 +50,6 @@ export default function FortnightGraph() {
     return (sum/length).toFixed(2)
   }
 
-  // const average = sum / values.length
-
   const config = {
     labels,
     datasets: [
@@ -68,7 +63,7 @@ export default function FortnightGraph() {
   const options = {
     responsive: true,
     barThickness: '8',
-    color: '#fff',
+    color: '#ffffff',
     plugins: {
       legend: {
         display: false,
@@ -77,7 +72,7 @@ export default function FortnightGraph() {
     scales: {
       x: {
         ticks: {
-          color: '#fff'
+          color: '#ffffff'
         },
         grid: {
           display: false,
@@ -85,7 +80,7 @@ export default function FortnightGraph() {
       },
       y: {
         ticks: {
-          color: '#fff',
+          color: '#ffffff',
           stepSize: 2,
         },
         grid: {
@@ -100,14 +95,14 @@ export default function FortnightGraph() {
     <div className='w-full justify-center flex'>
       <div className='w-full lg:w-3/4 shadow-lg bg-white p-4 xl:p-8 mt-4 rounded-2xl mb-14 xl:mb-10'>
         <div className='flex justify-center mt-4 flex-col'>
-            <h2 className='card-title font-bold text-gray-900 mb-4 text-md xl:text-xl'>{title}</h2>
-            <div className={`graph-container relative w-full p-3 rounded-2xl graph-bg-${color}`}>
+            <h2 className='card-title font-bold text-gray-900 mb-4 text-md xl:text-xl'>{reportConfig.title}</h2>
+            <div className={`graph-container relative w-full p-3 rounded-2xl graph-bg-${reportConfig.color}`}>
               <Bar options={options} data={config} />
             </div>
         </div>
         <div className='flex justify-left mt-6'>
-            <div className={`card-icon-container rounded-md items-center flex icon-bg-${color} p-2 mr-4`}>
-              <BookOpenIcon fill='#fff' className='h-8 w-8 text-white'/>
+            <div className={`card-icon-container rounded-md items-center flex icon-bg-${reportConfig.color} p-2 mr-4`}>
+              {reportConfig.icon}
             </div>
             <div>
                 
