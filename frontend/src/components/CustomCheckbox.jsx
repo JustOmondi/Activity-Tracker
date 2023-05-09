@@ -1,6 +1,6 @@
 import React, {useState}from 'react'
 import { Checkbox } from 'antd';
-import { BASE_API_URL } from '../constants'
+import { BASE_API_URL } from '../Config'
 import { capitalize } from '../utils';
 
 import { setMemberUpdated } from '../app/mainSlice';

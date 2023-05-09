@@ -1,6 +1,6 @@
 
 from django.utils import timezone
-from django.db.models import CharField, ForeignKey, Model, PROTECT, DateTimeField, IntegerField
+from django.db.models import CharField, ForeignKey, PROTECT, DateTimeField, IntegerField
 from django.db.models.functions import ExtractIsoWeekDay
 
 from auditlog.registry import auditlog

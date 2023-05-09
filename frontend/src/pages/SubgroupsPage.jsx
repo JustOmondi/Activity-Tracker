@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BASE_API_URL } from '../constants'
+import { BASE_API_URL } from '../Config'
 import SubgroupCard from '../components/SubgroupCard'
 import { Skeleton  } from 'antd'
 

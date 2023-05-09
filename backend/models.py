@@ -26,4 +26,3 @@ class BaseModel(models.Model):
 
         self.is_deleted = True
         self.save()
-
