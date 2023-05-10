@@ -4,9 +4,9 @@ from django.utils import timezone
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from backend.reports.constants import REPORT_NAMES
+from reports.constants import REPORT_NAMES
 
-from ..structure.models import Member
+from structure.models import Member
 
 from .models import Report
 

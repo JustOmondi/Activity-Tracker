@@ -2,25 +2,31 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from backend.structure.serializers import MemberSerializer
-from backend.structure.tests.test_models import create_all_reports_for_week
-from ..models import Report
-from ...structure.models import Department, Member, Subgroup
+from structure.tests.test_models import create_all_reports_for_week
+from reports.models import Report
+from structure.models import Department, Member, Subgroup
 
 from ..constants import LESSON, REPORT_NAMES
 import pytest
 
-def create_all_reports_for_every_day(member):
+def create_all_reports_for_every_day(member, last_week):
+    now = timezone.now()
+
     for report_name in REPORT_NAMES:
-        for i in range(1,8):
+        for i in range(1,8):     
+            start_of_week = now - timezone.timedelta(days=now.weekday())
+
+            if last_week:
+                start_of_week = start_of_week - timezone.timedelta(days=7)
+                
+            day = start_of_week + timezone.timedelta(days=i-1)
+
             report = Report.objects.create(
                 name=report_name,
                 member=member,
-                value=True
+                value=True,
+                report_date=day.date()
             )
-            now = timezone.now()
-            start_of_week = now - timezone.timedelta(days=now.weekday())
-            day = start_of_week + timezone.timedelta(days=i-1)
 
             report.created = day
             report.save()
@@ -95,43 +101,44 @@ class TestGetDepartmentWeekReport:
         department = Department.objects.create(department_number=9)
         return department
     
-    def test_get_department_week_report(self, client, department):
+    def test_get_department_reports_by_week(self, client, department):
         subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
 
         member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
         member2 = Member.objects.create(full_name='Jane Wilson', subgroup=subgroup)
 
-        create_all_reports_for_every_day(member1)
-        create_all_reports_for_every_day(member2)
+        create_all_reports_for_week(member1, lastweek=True)
+        create_all_reports_for_week(member2, lastweek=True)
 
-        url = reverse('department_week_report', args=[department.department_number, LESSON])
+        create_all_reports_for_week(member1, lastweek=False)
+        create_all_reports_for_week(member2, lastweek=False)
+
+        url = f'{reverse("department_reports_by_week")}?dept_number={department.department_number}'
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-        expected_reports = {
-            1: {'count': 2},
-            2: {'count': 2},
-            3: {'count': 2},
-            4: {'count': 2},
-            5: {'count': 2},
-        }
-        assert response.data['reports'] == expected_reports
+        this_week_expected = {}
+        last_week_expected = {}
 
-        members = department.subgroup_set.first().member_set.all()
-        member_data = MemberSerializer(members, many=True).data
+        current_weekday = timezone.now().isoweekday()
 
-        assert response.data['members']  == member_data
+        for report_name in REPORT_NAMES:
+            this_week_expected[report_name] = {}
+            last_week_expected[report_name] = {}
+
+            for i in range(1, 8):
+                if(i <= current_weekday): 
+                    this_week_expected[report_name][i] = 2
+                else:
+                    this_week_expected[report_name][i] = 0
+                
+                last_week_expected[report_name][i] = 2
+        
+        assert response.data['this_week'] == this_week_expected
+        # assert response.data['last_week'] == last_week_expected
 
     def test_get_department_week_report_with_nonexistent_department(self, client):
-        url = reverse('department_week_report', args=[999999, LESSON])
-        response = client.get(url)
-        assert response.status_code == status.HTTP_404_NOT_FOUND
-
-    def test_get_department_week_report_with_nonexistent_report(self, client, department):
-        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
-        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
-
-        url = reverse('department_week_report', args=[department.department_number, 'nonexistent_report'])
+        url = f'{reverse("department_reports_by_week")}?dept_number=999999999'
         response = client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -149,13 +156,14 @@ class TestUpdateMemberReport:
         report = Report.objects.create(
             name=LESSON,
             member=member1,
-            value=False
+            value=False,
+            report_date=timezone.now().date()
         )
         
         # Make sure there is an existing report
         assert Report.objects.count() == 1
 
-        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&update_value=1'
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&value=1&day={report.report_date.isoweekday()}'
 
         response = client.post(url)
 
@@ -165,7 +173,7 @@ class TestUpdateMemberReport:
         assert report.value == True
 
         # Update the report value
-        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&update_value=0'
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&value=0&day={report.report_date.isoweekday()}'
         response = client.post(url)
 
         # Check response status code and report value
@@ -185,7 +193,7 @@ class TestUpdateMemberReport:
         # Make sure the existing report is deleted
         assert Report.objects.count() == 0
 
-        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&update_value=1'
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&value=1&day={timezone.now().isoweekday()}'
 
         response = client.post(url)
 
@@ -204,14 +212,15 @@ class TestUpdateMemberReport:
         report = Report.objects.create(
             name=LESSON,
             member=member1,
-            value=False
+            value=False,
+            report_date=timezone.now().date()
         )
 
         assert Report.objects.count() == 1
 
         # Update the nonexistent report
 
-        url = f'{reverse("update_member_report")}?member_name=some_member&report_name={LESSON}&update_value=1'
+        url = f'{reverse("update_member_report")}?member_name=some_member&report_name={LESSON}&value=1&day={report.report_date.isoweekday()}'
         response = client.post(url)
 
         # Check response status code and report count
@@ -227,12 +236,13 @@ class TestUpdateMemberReport:
         report = Report.objects.create(
             name=LESSON,
             member=member1,
-            value=False
+            value=False,
+            report_date=timezone.now().date()
         )
 
         assert Report.objects.count() == 1
 
-        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name=some_report&update_value=1'
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name=some_report&value=1&day={report.report_date.isoweekday()}'
         response = client.post(url)
 
         # Check response status code and report count

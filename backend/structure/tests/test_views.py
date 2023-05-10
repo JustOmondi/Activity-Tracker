@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
-from ..models import Department, Member, Subgroup
-from ..serializers import DepartmentSerializer, MemberSerializer, SubgroupSerializer
+from structure.models import Department, Member, Subgroup
+from structure.serializers import DepartmentSerializer, MemberSerializer, SubgroupSerializer
 import pytest
 
 @pytest.mark.django_db
@@ -9,7 +9,7 @@ class TestDepartmentViews:
     def test_get_department(self, client):
         department = Department.objects.create(department_number=9)
 
-        url = f'{reverse("department")}?department_number={department.department_number}'
+        url = f'{reverse("department_details")}?department_number={department.department_number}'
 
         response = client.get(url)
         
@@ -38,7 +38,7 @@ class TestMemberViews:
 
         member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
 
-        url = f'{reverse("member")}?name={member.underscore_name}'
+        url = f'{reverse("member_details")}?name={member.underscore_name}'
 
         response = client.get(url)
         

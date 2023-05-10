@@ -13,8 +13,8 @@ from rest_framework.decorators import api_view
 from auditlog.models import LogEntry
 from django.contrib.auth.models import User
 
-from .reports.models import Report
-from .structure.models import Member
+from reports.models import Report
+from structure.models import Member
 
 @api_view(['GET'])
 def getIndex(request):

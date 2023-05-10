@@ -1,10 +1,8 @@
 import pytest
-from ..models import Subgroup, Member, Department
-from ...reports.models import Report
+from structure.models import Subgroup, Member, Department
+from reports.models import Report
 from django.utils import timezone
-from ...reports.constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, REPORT_NAMES
-import logging
-log = logging.getLogger("mylogger")
+from reports.constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, REPORT_NAMES
 
 TODAY = 0
 LAST_WEEK = 7
@@ -47,6 +45,7 @@ def create_all_reports_for_week(member, lastweek=False):
                 name=report_name,
                 member=member,
                 value=True,
+                report_date=day.date()
             )
 
             report.created = day
@@ -100,11 +99,11 @@ class TestDepartment:
         expected = {}
 
         for report_name in REPORT_NAMES:
-            current_key = f'{report_name}_count'
-            lastweek_key = f'lastweek_{report_name}_count'
 
-            expected[current_key] = 4
-            expected[lastweek_key] = 4
+            expected[report_name] = {
+                'this_week': 4,
+                'last_week': 4
+            }
         
         assert department.get_all_report_totals_by_day() == expected
 
@@ -156,11 +155,10 @@ class TestSubgroup:
         expected = {}
 
         for report_name in REPORT_NAMES:
-            current_key = f'{report_name}_count'
-            lastweek_key = f'lastweek_{report_name}_count'
-
-            expected[current_key] = 2
-            expected[lastweek_key] = 2
+            expected[report_name] = {
+                'this_week': 2,
+                'last_week': 2
+            }
         
         assert subgroup.get_all_report_totals_by_day() == expected
 

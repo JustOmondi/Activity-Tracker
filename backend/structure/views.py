@@ -2,7 +2,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import logging
 
-from backend.reports.constants import REPORT_NAMES
+from reports.constants import REPORT_NAMES
 
 from .models import Member, Subgroup, Department
 from .serializers import DepartmentSerializer, MemberSerializer, SubgroupSerializer

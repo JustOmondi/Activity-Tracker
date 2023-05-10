@@ -2,7 +2,8 @@ from django.db import models
 
 from django.utils import timezone
 
-from ..models import BaseModel
+from base.models import BaseModel
+
 from .constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, ATTENDANCE, PARTICIPATION
 
 from auditlog.registry import auditlog

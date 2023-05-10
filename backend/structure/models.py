@@ -5,12 +5,12 @@ from django.db.models.functions import ExtractIsoWeekDay
 
 from auditlog.registry import auditlog
 
-from ..models import BaseModel
+from base.models import BaseModel
 
-from ..reports.models import Report
-from ..reports.constants import REPORT_NAMES
+from reports.models import Report
+from reports.constants import REPORT_NAMES
 
-from .constants import SUBGROUP_LEADER_TITLE, YG
+from .constants import SUBGROUP_LEADER_TITLE
 
 def get_default_department():
     """ get a default value for subgroup department; create new department if not available """

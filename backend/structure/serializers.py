@@ -1,8 +1,6 @@
 
 from rest_framework import serializers
 
-from ..reports.constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING
-
 from .models import Department, Member, Subgroup
 
 class DepartmentSerializer(serializers.HyperlinkedModelSerializer):

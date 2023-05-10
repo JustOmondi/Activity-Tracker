@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from backend.reports.models import Report
-from .structure.models import Subgroup, Department, Member
+from reports.models import Report
+from structure.models import Subgroup, Department, Member
 
 # Register your models here.
 admin.site.register(Subgroup)
