@@ -47,14 +47,14 @@ export default function MembersTable({members, subgroups, reloadTableData, showM
     for(let reportItem of getAllReportItems()) {
       columns.push({
         title: reportItem.title.split(' ')[0],
-        dataIndex: `${reportItem.title}Attendance`,
-        key: `${reportItem.title}-attendance`,
+        dataIndex: `${reportItem.name}Attendance`,
+        key: `${reportItem.name}-attendance`,
         filters: [
           {text: 'Checked', value: true},
           {text: 'Not checked', value: false}
         ],
         onFilter: (value, record) => {
-          return value === record.lessonAttendance[1]
+          return value === record[`${reportItem.name}Attendance`]
         },
         responsive: ['lg'],
         render: (isChecked) => {
