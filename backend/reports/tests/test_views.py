@@ -6,7 +6,7 @@ from structure.tests.test_models import create_all_reports_for_week
 from reports.models import Report
 from structure.models import Department, Member, Subgroup
 
-from ..constants import LESSON, REPORT_NAMES
+from reports.constants import LESSON, REPORT_NAMES
 import pytest
 
 def create_all_reports_for_every_day(member, last_week):
