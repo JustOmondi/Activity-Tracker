@@ -36,15 +36,11 @@ def create_all_reports_for_week(member, lastweek=False):
         start_of_week = start_of_week - timezone.timedelta(days=7)
         loop_range = 7
 
-    # print(f'/////////// Now weekday = {now.strftime("%m/%d/%Y, %H:%M:%S")} weekday = {now.isoweekday()} ///////////////////')
-    # print(f'/////////// Start of week = {start_of_week.strftime("%m/%d/%Y, %H:%M:%S")} ///////////////////')
-
     for report_name in REPORT_NAMES:
         for i in range(loop_range):
             # Calculate the date for the current day of the week
             day = start_of_week + timezone.timedelta(days=i)
-            # print(f'/////////// Day = {day.strftime("%m/%d/%Y, %H:%M:%S")} i = {i}///////////////////')
-            # Create a Report object for the current day
+
             report = Report.objects.create(
                 name=report_name,
                 member=member,
@@ -54,8 +50,6 @@ def create_all_reports_for_week(member, lastweek=False):
 
             report.created = day
             report.save()
-
-            # print(f'/////////// Report Created = {report.created.strftime("%m/%d/%Y, %H:%M:%S")} ///////////////////')
 
 @pytest.mark.django_db
 class TestDepartment:

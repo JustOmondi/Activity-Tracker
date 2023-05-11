@@ -39,7 +39,7 @@ class TestGetAllMemberReportsByWeek:
         return department
 
 @pytest.mark.django_db
-class TestGetDepartmentWeekReport:
+class TestDepartmentReports:
     @pytest.fixture
     def department(self, db):
         department = Department.objects.create(department_number=9)
@@ -79,6 +79,8 @@ class TestGetDepartmentWeekReport:
                 last_week_expected[report_name][i] = 2
         
         assert response.data['this_week'] == this_week_expected
+
+        # TODO: Figure out value mismatch below
         # assert response.data['last_week'] == last_week_expected
 
     def test_get_department_week_report_with_nonexistent_department(self, client):
@@ -86,8 +88,62 @@ class TestGetDepartmentWeekReport:
         response = client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    def test_get_department_reports_by_fornight(self, client, department):
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+
+        member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+        member2 = Member.objects.create(full_name='Jane Wilson', subgroup=subgroup)
+
+        create_all_reports_for_week(member1, lastweek=True)
+        create_all_reports_for_week(member2, lastweek=True)
+
+        create_all_reports_for_week(member1, lastweek=False)
+        create_all_reports_for_week(member2, lastweek=False)
+
+        url = f'{reverse("department_reports_by_fortnight")}?report_name={LESSON}&dept_number={department.department_number}'
+        response = client.get(url)
+
+        assert response.status_code == status.HTTP_200_OK
+
+        # TODO: Test values
+        # expected = {
+        #     'values': [],
+        #     'labels': []
+        # }
+
+        # tz_aware_now = timezone.localtime(timezone.now())          
+        # date_range_end = tz_aware_now.replace(hour=23, minute=59, second=59)        
+
+        # date_range_start = date_range_end - timezone.timedelta(days=14)
+        # date_range_start = date_range_start.replace(hour=0, minute=0, second=0)
+        
+        # for date in (date_range_start + timezone.timedelta(days=n) for n in range(14)):
+        #     if date.isoweekday() <= tz_aware_now.isoweekday():
+        #         expected['values'].append(2)
+        #     else:
+        #         expected['values'].append(0)
+
+        #     expected['labels'].append(date.strftime('%d %b'))
+        
+        # assert response.data == expected
+
+    def test_get_department_reports_by_fornight_non_existent_department(self, client, department):
+            non_existent_dept_number = 9999
+            url = f'{reverse("department_reports_by_fortnight")}?report_name={LESSON}&dept_number={non_existent_dept_number}'
+            response = client.get(url)
+
+            assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_get_department_reports_by_fornight_non_existent_report_name(self, client, department):
+            non_existent_report_name = 'potato'
+
+            url = f'{reverse("department_reports_by_fortnight")}?report_name={non_existent_report_name}&dept_number={department.department_number}'
+            response = client.get(url)
+
+            assert response.status_code == status.HTTP_404_NOT_FOUND
+
 @pytest.mark.django_db
-class TestUpdateMemberReport:
+class TestMemberReports:
     def test_update_existing_report(self, client):
         """
         Test updating an existing report with a valid member name, report name, and update value.
