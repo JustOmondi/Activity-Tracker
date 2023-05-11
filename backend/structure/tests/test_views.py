@@ -43,17 +43,17 @@ class TestMemberViews:
         original_name = 'John Doe'
         new_underscore_name = 'jonathan_doe'
 
-        member1 = Member.objects.create(full_name=original_name, subgroup=subgroup)
+        member = Member.objects.create(full_name=original_name, subgroup=subgroup)
 
-        url = f'{reverse("member_update")}?name={member1.underscore_name}&new_name={new_underscore_name}'
+        url = f'{reverse("member_update")}?name={member.underscore_name}&new_name={new_underscore_name}'
 
         response = client.post(url)
 
         assert response.status_code == status.HTTP_200_OK
 
-        member1.refresh_from_db()
+        member.refresh_from_db()
 
-        assert member1.underscore_name == new_underscore_name
+        assert member.underscore_name == new_underscore_name
 
     def test_update_member_subgroup(self, client):
         department = Department.objects.create(department_number=7)
@@ -61,17 +61,17 @@ class TestMemberViews:
         old_subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
         new_subgroup = Subgroup.objects.create(subgroup_number=5, department=department)
 
-        member1 = Member.objects.create(full_name='John Doe', subgroup=old_subgroup)
+        member = Member.objects.create(full_name='John Doe', subgroup=old_subgroup)
 
-        url = f'{reverse("member_update")}?name={member1.underscore_name}&new_subgroup={new_subgroup.subgroup_number}'
+        url = f'{reverse("member_update")}?name={member.underscore_name}&new_subgroup={new_subgroup.subgroup_number}'
 
         response = client.post(url)
 
         assert response.status_code == status.HTTP_200_OK
 
-        member1.refresh_from_db()
+        member.refresh_from_db()
 
-        assert member1.subgroup == new_subgroup
+        assert member.subgroup == new_subgroup
 
     def test_update_non_existent_member(self, client):
         department = Department.objects.create(department_number=7)
@@ -80,7 +80,7 @@ class TestMemberViews:
         original_name = 'John Doe'
         new_underscore_name = 'jonathan_doe'
 
-        member1 = Member.objects.create(full_name=original_name, subgroup=subgroup)
+        member = Member.objects.create(full_name=original_name, subgroup=subgroup)
 
         non_existent_member_name = 'someone_random'
 
@@ -90,11 +90,11 @@ class TestMemberViews:
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-        member1.refresh_from_db()
+        member.refresh_from_db()
 
-        assert member1.underscore_name == original_name.replace(' ', '_').lower()
+        assert member.underscore_name == original_name.replace(' ', '_').lower()
 
-    def test_update_non_existent_subgroup(self, client):
+    def test_update_member_with_non_existent_subgroup(self, client):
         department = Department.objects.create(department_number=7)
         
         original_subgroup = 2
@@ -102,18 +102,113 @@ class TestMemberViews:
 
         subgroup = Subgroup.objects.create(subgroup_number=original_subgroup, department=department)
 
-        member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
 
-        url = f'{reverse("member_update")}?name={member1.underscore_name}&new_subgroup={non_existent_subgroup}'
+        url = f'{reverse("member_update")}?name={member.underscore_name}&new_subgroup={non_existent_subgroup}'
 
         response = client.post(url)
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-        member1.refresh_from_db()
+        member.refresh_from_db()
 
-        assert member1.subgroup.subgroup_number == original_subgroup
+        assert member.subgroup.subgroup_number == original_subgroup
 
+    def test_add_member(self, client):
+        department = Department.objects.create(department_number=7)
+
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+
+        assert Member.objects.count() == 0
+
+        underscore_name = 'some_person'
+
+        url = f'{reverse("member_add")}?name={underscore_name}&subgroup={subgroup.subgroup_number}'
+
+        response = client.post(url)
+
+        assert response.status_code == status.HTTP_200_OK
+
+        assert Member.objects.count() == 1
+
+        created_member = Member.objects.all().first()
+
+        assert created_member.underscore_name == underscore_name
+        assert created_member.subgroup == subgroup
+
+    def test_add_member_to_nonexistent_subgroup(self, client):
+        department = Department.objects.create(department_number=7)
+
+        existing_subgroup_number = 2
+        non_existing_subgroup_number = 55
+
+        subgroup = Subgroup.objects.create(subgroup_number=existing_subgroup_number, department=department)
+
+        underscore_name = 'some_person'
+
+        url = f'{reverse("member_add")}?name={underscore_name}&subgroup={non_existing_subgroup_number}'
+
+        response = client.post(url)
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert Member.objects.count() == 0
+
+    def test_remove_member(self, client):
+        department = Department.objects.create(department_number=7)
+
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+
+        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+
+        assert Member.objects.count() == 1
+
+        url = f'{reverse("member_remove")}?name={member.underscore_name}&subgroup={subgroup.subgroup_number}'
+
+        response = client.post(url)
+
+        assert response.status_code == status.HTTP_200_OK
+
+        assert Member.objects.count() == 0
+
+    def test_remove_non_existent_member(self, client):
+        department = Department.objects.create(department_number=7)
+
+        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
+
+        existing_member = 'John Doe'
+        non_existing_member_underscore_name = 'jonathan_doe'
+
+        Member.objects.create(full_name=existing_member, subgroup=subgroup)
+
+        assert Member.objects.count() == 1
+
+        url = f'{reverse("member_remove")}?name={non_existing_member_underscore_name}&subgroup={subgroup.subgroup_number}'
+
+        response = client.post(url)
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+        assert Member.objects.count() == 1
+
+    def test_remove_member_with_non_existent_subgroup(self, client):
+        department = Department.objects.create(department_number=7)
+
+        existing_subgroup_number = 2
+        non_existing_subgroup_number = 55
+
+        subgroup = Subgroup.objects.create(subgroup_number=existing_subgroup_number, department=department)
+
+        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
+
+        assert Member.objects.count() == 1
+
+        url = f'{reverse("member_remove")}?name={member.underscore_name}&subgroup={non_existing_subgroup_number}'
+
+        response = client.post(url)
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+        assert Member.objects.count() == 1
 
 @pytest.mark.django_db
 class TestSubgroupViews:
