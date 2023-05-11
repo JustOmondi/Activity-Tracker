@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from reports.constants import REPORT_NAMES
 
-from structure.models import Member
+from structure.models import Member, Department
 
 from .models import Report
 
@@ -24,7 +24,7 @@ def updateReportValue(request):
     if (report_name not in REPORT_NAMES):
         return Response(status=status.HTTP_404_NOT_FOUND, data={'message': f'Report name "{report_name}" not found'})
 
-    now_datetime = timezone.now()
+    now_datetime = timezone.localtime(timezone.now())
     current_day = now_datetime.isoweekday()
 
     if(report_day > current_day):
@@ -68,6 +68,38 @@ def updateReportValue(request):
 
         report.save()
 
-        message = f'Report created successfully'
+        message = 'Report created successfully'
         
     return Response(status=status.HTTP_200_OK, data={'message': message})
+
+@api_view(['GET'])
+def getDepartmentReportsByWeek(request):
+    dept_number = request.GET.get('dept_number')
+
+    department_lookup = Department.objects.filter(department_number=dept_number)
+
+    if(department_lookup.count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    department = department_lookup.first()
+    result = department.get_all_reports_this_week_and_last_week()
+    
+    return Response(result)
+
+@api_view(['GET'])
+def getDepartmentReportsByFortnight(request):
+    report_name = request.GET.get('report_name')
+    dept_number = request.GET.get('dept_number')
+
+    if report_name not in REPORT_NAMES:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    department_lookup = Department.objects.filter(department_number=dept_number)
+
+    if(department_lookup.count() == 0):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    department = department_lookup.first()
+    result = department.get_reports_by_fornight(report_name)
+    
+    return Response(result)

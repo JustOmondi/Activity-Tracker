@@ -51,7 +51,7 @@ def getLogs(request):
                 report = Report.all_items.get(id=log.object_pk)
                 member_name = report.member.full_name
                 report_name = report.name.replace('_', ' ')
-                report_date = report.report_date
+                report_date = report.report_date.strftime('%d %b')
 
                 report_data.append({'member_name': member_name, 'report_name': report_name, 'report_date': report_date, 'changes': []})
                 changes = json.loads(log.changes)

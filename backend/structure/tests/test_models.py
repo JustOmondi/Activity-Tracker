@@ -8,8 +8,10 @@ TODAY = 0
 LAST_WEEK = 7
 
 def create_all_reports(days_ago, member):
+    tz_aware_now = timezone.localtime(timezone.now())    
+ 
     for report_name in REPORT_NAMES:
-        created_date_time = timezone.now() - timezone.timedelta(days=days_ago)
+        created_date_time = tz_aware_now - timezone.timedelta(days=days_ago)
 
         report = Report.objects.create(
             name=report_name,
@@ -22,7 +24,9 @@ def create_all_reports(days_ago, member):
         report.save()
 
 def create_all_reports_for_week(member, lastweek=False):
-    now = timezone.now().replace(hour=0, minute=0, second=5)
+    tz_aware_now = timezone.localtime(timezone.now())
+
+    now = tz_aware_now.replace(hour=0, minute=0, second=5)
 
     start_of_week = now - timezone.timedelta(days=now.weekday())
 
@@ -185,7 +189,9 @@ class TestMember:
         assert member.get_report(report_name, days_ago) == 0
 
         # Create a Report object with a created date within the date range
-        created_date_time = timezone.now() - timezone.timedelta(days=days_ago)
+        tz_aware_now = timezone.localtime(timezone.now())
+
+        created_date_time = tz_aware_now - timezone.timedelta(days=days_ago)
         report = Report.objects.create(
             name=report_name,
             member=member,
@@ -236,7 +242,7 @@ class TestMember:
                 
         expected = {}
 
-        current_weekday = timezone.now().isoweekday()
+        current_weekday = timezone.localtime(timezone.now()).isoweekday()
 
         for report_name in REPORT_NAMES:
             expected[report_name] = {}

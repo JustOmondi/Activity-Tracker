@@ -33,7 +33,7 @@ export default function FortnightOverviewPage() {
   }, [])
 
   const getReports = async () => {
-    const URL = `${BASE_API_URL}/structure/department/reports-by-fortnight?dept_number=1&report_name=${reportName}`
+    const URL = `${BASE_API_URL}/reports/get/department/by-fortnight?dept_number=1&report_name=${reportName}`
 
     let response = await fetch(URL);
     let data = await response.json();

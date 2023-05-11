@@ -3,8 +3,9 @@ from django.utils import timezone
 from django.db.models.functions import ExtractIsoWeekDay
 from reports.constants import REPORT_NAMES
 
-def get_reports_by_week(report_queryset, entity, last_week=False):       
-    date_range_end = timezone.now().replace(hour=23, minute=59, second=59)        
+def get_reports_by_week(report_queryset, entity, last_week=False):        
+    tz_aware_now = timezone.localtime(timezone.now())    
+    date_range_end = tz_aware_now.replace(hour=23, minute=59, second=59)  
 
     # Get first day of week i.e. Monday
     date_range_start = date_range_end - timezone.timedelta(days=date_range_end.weekday())

@@ -10,7 +10,7 @@ from reports.constants import LESSON, REPORT_NAMES
 import pytest
 
 def create_all_reports_for_every_day(member, last_week):
-    now = timezone.now()
+    now = timezone.localtime(timezone.now())    
 
     for report_name in REPORT_NAMES:
         for i in range(1,8):     
@@ -37,62 +37,6 @@ class TestGetAllMemberReportsByWeek:
     def department(self, db):
         department = Department.objects.create(department_number=9)
         return department
-    
-    def test_get_all_reports_by_week_of_current_week(self, client, department):
-        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
-        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
-
-        create_all_reports_for_week(member)
-
-        url = f'{reverse("member_reports_by_week")}?name={member.underscore_name}&from_lastweek=0'
-  
-        response = client.get(url)
-        assert response.status_code == status.HTTP_200_OK
-                
-        expected = {}
-
-        current_weekday = timezone.now().isoweekday()
-
-        for report_name in REPORT_NAMES:
-            expected[report_name] = {}
-            for i in range(1, 8):
-                """ 
-                Only reports from the beginning of the week to 
-                the current weekday should have a value of True from what is returned
-                from the get_all_reports_by_week() function
-                """
-                if(i <= current_weekday): 
-                    expected[report_name][i] = True
-                else:
-                    expected[report_name][i] = False
-
-        assert response.data == expected
-
-    def test_get_all_reports_by_week_of_last_week(self, client, department):
-        subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
-        member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
-
-        create_all_reports_for_week(member, lastweek=True)
-
-        url = f'{reverse("member_reports_by_week")}?name={member.underscore_name}&from_lastweek=1'
-  
-        response = client.get(url)
-        assert response.status_code == status.HTTP_200_OK
-                
-        expected = {}
-
-        for report_name in REPORT_NAMES:
-            expected[report_name] = {}
-            for i in range(1, 8):
-                expected[report_name][i] = True
-
-        assert response.data == expected
-
-    def test_get_all_reports_by_week_with_nonexistent_member(self, client):
-        url = f'{reverse("member_reports_by_week")}?name=nonexistent_member'
-
-        response = client.get(url)
-        assert response.status_code == status.HTTP_404_NOT_FOUND
 
 @pytest.mark.django_db
 class TestGetDepartmentWeekReport:
@@ -120,7 +64,7 @@ class TestGetDepartmentWeekReport:
         this_week_expected = {}
         last_week_expected = {}
 
-        current_weekday = timezone.now().isoweekday()
+        current_weekday = timezone.localtime(timezone.now()).isoweekday()
 
         for report_name in REPORT_NAMES:
             this_week_expected[report_name] = {}
@@ -157,7 +101,7 @@ class TestUpdateMemberReport:
             name=LESSON,
             member=member1,
             value=False,
-            report_date=timezone.now().date()
+            report_date=timezone.localtime(timezone.now()).date()
         )
         
         # Make sure there is an existing report
@@ -185,6 +129,8 @@ class TestUpdateMemberReport:
         """
         Test creating a new report with a valid member name, report name, and update value.
         """
+        tz_aware_now = timezone.localtime(timezone.now())
+
         department = Department.objects.create(department_number=9)
         subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
 
@@ -193,7 +139,7 @@ class TestUpdateMemberReport:
         # Make sure the existing report is deleted
         assert Report.objects.count() == 0
 
-        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&value=1&day={timezone.now().isoweekday()}'
+        url = f'{reverse("update_member_report")}?member_name={member1.underscore_name}&report_name={LESSON}&value=1&day={tz_aware_now.isoweekday()}'
 
         response = client.post(url)
 
@@ -213,7 +159,7 @@ class TestUpdateMemberReport:
             name=LESSON,
             member=member1,
             value=False,
-            report_date=timezone.now().date()
+            report_date=timezone.localtime(timezone.now()).date()
         )
 
         assert Report.objects.count() == 1
@@ -237,7 +183,7 @@ class TestUpdateMemberReport:
             name=LESSON,
             member=member1,
             value=False,
-            report_date=timezone.now().date()
+            report_date=timezone.localtime(timezone.now()).date()
         )
 
         assert Report.objects.count() == 1

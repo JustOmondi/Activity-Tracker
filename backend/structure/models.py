@@ -72,9 +72,9 @@ class Department(BaseModel):
 
         return utils.get_reports_by_week(reports, 'department', last_week)
     
-    def get_reports_by_fornight(self, report_name):       
-        date_range_end = timezone.now().replace(hour=23, minute=59, second=59)        
-
+    def get_reports_by_fornight(self, report_name): 
+        tz_aware_now = timezone.localtime(timezone.now())          
+        date_range_end = tz_aware_now.replace(hour=23, minute=59, second=59)        
 
         date_range_start = date_range_end - timezone.timedelta(days=14)
         date_range_start = date_range_start.replace(hour=0, minute=0, second=0)
@@ -174,10 +174,10 @@ class Member(BaseModel):
         name = string_list[0]
         return Member.objects.get(full_name__icontains=name)
     
-    def get_report(self, report_name, days_ago):      
-        now = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    def get_report(self, report_name, days_ago):    
+        tz_aware_now = timezone.localtime(timezone.now()).replace(hour=0, minute=0, second=0, microsecond=0)
 
-        date_range_start = (now - timezone.timedelta(days=days_ago))
+        date_range_start = (tz_aware_now - timezone.timedelta(days=days_ago))
         date_range_end = date_range_start + timezone.timedelta(days=1)
         
         count = self.report_set.filter(name=report_name, created__gte=date_range_start, created__lt=date_range_end,value=True).count()

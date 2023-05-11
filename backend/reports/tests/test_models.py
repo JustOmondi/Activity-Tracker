@@ -26,11 +26,14 @@ def member(db, subgroup):
 
 @pytest.fixture()
 def report(db, member):
+
+    tz_aware_now = timezone.localtime(timezone.now())    
+
     return Report.objects.create(
         name='report name',
         member=member,
         value=True,
-        report_date=timezone.now().date()
+        report_date=tz_aware_now.date()
     )
 
 def test_report_str(report):

@@ -40,7 +40,7 @@ export default function Dashboard() {
   }
 
   const getReports = async () => {
-    const URL = `${BASE_API_URL}/structure/department/reportsbyweek?dept_number=1`
+    const URL = `${BASE_API_URL}/reports/get/department/by-week?dept_number=1`
 
     let response = await fetch(URL);
     let data = await response.json();
