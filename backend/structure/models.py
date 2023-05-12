@@ -85,7 +85,8 @@ class Department(BaseModel):
         for date in (date_range_start + timezone.timedelta(days=n) for n in range(14)):
             reports = Report.objects.filter(
                 report_date=date,
-                name=report_name
+                name=report_name,
+                member__subgroup__department__department_number=self.department_number
             )
 
             total = 0
