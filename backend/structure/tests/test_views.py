@@ -1,8 +1,13 @@
+import pytest
 from django.urls import reverse
 from rest_framework import status
 from structure.models import Department, Member, Subgroup
-from structure.serializers import DepartmentSerializer, MemberSerializer, SubgroupSerializer
-import pytest
+from structure.serializers import (
+    DepartmentSerializer,
+    MemberSerializer,
+    SubgroupSerializer,
+)
+
 
 @pytest.mark.django_db
 class TestDepartmentViews:
@@ -12,25 +17,25 @@ class TestDepartmentViews:
         url = f'{reverse("department_details")}?department_number={department.department_number}'
 
         response = client.get(url)
-        
+
         expected_data = DepartmentSerializer(department).data
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data == expected_data
 
+
 @pytest.mark.django_db
 class TestMemberViews:
-
     def test_get_members(self, client):
         department = Department.objects.create(department_number=7)
         subgroup = Subgroup.objects.create(subgroup_number=2, department=department)
 
-        member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
-        member2 = Member.objects.create(full_name='Jane Smith', subgroup=subgroup)
+        Member.objects.create(full_name='John Doe', subgroup=subgroup)
+        Member.objects.create(full_name='Jane Smith', subgroup=subgroup)
 
         url = reverse('members')
         response = client.get(url)
-        
+
         expected_data = MemberSerializer(Member.objects.all(), many=True).data
 
         assert response.status_code == status.HTTP_200_OK
@@ -96,11 +101,13 @@ class TestMemberViews:
 
     def test_update_member_with_non_existent_subgroup(self, client):
         department = Department.objects.create(department_number=7)
-        
+
         original_subgroup = 2
         non_existent_subgroup = 577
 
-        subgroup = Subgroup.objects.create(subgroup_number=original_subgroup, department=department)
+        subgroup = Subgroup.objects.create(
+            subgroup_number=original_subgroup, department=department
+        )
 
         member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
 
@@ -142,7 +149,9 @@ class TestMemberViews:
         existing_subgroup_number = 2
         non_existing_subgroup_number = 55
 
-        subgroup = Subgroup.objects.create(subgroup_number=existing_subgroup_number, department=department)
+        Subgroup.objects.create(
+            subgroup_number=existing_subgroup_number, department=department
+        )
 
         underscore_name = 'some_person'
 
@@ -196,7 +205,9 @@ class TestMemberViews:
         existing_subgroup_number = 2
         non_existing_subgroup_number = 55
 
-        subgroup = Subgroup.objects.create(subgroup_number=existing_subgroup_number, department=department)
+        subgroup = Subgroup.objects.create(
+            subgroup_number=existing_subgroup_number, department=department
+        )
 
         member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
 
@@ -210,9 +221,9 @@ class TestMemberViews:
 
         assert Member.objects.count() == 1
 
+
 @pytest.mark.django_db
 class TestSubgroupViews:
-
     def test_get_subgroups(self, client):
         department = Department.objects.create(department_number=10)
 
@@ -226,7 +237,7 @@ class TestSubgroupViews:
 
         url = reverse('subgroups')
         response = client.get(url)
-       
+
         expected_data = SubgroupSerializer(Subgroup.objects.all(), many=True).data
 
         assert response.status_code == status.HTTP_200_OK
