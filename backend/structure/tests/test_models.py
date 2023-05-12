@@ -3,6 +3,7 @@ from structure.models import Subgroup, Member, Department
 from reports.models import Report
 from django.utils import timezone
 from reports.constants import ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING, REPORT_NAMES
+from base.tests.utils import create_all_reports_for_week
 
 TODAY = 0
 LAST_WEEK = 7
@@ -22,34 +23,6 @@ def create_all_reports(days_ago, member):
         report.created = created_date_time
         report.updated = created_date_time
         report.save()
-
-def create_all_reports_for_week(member, lastweek=False):
-    tz_aware_now = timezone.localtime(timezone.now())
-
-    now = tz_aware_now.replace(hour=0, minute=0, second=5)
-
-    start_of_week = now - timezone.timedelta(days=now.weekday())
-
-    loop_range = now.isoweekday()
-
-    if (lastweek):
-        start_of_week = start_of_week - timezone.timedelta(days=7)
-        loop_range = 7
-
-    for report_name in REPORT_NAMES:
-        for i in range(loop_range):
-            # Calculate the date for the current day of the week
-            day = start_of_week + timezone.timedelta(days=i)
-
-            report = Report.objects.create(
-                name=report_name,
-                member=member,
-                value=True,
-                report_date=day.date()
-            )
-
-            report.created = day
-            report.save()
 
 @pytest.mark.django_db
 class TestDepartment:

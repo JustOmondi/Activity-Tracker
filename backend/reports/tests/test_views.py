@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from structure.tests.test_models import create_all_reports_for_week
+from base.tests.utils import create_all_reports_for_week, create_all_reports_for_fortnight
 from reports.models import Report
 from structure.models import Department, Member, Subgroup
 
@@ -94,38 +94,30 @@ class TestDepartmentReports:
         member1 = Member.objects.create(full_name='John Doe', subgroup=subgroup)
         member2 = Member.objects.create(full_name='Jane Wilson', subgroup=subgroup)
 
-        create_all_reports_for_week(member1, lastweek=True)
-        create_all_reports_for_week(member2, lastweek=True)
-
-        create_all_reports_for_week(member1, lastweek=False)
-        create_all_reports_for_week(member2, lastweek=False)
+        create_all_reports_for_fortnight(member1)
+        create_all_reports_for_fortnight(member2)
 
         url = f'{reverse("department_reports_by_fortnight")}?report_name={LESSON}&dept_number={department.department_number}'
         response = client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
 
-        # TODO: Test values
-        # expected = {
-        #     'values': [],
-        #     'labels': []
-        # }
+        expected = {
+            'values': [],
+            'labels': []
+        }
 
-        # tz_aware_now = timezone.localtime(timezone.now())          
-        # date_range_end = tz_aware_now.replace(hour=23, minute=59, second=59)        
+        tz_aware_now = timezone.localtime(timezone.now())          
+        date_range_end = tz_aware_now.replace(hour=23, minute=59, second=59)        
 
-        # date_range_start = date_range_end - timezone.timedelta(days=14)
-        # date_range_start = date_range_start.replace(hour=0, minute=0, second=0)
+        date_range_start = date_range_end - timezone.timedelta(days=14)
+        date_range_start = date_range_start.replace(hour=0, minute=0, second=0)
         
-        # for date in (date_range_start + timezone.timedelta(days=n) for n in range(14)):
-        #     if date.isoweekday() <= tz_aware_now.isoweekday():
-        #         expected['values'].append(2)
-        #     else:
-        #         expected['values'].append(0)
-
-        #     expected['labels'].append(date.strftime('%d %b'))
+        for date in (date_range_start + timezone.timedelta(days=n) for n in range(14)):
+            expected['values'].append(2)
+            expected['labels'].append(date.strftime('%d %b'))
         
-        # assert response.data == expected
+        assert response.data == expected
 
     def test_get_department_reports_by_fornight_non_existent_department(self, client, department):
             non_existent_dept_number = 9999
