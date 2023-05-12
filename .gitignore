@@ -3,3 +3,8 @@ dev
 db.sqlite3
 main/__pycache__
 node_modules
+*.sqlite3
+.vscode
+.pytest_cache
+**.coverage
+backend/coverage_re
