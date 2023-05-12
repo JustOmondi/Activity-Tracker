@@ -1,9 +1,9 @@
-import React from 'react'
-import { Collapse, Timeline  } from 'antd'
-import { capitalize } from '../utils'
 import { CloseCircleFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
+import { Collapse, Timeline } from 'antd';
+import React from 'react';
+import { capitalize } from '../utils';
 
-export default function RecentChangesCard({changes, title}) {
+export default function RecentChangesCard({ changes, title }) {
 
     const { Panel } = Collapse;
 
@@ -17,7 +17,7 @@ export default function RecentChangesCard({changes, title}) {
         const previousValue = item['changes'][0]['previous_value']
         const newValue = item['changes'][0]['new_value']
 
-        if(itemUpdated === 'value') {
+        if (itemUpdated === 'value') {
             itemUpdated = 'Attendance'
         }
 
@@ -27,18 +27,18 @@ export default function RecentChangesCard({changes, title}) {
             <span className=''>{memberName}</span>: <span className='font-bold'>{reportName} {itemUpdated}</span> <span className=''>{action}</span> from <span className='text-black'>{previousValue}</span> to <span className='text-black'>{newValue}</span>
         </div>)
 
-        if(action === 'added') {
+        if (action === 'added') {
             color = 'green'
             dot = <PlusCircleFilled />
 
             message = (<div className='text-slate-500'><span className=''>{memberName}</span>: Added</div>)
 
-            if(reportName) {
+            if (reportName) {
                 message = (<div className='text-slate-500'><span className=''>{memberName}</span>: <span className='font-bold'>{reportName} Attendance</span> added for <span className='text-black'>{reportDate}</span></div>)
-            } 
+            }
         }
 
-        if(action === 'removed') {
+        if (action === 'removed') {
             color = 'red'
             dot = <CloseCircleFilled />
             message = (<div className='text-slate-500'><span className=''>{memberName}</span>: Removed</div>)
@@ -51,11 +51,11 @@ export default function RecentChangesCard({changes, title}) {
         }
     }
 
-  return (
-    <Collapse accordion>
-        <Panel header={<h2 className='font-bold text-md'>{title}</h2>}>
-            <Timeline items={changes.map(formatChanges)} />
-        </Panel>
-    </Collapse>
-  )
+    return (
+        <Collapse accordion>
+            <Panel header={<h2 className='font-bold text-md'>{title}</h2>}>
+                <Timeline items={changes.map(formatChanges)} />
+            </Panel>
+        </Collapse>
+    )
 }

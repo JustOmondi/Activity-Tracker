@@ -1,15 +1,15 @@
-import React, {useState} from 'react'
-import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
-import {Link} from "react-router-dom";
-import { ArrowLeftOnRectangleIcon, HomeIcon, ListBulletIcon, UsersIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftOnRectangleIcon, HomeIcon, ListBulletIcon, UsersIcon } from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import { Menu, MenuItem, Sidebar } from 'react-pro-sidebar';
+import { Link } from "react-router-dom";
 
-export default function NavSidebar({toggleSidebar}) {
+export default function NavSidebar({ toggleSidebar }) {
     const sideBarBGColour = '#111827';
 
     const [activeLink, setActiveLink] = useState(window.location.pathname)
 
-    const handleLinkClick = ({target}) => {
-        if(window.innerWidth < 900) {
+    const handleLinkClick = ({ target }) => {
+        if (window.innerWidth < 900) {
             toggleSidebar()
         }
 
@@ -26,12 +26,12 @@ export default function NavSidebar({toggleSidebar}) {
             width: '250px',
             borderRight: `0px solid ${sideBarBGColour}`,
         }}>
-           <Menu>
-                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/dashboard' ? 'active' : ''}`} icon={<HomeIcon className={iconClasses}/>} component={<Link to='/dashboard' />}>Dashboard</MenuItem>
-                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/subgroups' ? 'active' : ''}`} icon={<ListBulletIcon className={iconClasses}/>} component={<Link to='/subgroups' />}>Subgroups</MenuItem>
-                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/members' ? 'active' : ''}`} icon={<UsersIcon className={iconClasses}/>} component={<Link to='/members' />}>Members</MenuItem>
-                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/'}`} icon={<ArrowLeftOnRectangleIcon className={iconClasses}/>} component={<Link to='/' />}>Logout</MenuItem>
-            </Menu> 
+            <Menu>
+                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/dashboard' ? 'active' : ''}`} icon={<HomeIcon className={iconClasses} />} component={<Link to='/dashboard' />}>Dashboard</MenuItem>
+                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/subgroups' ? 'active' : ''}`} icon={<ListBulletIcon className={iconClasses} />} component={<Link to='/subgroups' />}>Subgroups</MenuItem>
+                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/members' ? 'active' : ''}`} icon={<UsersIcon className={iconClasses} />} component={<Link to='/members' />}>Members</MenuItem>
+                <MenuItem onClick={handleLinkClick} className={`${activeLink === '/'}`} icon={<ArrowLeftOnRectangleIcon className={iconClasses} />} component={<Link to='/' />}>Logout</MenuItem>
+            </Menu>
         </Sidebar>
     )
 }

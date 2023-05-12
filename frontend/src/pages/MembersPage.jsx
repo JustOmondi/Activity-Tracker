@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { BASE_API_URL, getAllReportItems } from '../Config'
-import { Button, Input, Modal, Select, Space, message, Skeleton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import MembersTable from '../components/MembersTable'
+import { Button, Input, Modal, Select, Skeleton, Space, message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { BASE_API_URL, getAllReportItems } from '../Config';
+import MembersTable from '../components/MembersTable';
 
+import { useDispatch, useSelector } from 'react-redux';
 import { setMemberUpdated } from '../app/mainSlice';
-import { useDispatch, useSelector } from 'react-redux'
 
 export default function MembersListPage() {
     const [members, setMembers] = useState([])
@@ -21,7 +21,7 @@ export default function MembersListPage() {
 
     const showMessage = (type, message) => {
         const duration = type === 'loading' ? 0 : 5
-        
+
         messageApi.open({
             type: type,
             content: message,
@@ -76,13 +76,13 @@ export default function MembersListPage() {
                 lastWeekReports: lastWeekReports
             }
 
-            for(let reportItem of getAllReportItems()) {
+            for (let reportItem of getAllReportItems()) {
                 formattedMember[`${reportItem.name}Attendance`] = thisWeekReports[reportItem.name][currentDay]
             }
 
             formattedMembers.push(formattedMember)
         }
-        
+
         setMembers(formattedMembers)
     }
 
@@ -99,7 +99,7 @@ export default function MembersListPage() {
 
         let response = await fetch(URL);
         let data = await response.json();
-        
+
         formatSubgroups(data);
     }
 
@@ -112,14 +112,14 @@ export default function MembersListPage() {
     }
 
     const handleAfterClose = () => {
-        if(memberUpdated) {
+        if (memberUpdated) {
             dispatch(setMemberUpdated(false))
             reloadTableData();
         }
     }
 
     const handleOkClick = () => {
-        if(newMemberName === '' || !newMemberSubgroup) {
+        if (newMemberName === '' || !newMemberSubgroup) {
             showMessage('error', 'Please check that all fields are filled in')
         } else {
             const underscoreName = newMemberName.toLowerCase().replace(' ', '_')
@@ -128,29 +128,29 @@ export default function MembersListPage() {
 
             showMessage('loading', 'Adding new member')
 
-            fetch(url, {method: 'POST'})
-            .then(async (response) => {
-                hideMessage()
+            fetch(url, { method: 'POST' })
+                .then(async (response) => {
+                    hideMessage()
 
-                if (response.status === 200) {
-                    const message = 'Member added successfully'
+                    if (response.status === 200) {
+                        const message = 'Member added successfully'
 
-                    showMessage('success', message)
+                        showMessage('success', message)
 
-                    dispatch(setMemberUpdated(true))
-                
-                } else {
-                    const message = 'Adding new member failed. Please try again'
+                        dispatch(setMemberUpdated(true))
 
-                    showMessage('error', message)
-                }
-                
-                setAddMemberModalVisible(false)
-            })
+                    } else {
+                        const message = 'Adding new member failed. Please try again'
+
+                        showMessage('error', message)
+                    }
+
+                    setAddMemberModalVisible(false)
+                })
         }
     }
 
-    const handleNameInputChange = ({target}) => {
+    const handleNameInputChange = ({ target }) => {
         setNewMemberName(target.value)
     }
 
@@ -170,7 +170,7 @@ export default function MembersListPage() {
             </div>
         )
     }
-    
+
     return (
         <div>
             {(members.length === 0) && (
@@ -182,8 +182,8 @@ export default function MembersListPage() {
             {(members.length > 0) && (
                 <>
                     {contextHolder}
-                    <Button 
-                        className='bg-black text-white shadow-md mb-6 flex items-center mr-3' 
+                    <Button
+                        className='bg-black text-white shadow-md mb-6 flex items-center mr-3'
                         onClick={handleAddMemberClick}
                         type='primary'
                         size='large'
@@ -200,14 +200,14 @@ export default function MembersListPage() {
                             <Button key="ok" className='ok-button' onClick={handleOkClick}>
                                 Submit
                             </Button>
-                          ]}>
+                        ]}>
                         <div className='flex items-center mt-8'>
-                            <h3 className='mr-3 font-bold'>Name:</h3> 
+                            <h3 className='mr-3 font-bold'>Name:</h3>
                             <Space.Compact style={{ width: '100%' }}>
-                                <Input onChange={handleNameInputChange}/>
+                                <Input onChange={handleNameInputChange} />
                             </Space.Compact>
                         </div>
-                        
+
                         <div className='flex items-center mt-8'>
                             <h3 className='mr-3 font-bold'>Subgroup:</h3>
                             <Space.Compact style={{ width: '100%' }}>
@@ -220,9 +220,15 @@ export default function MembersListPage() {
                             </Space.Compact>
                         </div>
                     </Modal>
-                    <MembersTable members={members} subgroups={subgroups} reloadTableData={reloadTableData} showMessage={showMessage} hideMessage={hideMessage} />
-                </>   
+                    <MembersTable
+                        members={members}
+                        subgroups={subgroups}
+                        reloadTableData={reloadTableData}
+                        showMessage={showMessage}
+                        hideMessage={hideMessage}
+                    />
+                </>
             )}
-        </div> 
+        </div>
     )
 }

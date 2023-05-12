@@ -1,13 +1,10 @@
-import React, {useState} from 'react'
-import { Button, Input, Form } from 'antd';
+import { Button, Form, Input } from 'antd';
+import React, { useState } from 'react';
 import { BASE_API_URL } from '../Config';
-import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
     const [loginError, setloginError] = useState(false)
     const [loading, setLoading] = useState(false)
-
-    const navigate = useNavigate();
 
     const COOKIE_NAME = 'token'
 
@@ -24,21 +21,21 @@ export default function LoginPage() {
                 'Content-Type': 'application/json'
             }
         })
-        .then(async (response) => {
-            setLoading(false)
+            .then(async (response) => {
+                setLoading(false)
 
-            if (response.status === 200) {
-                const data = await response.json()
-                document.cookie = `${COOKIE_NAME}=${data[COOKIE_NAME]}`
-                window.location.replace('/dashboard');
-            } else {
+                if (response.status === 200) {
+                    const data = await response.json()
+                    document.cookie = `${COOKIE_NAME}=${data[COOKIE_NAME]}`
+                    window.location.replace('/dashboard');
+                } else {
+                    setloginError(true)
+                }
+            })
+            .catch(error => {
+                setLoading(false)
                 setloginError(true)
-            }
-        })
-        .catch(error => {
-            setLoading(false)
-            setloginError(true)
-        })
+            })
     }
 
     const onFinishFailed = (errorInfo) => {
@@ -48,7 +45,7 @@ export default function LoginPage() {
     return (
         <div className='page h-full pt-8 px-6'>
             <div className='page-inner overflow-auto w-full flex flex-col items-center justify-center'>
-                <img className='w-40' alt='Logo' src="/logo.png"/>
+                <img className='w-40' alt='Logo' src="/logo.png" />
                 <h1 className='font-bold text-[2em] xl:text-[3em] mb-10'>Welcome!</h1>
                 {loginError && <h2 className='font-medium text-md mb-10 text-red-600'>Username or password incorrect, please try again</h2>}
                 <div className='subgroup-card shadow-lg bg-white rounded-3xl flex flex-col items-center w-autoflex-wrap p-10'>
@@ -60,23 +57,23 @@ export default function LoginPage() {
                         onFinishFailed={onFinishFailed}
                         autoComplete="off">
                         <Form.Item
-                        label=""
-                        name="username"
-                        rules={[{ required: true, message: 'Please input your username' }]}
+                            label=""
+                            name="username"
+                            rules={[{ required: true, message: 'Please input your username' }]}
                         >
-                            <Input placeholder='Username'/>
+                            <Input placeholder='Username' />
                         </Form.Item>
 
                         <Form.Item
-                        label=""
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password' }]}
+                            label=""
+                            name="password"
+                            rules={[{ required: true, message: 'Please input your password' }]}
                         >
-                            <Input.Password placeholder='Password'/>
+                            <Input.Password placeholder='Password' />
                         </Form.Item>
                         <Form.Item>
-                            <Button 
-                                className='bg-black text-white shadow-md flex items-center mt-6 w-full justify-center' 
+                            <Button
+                                className='bg-black text-white shadow-md flex items-center mt-6 w-full justify-center'
                                 type='primary'
                                 loading={loading}
                                 htmlType="submit"
@@ -85,7 +82,6 @@ export default function LoginPage() {
                             </Button>
                         </Form.Item>
                     </Form>
-                    
                 </div>
             </div>
         </div>

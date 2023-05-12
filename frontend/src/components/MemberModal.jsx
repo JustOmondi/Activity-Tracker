@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import { Button, Input, Modal, Select, Collapse, Space, Popconfirm  } from 'antd';
+import { Button, Collapse, Input, Modal, Popconfirm, Select, Space } from 'antd';
+import React, { useState } from 'react';
 import AttendanceWeekView from './AttendanceWeekView';
 
 import { BASE_API_URL, getAllReportItems } from '../Config';
 
+import { useDispatch } from 'react-redux';
 import { setMemberUpdated } from '../app/mainSlice';
-import { useDispatch } from 'react-redux'
 
-export default function MemberModal({hideModal, member, subgroups, showMessage, hideMessage}) {
+export default function MemberModal({ hideModal, member, subgroups, showMessage, hideMessage }) {
   const memberNameUnderscore = member.name.toLowerCase().replaceAll(' ', '_')
 
   const [open, setOpen] = useState(true);
@@ -21,13 +21,13 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
 
   const getAttendance = (reportName, reportColor) => {
     return {
-      'thisWeek': member.thisWeekReports[reportName], 
+      'thisWeek': member.thisWeekReports[reportName],
       'lastWeek': member.lastWeekReports[reportName],
       'color': reportColor
     }
   }
 
-  const handleNameInputChange = ({target}) => {
+  const handleNameInputChange = ({ target }) => {
     const name = target.value.toLowerCase().replace(' ', '_')
     setNewNameUnderscore(name)
   }
@@ -42,36 +42,36 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
     setIsLoading(true)
     showMessage('loading', 'Updating member name')
 
-    fetch(url, {method: 'POST'})
-    .then(async (response) => {
+    fetch(url, { method: 'POST' })
+      .then(async (response) => {
         hideMessage()
 
         if (response.status === 200) {
-            const message = 'Name updated successfully'
+          const message = 'Name updated successfully'
 
-            showMessage('success', message)
+          showMessage('success', message)
 
-            setOpen(false);
-            if(memberNameUnderscore !== newNameUnderscore) {
-              // Update redux store to indicate a member has been updated 
-              dispatch(setMemberUpdated(true))
-            }
-            
+          setOpen(false);
+          if (memberNameUnderscore !== newNameUnderscore) {
+            // Update redux store to indicate a member has been updated 
+            dispatch(setMemberUpdated(true))
+          }
+
         } else {
-            const message = 'Update failed. Please try again'
+          const message = 'Update failed. Please try again'
 
-            showMessage('error', message)
+          showMessage('error', message)
         }
 
         setIsLoading(false)
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         hideMessage()
         const message = 'Update failed. Please try again'
 
         setIsLoading(false)
         showMessage('error', message)
-    })
+      })
   };
 
   const handleSubgroupUpdateClick = () => {
@@ -80,39 +80,39 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
     setIsLoading(true)
     showMessage('loading', 'Updating member subgroup')
 
-    fetch(url, {method: 'POST'})
-    .then(async (response) => {
+    fetch(url, { method: 'POST' })
+      .then(async (response) => {
         hideMessage()
 
         console.log(response.status)
 
         if (response.status === 200) {
-            const message = 'Subgroup updated successfully'
+          const message = 'Subgroup updated successfully'
 
-            showMessage('success', message)
+          showMessage('success', message)
 
-            if(member.subgroup !== currentSubgroup) {
-               // Update redux store to indicate a member has been updated 
-              dispatch(setMemberUpdated(true))
-            }
-           
+          if (member.subgroup !== currentSubgroup) {
+            // Update redux store to indicate a member has been updated 
+            dispatch(setMemberUpdated(true))
+          }
+
         } else {
-            const message = 'Update failed. Please try again'
+          const message = 'Update failed. Please try again'
 
-            showMessage('error', message)
+          showMessage('error', message)
         }
 
         setIsLoading(false)
-    })
-    .catch(error => {
-      console.log(error)
+      })
+      .catch(error => {
+        console.log(error)
         hideMessage()
 
         const message = 'Update failed. Please try again'
 
         setIsLoading(false)
         showMessage('error', message)
-    })
+      })
   };
 
   const handleCancel = () => {
@@ -125,33 +125,33 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
     setIsLoading(true)
     showMessage('loading', 'Removing member')
 
-    fetch(url, {method: 'POST'})
-    .then(async (response) => {
+    fetch(url, { method: 'POST' })
+      .then(async (response) => {
         hideMessage()
 
         if (response.status === 200) {
-            const message = 'Member removed successfully'
+          const message = 'Member removed successfully'
 
-            showMessage('success', message)
+          showMessage('success', message)
 
-            setOpen(false);
-            dispatch(setMemberUpdated(true))
-            
+          setOpen(false);
+          dispatch(setMemberUpdated(true))
+
         } else {
-            const message = 'Member removal failed. Please try again'
+          const message = 'Member removal failed. Please try again'
 
-            showMessage('error', message)
+          showMessage('error', message)
         }
 
         setIsLoading(false)
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         hideMessage()
         const message = 'Member removal failed. Please try again'
 
         setIsLoading(false)
         showMessage('error', message)
-    })
+      })
   };
 
   const afterClose = () => {
@@ -173,7 +173,7 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
             title={`Remove ${member.name}`}
             description={`Are you sure you would like to remove this member?`}
             onConfirm={handleRemoveMemberClick}
-            onCancel={() => {}}
+            onCancel={() => { }}
             okText="Yes"
             cancelText="No">
             <Button key="remove" type='default'>
@@ -185,9 +185,9 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
           </Button>
         ]}>
         <div className='flex items-center mt-8'>
-          <h3 className='mr-3 font-bold'>Name:</h3> 
+          <h3 className='mr-3 font-bold'>Name:</h3>
           <Space.Compact style={{ width: '100%' }}>
-            <Input defaultValue={member.name} onChange={handleNameInputChange}/>
+            <Input defaultValue={member.name} onChange={handleNameInputChange} />
             <Button disabled={isLoading} className='ok-button' onClick={handleNameUpdateClick}>Update</Button>
           </Space.Compact>
         </div>
@@ -195,27 +195,27 @@ export default function MemberModal({hideModal, member, subgroups, showMessage, 
           <h3 className='mr-3 font-bold'>Subgroup:</h3>
           <Space.Compact style={{ width: '100%' }}>
             <Select
-                defaultValue={member.subgroup}
-                style={{ width: 120 }}
-                options={subgroups}
-                onChange={handleSubgroupSelectChange} />
+              defaultValue={member.subgroup}
+              style={{ width: 120 }}
+              options={subgroups}
+              onChange={handleSubgroupSelectChange} />
             <Button disabled={isLoading} className='ok-button' onClick={handleSubgroupUpdateClick}>Update</Button>
           </Space.Compact>
-          
+
         </div>
 
         <Collapse className='mt-4' accordion>
           {getAllReportItems().map((reportItem, index) => {
-              return (
-                <Panel header={<h3 className='font-bold'>{reportItem.title}</h3>} key={index}>
-                  <AttendanceWeekView
-                    showMessage={showMessage}
-                    hideMessage={hideMessage}
-                    attendance={getAttendance(reportItem.name, reportItem.color)}
-                    reportName={reportItem.name}
-                    memberName={newNameUnderscore} />
-                </Panel>
-              )
+            return (
+              <Panel header={<h3 className='font-bold'>{reportItem.title}</h3>} key={index}>
+                <AttendanceWeekView
+                  showMessage={showMessage}
+                  hideMessage={hideMessage}
+                  attendance={getAttendance(reportItem.name, reportItem.color)}
+                  reportName={reportItem.name}
+                  memberName={newNameUnderscore} />
+              </Panel>
+            )
           })}
         </Collapse>
       </Modal>

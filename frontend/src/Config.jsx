@@ -1,4 +1,4 @@
-import { BuildingOfficeIcon, UsersIcon, BoltIcon, BookOpenIcon } from '@heroicons/react/24/outline'
+import { BoltIcon, BookOpenIcon, BuildingOfficeIcon, UsersIcon } from '@heroicons/react/24/outline'
 
 export const BASE_API_URL = 'http://127.0.0.1:8000/api'
 
@@ -28,51 +28,51 @@ export const REPORTS = {
         title: 'Lesson Attendance',
         color: GREEN,
         name: LESSON,
-        icon: <BuildingOfficeIcon fill={fillColor} className={iconClasses}/>
+        icon: <BuildingOfficeIcon fill={fillColor} className={iconClasses} />
     },
     [`${ACTIVITY}`]: {
         title: 'Activity Attendance',
         color: BLUE,
         name: ACTIVITY,
-        icon: <BoltIcon fill={fillColor} className={iconClasses}/>
+        icon: <BoltIcon fill={fillColor} className={iconClasses} />
     },
     [`${HOMEWORK}`]: {
         title: 'Homework Done',
         color: ORANGE,
         name: HOMEWORK,
-        icon: <BookOpenIcon fill={fillColor} className={iconClasses}/>
+        icon: <BookOpenIcon fill={fillColor} className={iconClasses} />
     },
     [`${WEEKLY_MEETING}`]: {
         title: 'Meeting Attendance',
         color: PINK,
         name: WEEKLY_MEETING,
-        icon: <UsersIcon fill={fillColor} className={iconClasses}/>
+        icon: <UsersIcon fill={fillColor} className={iconClasses} />
     },
 }
 
 export const getFeaturedTiles = () => {
     const items = []
-      for (let reportName of FEATURED_TILES) {
-          const report = REPORTS[reportName]
-          items.push(report)
-      }
+    for (let reportName of FEATURED_TILES) {
+        const report = REPORTS[reportName]
+        items.push(report)
+    }
     return items
 }
 
 export const getFeaturedGraphs = () => {
     const items = []
-      for (let reportName of FEATURED_GRAPHS) {
-          const report = REPORTS[reportName]
-          items.push(report)
-      }
+    for (let reportName of FEATURED_GRAPHS) {
+        const report = REPORTS[reportName]
+        items.push(report)
+    }
     return items
 }
 
 export const getAllReportItems = () => {
     const items = []
-      for (let reportName in REPORTS) {
-          const report = REPORTS[reportName]
-          items.push(report)
-      }
+    for (let reportName in REPORTS) {
+        const report = REPORTS[reportName]
+        items.push(report)
+    }
     return items
 }

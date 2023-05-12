@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
-import { BASE_API_URL, REPORTS } from '../Config'
+import React, { useEffect, useState } from 'react';
+import { BASE_API_URL, REPORTS } from '../Config';
 
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  LinearScale,
   Title,
   Tooltip,
 } from 'chart.js';
@@ -47,7 +47,7 @@ export default function FortnightOverviewPage() {
 
     const sum = values.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
 
-    return (sum/length).toFixed(2)
+    return (sum / length).toFixed(2)
   }
 
   const config = {
@@ -95,22 +95,22 @@ export default function FortnightOverviewPage() {
     <div className='w-full justify-center flex'>
       <div className='w-full lg:w-3/4 shadow-lg bg-white p-4 xl:p-8 mt-4 rounded-2xl mb-14 xl:mb-10'>
         <div className='flex justify-center mt-4 flex-col'>
-            <h2 className='card-title font-bold text-gray-900 mb-4 text-md xl:text-xl'>{reportConfig.title}</h2>
-            <div className={`graph-container relative w-full p-3 rounded-2xl graph-bg-${reportConfig.color}`}>
-              <Bar options={options} data={config} />
-            </div>
+          <h2 className='card-title font-bold text-gray-900 mb-4 text-md xl:text-xl'>{reportConfig.title}</h2>
+          <div className={`graph-container relative w-full p-3 rounded-2xl graph-bg-${reportConfig.color}`}>
+            <Bar options={options} data={config} />
+          </div>
         </div>
         <div className='flex justify-left mt-6'>
-            <div className={`card-icon-container rounded-md items-center flex icon-bg-${reportConfig.color} p-2 mr-4`}>
-              {reportConfig.icon}
-            </div>
-            <div>
-                
-                <div className='card-title font-light text-slate-500'>Range: Last 2 weeks</div>
-                <div className='card-title font-light text-slate-500'>Average: {calculateAverage()}</div>
-            </div>
+          <div className={`card-icon-container rounded-md items-center flex icon-bg-${reportConfig.color} p-2 mr-4`}>
+            {reportConfig.icon}
+          </div>
+          <div>
+
+            <div className='card-title font-light text-slate-500'>Range: Last 2 weeks</div>
+            <div className='card-title font-light text-slate-500'>Average: {calculateAverage()}</div>
+          </div>
         </div>
-    </div>
+      </div>
     </div>
   )
 }
