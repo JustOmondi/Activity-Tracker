@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { BASE_API_URL } from '../Config';
+import { BASE_API_URL, HTTP_200_OK } from '../Config';
 
 import { useDispatch } from 'react-redux';
 import { setMemberUpdated } from '../app/mainSlice';
@@ -51,7 +51,7 @@ const useModal = (member, hideModal, showMessage, hideMessage) => {
             .then(async (response) => {
                 hideMessage()
 
-                if (response.status === 200) {
+                if (response.status === HTTP_200_OK) {
                     const message = 'Name updated successfully'
 
                     showMessage('success', message)
@@ -91,7 +91,7 @@ const useModal = (member, hideModal, showMessage, hideMessage) => {
 
                 console.log(response.status)
 
-                if (response.status === 200) {
+                if (response.status === HTTP_200_OK) {
                     const message = 'Subgroup updated successfully'
 
                     showMessage('success', message)
@@ -130,7 +130,7 @@ const useModal = (member, hideModal, showMessage, hideMessage) => {
             .then(async (response) => {
                 hideMessage()
 
-                if (response.status === 200) {
+                if (response.status === HTTP_200_OK) {
                     const message = 'Member removed successfully'
 
                     showMessage('success', message)

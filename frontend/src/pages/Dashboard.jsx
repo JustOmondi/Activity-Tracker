@@ -57,9 +57,9 @@ export default function Dashboard() {
     setReportChanges(data['report_changes'])
   }
 
-  const getInfoCardSkeleton = () => {
+  const getInfoCardSkeleton = (index) => {
     return (
-      <div className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative mb-8 2xl:mb-0'>
+      <div key={index} className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative mb-8 2xl:mb-0'>
         <div>
           <div className='flex w-full justify-between'>
             <Skeleton.Input active />
@@ -70,9 +70,9 @@ export default function Dashboard() {
     )
   }
 
-  const getGraphCardSkeleton = () => {
+  const getGraphCardSkeleton = (index) => {
     return (
-      <div className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative mb-8 2xl:mb-0 overflow-hidden border-8 border-white'>
+      <div key={index} className='info-card shadow-lg bg-white p-3 m-1 rounded-2xl relative mb-8 2xl:mb-0 overflow-hidden border-8 border-white'>
         <div>
           <div className='flex w-full justify-center mt-3 scale-[3]'>
             <Skeleton.Input active />
@@ -88,7 +88,7 @@ export default function Dashboard() {
         {getFeaturedTiles().map((reportItem, index) => {
           return (
             <>
-              {!reportTotalsForToday.hasOwnProperty(reportItem.name) && getInfoCardSkeleton()}
+              {!reportTotalsForToday.hasOwnProperty(reportItem.name) && getInfoCardSkeleton(index)}
               {reportTotalsForToday.hasOwnProperty(reportItem.name) && (
                 <ReportTile
                   key={index}
@@ -97,7 +97,7 @@ export default function Dashboard() {
                   currentValue={reportTotalsForToday[reportItem.name][THIS_WEEK]}
                   lastweekValue={reportTotalsForToday[reportItem.name][LAST_WEEK]}
                   color={reportItem.color}
-                  link={`/reports?name=${reportItem.name}`}
+                  link={`/app/reports?name=${reportItem.name}`}
                 />
               )}
             </>
@@ -108,7 +108,7 @@ export default function Dashboard() {
         {getFeaturedGraphs().map((reportItem, index) => {
           return (
             <>
-              {!reportTotalsForWeek.hasOwnProperty(reportItem.name) && getGraphCardSkeleton()}
+              {!reportTotalsForWeek.hasOwnProperty(reportItem.name) && getGraphCardSkeleton(index)}
               {reportTotalsForWeek.hasOwnProperty(reportItem.name) && (
                 <ReportGraphTile
                   key={index}
@@ -116,7 +116,7 @@ export default function Dashboard() {
                   icon={reportItem.icon}
                   title={reportItem.title}
                   graphData={reportTotalsForWeek[reportItem.name]}
-                  link={`/reports?name=${reportItem.name}`}
+                  link={`/app/reports?name=${reportItem.name}`}
                 />
               )}
             </>
@@ -124,13 +124,13 @@ export default function Dashboard() {
         })}
       </div>
       <div className='flex w-full justify-evenly space-around mt-0 xl:mt-12 flex-wrap xl:flex-nowrap'>
-        <div className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
-          {memberChanges.length === 0 && <Skeleton active paragraph={{ rows: 2 }} />}
-          {memberChanges.length !== 0 && <RecentChangesCard changes={memberChanges} title={'Member Changes'} />}
+        <div key={1} className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
+          {memberChanges.length === 0 && <Skeleton key={1} active paragraph={{ rows: 2 }} />}
+          {memberChanges.length !== 0 && <RecentChangesCard key={1} changes={memberChanges} title={'Member Changes'} />}
         </div>
-        <div className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
-          {reportChanges.length === 0 && <Skeleton active paragraph={{ rows: 2 }} />}
-          {reportChanges.length !== 0 && <RecentChangesCard changes={reportChanges} title={'Report Changes'} />}
+        <div key={2} className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
+          {reportChanges.length === 0 && <Skeleton key={2} active paragraph={{ rows: 2 }} />}
+          {reportChanges.length !== 0 && <RecentChangesCard key={2} changes={reportChanges} title={'Report Changes'} />}
         </div>
       </div>
     </div>

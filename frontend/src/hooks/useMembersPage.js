@@ -1,7 +1,7 @@
 import { Skeleton, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BASE_API_URL, getAllReportItems } from '../Config';
+import { BASE_API_URL, HTTP_200_OK, getAllReportItems } from '../Config';
 import { setMemberUpdated } from '../app/mainSlice';
 
 const useMembersPage = () => {
@@ -129,7 +129,7 @@ const useMembersPage = () => {
                 .then(async (response) => {
                     hideMessage()
 
-                    if (response.status === 200) {
+                    if (response.status === HTTP_200_OK) {
                         const message = 'Member added successfully'
 
                         showMessage('success', message)

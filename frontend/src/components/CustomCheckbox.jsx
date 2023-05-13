@@ -1,6 +1,6 @@
 import { Checkbox } from 'antd';
 import React, { useState } from 'react';
-import { BASE_API_URL } from '../Config';
+import { BASE_API_URL, HTTP_200_OK } from '../Config';
 import { capitalize } from '../utils';
 
 import { useDispatch } from 'react-redux';
@@ -27,7 +27,7 @@ export default function CustomCheckbox({ item, isChecked, dayOfWeek, showMessage
             .then(async (response) => {
                 hideMessage()
 
-                if (response.status === 200) {
+                if (response.status === HTTP_200_OK) {
                     const message = `${capitalize(reportName)} attendance updated successfully`
 
                     setChecked(newChecked)

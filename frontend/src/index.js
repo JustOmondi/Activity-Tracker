@@ -5,6 +5,7 @@ import App from './App';
 import Dashboard from './pages/Dashboard';
 import ErrorPage from './pages/ErrorPage';
 import FortnightOverviewPage from './pages/FortnightOverviewPage';
+import LoginPage from './pages/LoginPage';
 import MembersPage from './pages/MembersPage';
 import SubgroupsPage from './pages/SubgroupsPage';
 
@@ -16,28 +17,33 @@ import store from './app/store';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/app",
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "dashboard/",
+        path: "/app/dashboard",
         element: <Dashboard />,
       },
       {
-        path: "members/",
+        path: "/app/members",
         element: <MembersPage />,
       },
       {
-        path: "subgroups/",
+        path: "/app/subgroups",
         element: <SubgroupsPage />,
       },
       {
-        path: "reports/",
+        path: "/app/reports",
         element: <FortnightOverviewPage />,
       },
     ],
   },
+  {
+    path: "/",
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
