@@ -1,12 +1,28 @@
 import { BoltIcon, BookOpenIcon, BuildingOfficeIcon, UsersIcon } from '@heroicons/react/24/outline'
 
+
 export const BASE_API_URL = 'http://127.0.0.1:8000/api'
 
+export const THIS_WEEK = 'this_week'
+export const LAST_WEEK = 'last_week'
+
+const iconClasses = 'h-8 w-8 text-white'
+
+// Colors
 const BLUE = 'blue'
 const ORANGE = 'orange'
 const GREEN = 'green'
 const PINK = 'pink'
+const fillColor = '#ffffff'
 
+
+// HTTP Responses
+export const HTTP_200_OK = 200
+export const HTTP_400_BAD_REQUEST = 400
+export const HTTP_404_NOT_FOUND = 404
+export const HTTP_403_FORBIDDEN = 403
+
+// Reports
 const LESSON = 'lesson'
 const ACTIVITY = 'activity'
 const WEEKLY_MEETING = 'weekly_meeting'
@@ -14,12 +30,6 @@ const HOMEWORK = 'homework'
 
 const FEATURED_TILES = [LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING]
 const FEATURED_GRAPHS = [LESSON, ACTIVITY, HOMEWORK]
-
-const iconClasses = 'h-8 w-8 text-white'
-const fillColor = '#ffffff'
-
-export const THIS_WEEK = 'this_week'
-export const LAST_WEEK = 'last_week'
 
 export const REPORT_NAMES = [LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING]
 
@@ -76,3 +86,7 @@ export const getAllReportItems = () => {
     }
     return items
 }
+
+// Cookies
+export const TOKEN_COOKIE_NAME = 'token'
+export const COOKIE_MAX_AGE_DAYS = 30
