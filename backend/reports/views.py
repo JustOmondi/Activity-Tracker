@@ -1,3 +1,4 @@
+from base import utils
 from django.utils import timezone
 from reports.constants import REPORT_NAMES
 from rest_framework import status
@@ -94,7 +95,11 @@ def getDepartmentReportsByWeek(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     department = department_lookup.first()
-    result = department.get_all_reports_this_week_and_last_week()
+
+    result = {
+        'reports': department.get_all_reports_this_week_and_last_week(),
+        'logs': utils.getLogs(),
+    }
 
     return Response(result)
 
