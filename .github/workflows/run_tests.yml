@@ -21,7 +21,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - run: cd backend
+    - run: pwd && cd backend
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
