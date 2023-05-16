@@ -1,12 +1,12 @@
 import { BoltIcon, BookOpenIcon, BuildingOfficeIcon, UsersIcon } from '@heroicons/react/24/outline'
 
-
+// General
 export const BASE_API_URL = 'http://127.0.0.1:8000/api'
 
 export const THIS_WEEK = 'this_week'
 export const LAST_WEEK = 'last_week'
 
-const iconClasses = 'h-8 w-8 text-white'
+export const NOTIFICATION_DURATION_SECONDS = 5
 
 // Colors
 const BLUE = 'blue'
@@ -33,6 +33,7 @@ const FEATURED_GRAPHS = [LESSON, ACTIVITY, HOMEWORK]
 
 export const REPORT_NAMES = [LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING]
 
+const iconClasses = 'h-8 w-8 text-white'
 export const REPORTS = {
     [`${LESSON}`]: {
         title: 'Lesson Attendance',
