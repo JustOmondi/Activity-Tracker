@@ -17,6 +17,9 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set Working Dir
+      working-directory: ./backend
+      run: pwd
     - name: Install Dependencies
       working-directory: ./backend
       run: |
