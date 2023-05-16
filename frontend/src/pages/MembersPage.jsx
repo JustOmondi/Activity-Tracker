@@ -42,6 +42,7 @@ export default function MembersPage() {
                         icon={<PlusOutlined />}>
                         Add Member
                     </Button>
+
                     <Modal
                         title="Add New Member"
                         open={addMemberModalVisible}

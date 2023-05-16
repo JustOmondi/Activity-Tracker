@@ -1,8 +1,10 @@
+// General
 export const capitalize = (word) => {
     const lower = word.toLowerCase();
     return word.charAt(0).toUpperCase() + lower.slice(1);
 }
 
+// Cookies
 export const getCookieValue = (cookieName) => {
     const cookies = document.cookie.split(';');
 
@@ -19,3 +21,4 @@ export const getCookieValue = (cookieName) => {
 export const deleteCookie = (cookieName) => {
     document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
+

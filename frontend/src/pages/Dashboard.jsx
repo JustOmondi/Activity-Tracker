@@ -4,6 +4,7 @@ import { BASE_API_URL, LAST_WEEK, REPORT_NAMES, THIS_WEEK, getFeaturedGraphs, ge
 import RecentChangesCard from '../components/RecentChangesCard'
 import ReportGraphTile from '../components/ReportGraphTile'
 import ReportTile from '../components/ReportTile'
+import useNotificationMessage from '../hooks/useNotificationMessage'
 
 export default function Dashboard() {
   const [reportTotalsForWeek, setReportTotalsForWeek] = useState({})
@@ -11,9 +12,13 @@ export default function Dashboard() {
   const [memberChanges, setMemberChanges] = useState([])
   const [reportChanges, setReportChanges] = useState([])
 
+  const {
+    contextHolder,
+    showMessage
+  } = useNotificationMessage()
+
   useEffect(() => {
-    getReports()
-    getRecentChanges()
+    getDashboardData()
   }, [])
 
   const formatReports = (data) => {
@@ -39,22 +44,20 @@ export default function Dashboard() {
     setReportTotalsForToday(formattedReportsForToday)
   }
 
-  const getReports = async () => {
+  const getDashboardData = async () => {
     const URL = `${BASE_API_URL}/reports/get/department/by-week?dept_number=1`
 
-    let response = await fetch(URL);
-    let data = await response.json();
-    formatReports(data);
-  }
+    try {
+      const response = await fetch(URL)
+      const data = await response.json();
 
-  const getRecentChanges = async () => {
-    const URL = `${BASE_API_URL}/logs`
+      formatReports(data['reports']);
 
-    let response = await fetch(URL);
-    let data = await response.json();
-
-    setMemberChanges(data['member_changes'])
-    setReportChanges(data['report_changes'])
+      setMemberChanges(data['logs']['member_changes'])
+      setReportChanges(data['logs']['report_changes'])
+    } catch (error) {
+      showMessage('error', 'Please reload the page to try again')
+    }
   }
 
   const getInfoCardSkeleton = (index) => {
@@ -84,6 +87,7 @@ export default function Dashboard() {
 
   return (
     <div className='w-full'>
+      {contextHolder}
       <div className='highlights flex justify-evenly flex-wrap mt-3'>
         {getFeaturedTiles().map((reportItem, index) => {
           return (

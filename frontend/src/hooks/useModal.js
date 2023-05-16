@@ -41,118 +41,104 @@ const useModal = (member, hideModal, showMessage, hideMessage) => {
         setOpen(true);
     }
 
-    const handleNameUpdateClick = () => {
-        const url = `${BASE_API_URL}/structure/member/update?name=${memberNameUnderscore}&new_name=${newNameUnderscore}`
+    const handleNameUpdateClick = async () => {
+        const URL = `${BASE_API_URL}/structure/member/update?name=${memberNameUnderscore}&new_name=${newNameUnderscore}`
 
-        setIsLoading(true)
         showMessage('loading', 'Updating member name')
-
-        fetch(url, { method: 'POST' })
-            .then(async (response) => {
-                hideMessage()
-
-                if (response.status === HTTP_200_OK) {
-                    const message = 'Name updated successfully'
-
-                    showMessage('success', message)
-
-                    setOpen(false);
-                    if (memberNameUnderscore !== newNameUnderscore) {
-                        // Update redux store to indicate a member has been updated 
-                        dispatch(setMemberUpdated(true))
-                    }
-
-                } else {
-                    const message = 'Update failed. Please try again'
-
-                    showMessage('error', message)
-                }
-
-                setIsLoading(false)
-            })
-            .catch(error => {
-                hideMessage()
-                const message = 'Update failed. Please try again'
-
-                setIsLoading(false)
-                showMessage('error', message)
-            })
-    };
-
-    const handleSubgroupUpdateClick = () => {
-        const url = `${BASE_API_URL}/structure/member/update?name=${memberNameUnderscore}&new_subgroup=${currentSubgroup}`
-
         setIsLoading(true)
-        showMessage('loading', 'Updating member subgroup')
 
-        fetch(url, { method: 'POST' })
-            .then(async (response) => {
+        try {
+            const response = await fetch(URL, { method: 'POST' })
+
+            if (response.status === HTTP_200_OK) {
                 hideMessage()
+                showMessage('success', 'Name updated successfully')
 
-                console.log(response.status)
+                setOpen(false);
+                if (memberNameUnderscore !== newNameUnderscore) {
 
-                if (response.status === HTTP_200_OK) {
-                    const message = 'Subgroup updated successfully'
-
-                    showMessage('success', message)
-
-                    if (member.subgroup !== currentSubgroup) {
-                        // Update redux store to indicate a member has been updated 
-                        dispatch(setMemberUpdated(true))
-                    }
-
-                } else {
-                    const message = 'Update failed. Please try again'
-
-                    showMessage('error', message)
-                }
-
-                setIsLoading(false)
-            })
-            .catch(error => {
-                console.log(error)
-                hideMessage()
-
-                const message = 'Update failed. Please try again'
-
-                setIsLoading(false)
-                showMessage('error', message)
-            })
-    };
-
-    const handleRemoveMemberClick = () => {
-        const url = `${BASE_API_URL}/structure/member/remove?name=${memberNameUnderscore}&subgroup=${currentSubgroup}`
-
-        setIsLoading(true)
-        showMessage('loading', 'Removing member')
-
-        fetch(url, { method: 'POST' })
-            .then(async (response) => {
-                hideMessage()
-
-                if (response.status === HTTP_200_OK) {
-                    const message = 'Member removed successfully'
-
-                    showMessage('success', message)
-
-                    setOpen(false);
+                    // Update redux store to indicate a member has been updated 
                     dispatch(setMemberUpdated(true))
-
-                } else {
-                    const message = 'Member removal failed. Please try again'
-
-                    showMessage('error', message)
                 }
 
-                setIsLoading(false)
-            })
-            .catch(error => {
-                hideMessage()
+            } else {
+                showMessage('error', 'Update failed. Please try again')
+            }
+
+            setIsLoading(false)
+
+        } catch (error) {
+            hideMessage()
+            setIsLoading(false)
+
+            showMessage('error', 'Update failed. Please try again')
+        }
+    };
+
+    const handleSubgroupUpdateClick = async () => {
+        const URL = `${BASE_API_URL}/structure/member/update?name=${memberNameUnderscore}&new_subgroup=${currentSubgroup}`
+
+        showMessage('loading', 'Updating member subgroup')
+        setIsLoading(true)
+
+        try {
+            const response = await fetch(URL, { method: 'POST' })
+
+            hideMessage()
+            setIsLoading(false)
+
+            if (response.status === HTTP_200_OK) {
+                const message = 'Subgroup updated successfully'
+
+                showMessage('success', message)
+
+                if (member.subgroup !== currentSubgroup) {
+                    // Update redux store to indicate a member has been updated 
+                    dispatch(setMemberUpdated(true))
+                }
+
+            } else {
+                showMessage('error', 'Update failed. Please try again')
+            }
+        } catch (error) {
+            hideMessage()
+            setIsLoading(false)
+
+            showMessage('error', 'Update failed. Please try again')
+        }
+    };
+
+    const handleRemoveMemberClick = async () => {
+        const URL = `${BASE_API_URL}/structure/member/remove?name=${memberNameUnderscore}&subgroup=${currentSubgroup}`
+
+        showMessage('loading', 'Removing member')
+        setIsLoading(true)
+
+        try {
+            const response = await fetch(URL, { method: 'POST' })
+
+            hideMessage()
+            setIsLoading(false)
+
+            if (response.status === HTTP_200_OK) {
+                const message = 'Member removed successfully'
+
+                showMessage('success', message)
+
+                setOpen(false);
+                dispatch(setMemberUpdated(true))
+
+            } else {
                 const message = 'Member removal failed. Please try again'
 
-                setIsLoading(false)
                 showMessage('error', message)
-            })
+            }
+        } catch (error) {
+            hideMessage()
+            setIsLoading(false)
+
+            showMessage('error', 'Member removal failed. Please try again')
+        }
     }
 
     return {

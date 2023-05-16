@@ -1,8 +1,9 @@
-import { Skeleton, message } from 'antd';
+import { Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_API_URL, HTTP_200_OK, getAllReportItems } from '../Config';
 import { setMemberUpdated } from '../app/mainSlice';
+import useNotificationMessage from './useNotificationMessage';
 
 const useMembersPage = () => {
     const [members, setMembers] = useState([])
@@ -11,24 +12,14 @@ const useMembersPage = () => {
     const [newMemberName, setNewMemberName] = useState('')
     const [newMemberSubgroup, setNewMemberSubgroup] = useState('')
 
-    const [messageApi, contextHolder] = message.useMessage();
-
     const dispatch = useDispatch()
     const memberUpdated = useSelector((state) => state.memberUpdated.value)
 
-    const showMessage = (type, message) => {
-        const duration = type === 'loading' ? 0 : 5
-
-        messageApi.open({
-            type: type,
-            content: message,
-            duration: duration,
-        });
-    }
-
-    const hideMessage = () => {
-        messageApi.destroy()
-    }
+    const {
+        contextHolder,
+        hideMessage,
+        showMessage
+    } = useNotificationMessage()
 
     // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
     const currentDay = (new Date()).getDay()
@@ -115,35 +106,40 @@ const useMembersPage = () => {
         }
     }
 
+    const addMember = async () => {
+        const underscoreName = newMemberName.toLowerCase().replace(' ', '_')
+
+        const URL = `${BASE_API_URL}/structure/member/add?name=${underscoreName}&subgroup=${newMemberSubgroup}`
+
+        showMessage('loading', 'Adding new member')
+
+        const response = await fetch(URL, { method: 'POST' })
+
+        try {
+            hideMessage()
+
+            if (response.status === HTTP_200_OK) {
+                showMessage('success', 'Member added successfully')
+
+                dispatch(setMemberUpdated(true))
+
+                setAddMemberModalVisible(false)
+
+            } else {
+                showMessage('error', 'Adding new member failed. Please try again')
+            }
+        } catch (error) {
+            hideMessage()
+
+            showMessage('error', 'Adding new member failed. Please try again')
+        }
+    }
+
     const handleOkClick = () => {
         if (newMemberName === '' || !newMemberSubgroup) {
             showMessage('error', 'Please check that all fields are filled in')
         } else {
-            const underscoreName = newMemberName.toLowerCase().replace(' ', '_')
-
-            const url = `${BASE_API_URL}/structure/member/add?name=${underscoreName}&subgroup=${newMemberSubgroup}`
-
-            showMessage('loading', 'Adding new member')
-
-            fetch(url, { method: 'POST' })
-                .then(async (response) => {
-                    hideMessage()
-
-                    if (response.status === HTTP_200_OK) {
-                        const message = 'Member added successfully'
-
-                        showMessage('success', message)
-
-                        dispatch(setMemberUpdated(true))
-
-                    } else {
-                        const message = 'Adding new member failed. Please try again'
-
-                        showMessage('error', message)
-                    }
-
-                    setAddMemberModalVisible(false)
-                })
+            addMember()
         }
     }
 

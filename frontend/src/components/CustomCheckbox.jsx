@@ -14,47 +14,48 @@ export default function CustomCheckbox({ item, isChecked, dayOfWeek, showMessage
 
     const currentDay = (new Date()).getDay()
 
-    const updateReportValue = (newChecked) => {
+    const updateReportValue = async (newChecked) => {
         const updateValue = newChecked ? 1 : 0
 
-        const url = `${BASE_API_URL}/reports/update/value?member_name=${memberName}&report_name=${reportName}&value=${updateValue}&day=${dayOfWeek}`
+        const URL = `${BASE_API_URL}/reports/update/value?member_name=${memberName}&report_name=${reportName}&value=${updateValue}&day=${dayOfWeek}`
 
         showMessage('loading', `Updating ${capitalize(reportName)} attendance`)
 
         setIsLoading(true)
 
-        fetch(url, { method: 'POST' })
-            .then(async (response) => {
+        try {
+            const response = await fetch(URL, { method: 'POST' })
+
+            if (response.status === HTTP_200_OK) {
                 hideMessage()
 
-                if (response.status === HTTP_200_OK) {
-                    const message = `${capitalize(reportName)} attendance updated successfully`
+                const message = `${capitalize(reportName)} attendance updated successfully`
 
-                    setChecked(newChecked)
-                    showMessage('success', message)
+                setChecked(newChecked)
+                showMessage('success', message)
 
-                    // Update redux store to indicate a member has been updated 
-                    dispatch(setMemberUpdated(true))
+                // Update redux store to indicate a member has been updated 
+                dispatch(setMemberUpdated(true))
 
-                } else {
-                    const message = 'Update failed. Please try again'
-
-                    setChecked(!newChecked);
-                    showMessage('error', message)
-                }
-
-                setIsLoading(false)
-            })
-            .catch(error => {
-                hideMessage()
-
+            } else {
                 const message = 'Update failed. Please try again'
 
-                setChecked(!newChecked)
-                setIsLoading(false)
-
+                setChecked(!newChecked);
                 showMessage('error', message)
-            })
+            }
+
+            setIsLoading(false)
+
+        } catch (error) {
+            hideMessage()
+
+            const message = 'Update failed. Please try again'
+
+            setChecked(!newChecked)
+            setIsLoading(false)
+
+            showMessage('error', message)
+        }
     }
 
     const handleChange = ({ target }) => {

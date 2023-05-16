@@ -13,7 +13,7 @@ export default function ErrorPage() {
             className='bg-black text-white shadow-md flex items-center mt-6'
             type='primary'
             size='large'>
-            Got to Dashboard
+            Go to Dashboard
           </Button>
         </Link>
       </div>
