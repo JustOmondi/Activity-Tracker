@@ -79,10 +79,10 @@ class TestDepartmentReports:
 
                 last_week_expected[report_name][i] = 2
 
-        assert response.data['this_week'] == this_week_expected
+        assert response.data['reports']['this_week'] == this_week_expected
 
         # TODO: Figure out value mismatch below
-        # assert response.data['last_week'] == last_week_expected
+        # assert response.data['reports']['last_week'] == last_week_expected
 
     def test_get_department_week_report_with_nonexistent_department(self, client):
         url = f'{reverse("department_reports_by_week")}?dept_number=999999999'
