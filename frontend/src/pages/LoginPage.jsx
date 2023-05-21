@@ -1,56 +1,64 @@
-import { Button, Form, Input, Skeleton } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { BASE_API_URL, COOKIE_MAX_AGE_DAYS, HTTP_200_OK, TOKEN_COOKIE_NAME } from '../Config';
-import { getCookieValue } from '../utils';
+import { Button, Form, Input, Skeleton } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setLoggedIn } from '../app/mainSlice'
+import useAuth from '../hooks/useAuth'
+import { INCORRECT_CREDENTIALS, NETWORK_OR_SERVER_ERROR, OTHER_ERROR, SUCCESS } from '../utils'
 
 export default function LoginPage() {
     const [loginError, setloginError] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [tokenFound, setTokenFound] = useState(true)
+
+    const defaultErrorMessage = 'Username or password incorrect, please try again'
+    const [errorMessage, setErrorMessage] = useState(defaultErrorMessage)
+
+    const dispatch = useDispatch()
+
+    const { getNewTokens, tokenFound } = useAuth()
 
     useEffect(() => {
-        const token = getCookieValue(TOKEN_COOKIE_NAME)
-
-        if (token) {
+        if (tokenFound) {
             window.location.replace('/app/dashboard');
-        } else {
-            setTokenFound(false)
         }
     }, [])
 
-
     const onFinish = (values) => {
-        const url = `${BASE_API_URL}/login`
-
         setLoading(true)
-        setloginError(false)
 
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(values),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(async (response) => {
-                setLoading(false)
+        const message = getNewTokens(values)
 
-                if (response.status === HTTP_200_OK) {
-                    const data = await response.json()
-                    document.cookie = `${TOKEN_COOKIE_NAME}=${data[TOKEN_COOKIE_NAME]}; max-age=${COOKIE_MAX_AGE_DAYS * 24 * 3600}`
-                    window.location.replace('/app/dashboard');
-                } else {
-                    setloginError(true)
-                }
-            })
-            .catch(error => {
-                setLoading(false)
-                setloginError(true)
-            })
+        if (message === SUCCESS) {
+            setloginError(false)
+            dispatch(setLoggedIn(true))
+            window.location.replace('/app/dashboard')
+
+        } else if (message === INCORRECT_CREDENTIALS) {
+            setloginError(true)
+            setErrorMessage(defaultErrorMessage)
+
+        } else if (message === OTHER_ERROR) {
+            setloginError(true)
+            setErrorMessage('Unexpected error ocurred. Please reload and try again')
+
+        } else if (message === NETWORK_OR_SERVER_ERROR) {
+            setloginError(true)
+            setErrorMessage('Server error ocurred. Please reload and try again')
+        }
+
+        setLoading(false)
     }
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
+    }
+
+    const handleFieldsChange = () => {
+        if (loginError) {
+            setloginError(false)
+            setErrorMessage('')
+        } else {
+            setErrorMessage(defaultErrorMessage)
+        }
     }
 
     return (
@@ -58,7 +66,7 @@ export default function LoginPage() {
             <div className='page-inner overflow-auto w-full flex flex-col items-center justify-center'>
                 <img className='w-20' alt='Logo' src="/logo.png" />
                 <h1 className='font-bold text-[2em] xl:text-[2em] mb-10'>Welcome!</h1>
-                {loginError && <h2 className='font-medium text-md mb-10 text-red-600'>Username or password incorrect, please try again</h2>}
+                {loginError && <h2 className='font-medium text-md mb-10 text-red-600'>{errorMessage}</h2>}
                 <div className='subgroup-card shadow-lg bg-white rounded-3xl flex flex-col items-center w-autoflex-wrap p-10'>
                     {tokenFound && <Skeleton.Input active />}
                     {!tokenFound && (
@@ -68,6 +76,7 @@ export default function LoginPage() {
                             initialValues={{ remember: true }}
                             onFinish={onFinish}
                             onFinishFailed={onFinishFailed}
+                            onFieldsChange={handleFieldsChange}
                             autoComplete="off">
                             <Form.Item
                                 label=""

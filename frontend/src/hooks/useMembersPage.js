@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_API_URL, HTTP_200_OK, getAllReportItems } from '../Config';
 import { setMemberUpdated } from '../app/mainSlice';
+import useAuth from './useAuth';
 import useNotificationMessage from './useNotificationMessage';
 
 const useMembersPage = () => {
@@ -13,6 +14,7 @@ const useMembersPage = () => {
     const [newMemberSubgroup, setNewMemberSubgroup] = useState('')
 
     const dispatch = useDispatch()
+
     const memberUpdated = useSelector((state) => state.memberUpdated.value)
 
     const {
@@ -20,6 +22,8 @@ const useMembersPage = () => {
         hideMessage,
         showMessage
     } = useNotificationMessage()
+
+    const { fetchWithAuthHeader } = useAuth()
 
     // Get day of the week in ISO format where Monday = 1 .. Sunday = 7
     const currentDay = (new Date()).getDay()
@@ -77,7 +81,7 @@ const useMembersPage = () => {
     const getMembers = async () => {
         const URL = `${BASE_API_URL}/structure/members`
 
-        let response = await fetch(URL);
+        let response = await fetchWithAuthHeader(URL);
         let data = await response.json();
         formatMembers(data);
     }
@@ -85,7 +89,7 @@ const useMembersPage = () => {
     const getSubgroups = async () => {
         const URL = `${BASE_API_URL}/structure/subgroups`
 
-        let response = await fetch(URL);
+        let response = await fetchWithAuthHeader(URL);
         let data = await response.json();
 
         formatSubgroups(data);
@@ -113,9 +117,9 @@ const useMembersPage = () => {
 
         showMessage('loading', 'Adding new member')
 
-        const response = await fetch(URL, { method: 'POST' })
-
         try {
+            const response = await fetchWithAuthHeader(URL)
+
             hideMessage()
 
             if (response.status === HTTP_200_OK) {

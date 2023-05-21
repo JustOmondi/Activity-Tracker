@@ -5,12 +5,15 @@ import { capitalize } from '../utils';
 
 import { useDispatch } from 'react-redux';
 import { setMemberUpdated } from '../app/mainSlice';
+import useAuth from '../hooks/useAuth';
 
 export default function CustomCheckbox({ item, isChecked, dayOfWeek, showMessage, hideMessage, classes, reportName, memberName }) {
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(isChecked);
 
     const dispatch = useDispatch()
+
+    const { fetchWithAuthHeader } = useAuth()
 
     const currentDay = (new Date()).getDay()
 
@@ -24,7 +27,7 @@ export default function CustomCheckbox({ item, isChecked, dayOfWeek, showMessage
         setIsLoading(true)
 
         try {
-            const response = await fetch(URL, { method: 'POST' })
+            const response = await fetchWithAuthHeader(URL)
 
             if (response.status === HTTP_200_OK) {
                 hideMessage()

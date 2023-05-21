@@ -4,6 +4,7 @@ import { BASE_API_URL, LAST_WEEK, REPORT_NAMES, THIS_WEEK, getFeaturedGraphs, ge
 import RecentChangesCard from '../components/RecentChangesCard'
 import ReportGraphTile from '../components/ReportGraphTile'
 import ReportTile from '../components/ReportTile'
+import useAuth from '../hooks/useAuth'
 import useNotificationMessage from '../hooks/useNotificationMessage'
 
 export default function Dashboard() {
@@ -16,6 +17,8 @@ export default function Dashboard() {
     contextHolder,
     showMessage
   } = useNotificationMessage()
+
+  const { fetchWithAuthHeader } = useAuth()
 
   useEffect(() => {
     getDashboardData()
@@ -45,10 +48,12 @@ export default function Dashboard() {
   }
 
   const getDashboardData = async () => {
+
     const URL = `${BASE_API_URL}/reports/get/department/by-week?dept_number=1`
 
     try {
-      const response = await fetch(URL)
+      const response = await fetchWithAuthHeader(URL)
+
       const data = await response.json();
 
       formatReports(data['reports']);

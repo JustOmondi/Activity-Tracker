@@ -89,5 +89,5 @@ export const getAllReportItems = () => {
 }
 
 // Cookies
-export const TOKEN_COOKIE_NAME = 'token'
+export const REFRESH_TOKEN = 'refresh'
 export const COOKIE_MAX_AGE_DAYS = 30

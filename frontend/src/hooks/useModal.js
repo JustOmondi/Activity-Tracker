@@ -4,6 +4,7 @@ import { BASE_API_URL, HTTP_200_OK } from '../Config';
 
 import { useDispatch } from 'react-redux';
 import { setMemberUpdated } from '../app/mainSlice';
+import useAuth from './useAuth';
 
 const useModal = (member, hideModal, showMessage, hideMessage) => {
     const memberNameUnderscore = member.name.toLowerCase().replaceAll(' ', '_')
@@ -14,6 +15,8 @@ const useModal = (member, hideModal, showMessage, hideMessage) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const dispatch = useDispatch()
+
+    const { fetchWithAuthHeader } = useAuth()
 
     const getAttendance = (reportName, reportColor) => {
         return {
@@ -48,7 +51,7 @@ const useModal = (member, hideModal, showMessage, hideMessage) => {
         setIsLoading(true)
 
         try {
-            const response = await fetch(URL, { method: 'POST' })
+            const response = await fetchWithAuthHeader(URL)
 
             if (response.status === HTTP_200_OK) {
                 hideMessage()
@@ -82,7 +85,7 @@ const useModal = (member, hideModal, showMessage, hideMessage) => {
         setIsLoading(true)
 
         try {
-            const response = await fetch(URL, { method: 'POST' })
+            const response = await fetchWithAuthHeader(URL)
 
             hideMessage()
             setIsLoading(false)
@@ -115,7 +118,7 @@ const useModal = (member, hideModal, showMessage, hideMessage) => {
         setIsLoading(true)
 
         try {
-            const response = await fetch(URL, { method: 'POST' })
+            const response = await fetchWithAuthHeader(URL)
 
             hideMessage()
             setIsLoading(false)
