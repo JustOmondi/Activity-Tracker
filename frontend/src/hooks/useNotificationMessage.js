@@ -5,6 +5,8 @@ const useNotificationMessage = () => {
     const [messageApi, contextHolder] = message.useMessage();
 
     const showMessage = (type, message) => {
+        messageApi.destroy()
+
         const duration = type === 'loading' ? 0 : NOTIFICATION_DURATION_SECONDS
 
         messageApi.open({
