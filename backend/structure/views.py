@@ -1,13 +1,17 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 
 from .models import Department, Member, Subgroup
 from .serializers import DepartmentSerializer, MemberSerializer, SubgroupSerializer
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def getDepartment(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     department_number = request.GET.get('department_number')
     department_lookup = Department.objects.filter(department_number=department_number)
 
@@ -21,8 +25,11 @@ def getDepartment(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def getMembers(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     members = Member.objects.all()
     serializer = MemberSerializer(members, many=True)
 
@@ -31,6 +38,9 @@ def getMembers(request):
 
 @api_view(['GET', 'POST'])
 def addMember(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     name = request.GET.get('name')
     subgroup = request.GET.get('subgroup')
 
@@ -47,6 +57,9 @@ def addMember(request):
 
 @api_view(['GET', 'POST'])
 def removeMember(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     name = request.GET.get('name')
     subgroup_number = request.GET.get('subgroup')
 
@@ -64,6 +77,9 @@ def removeMember(request):
 
 @api_view(['GET', 'POST'])
 def updateMember(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     name = request.GET.get('name')
     new_name = request.GET.get('new_name')
     new_subgroup = request.GET.get('new_subgroup')
@@ -91,8 +107,11 @@ def updateMember(request):
     return Response(status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def getSubgroups(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     subgroups = Subgroup.objects.all()
     serializer = SubgroupSerializer(subgroups, many=True)
 

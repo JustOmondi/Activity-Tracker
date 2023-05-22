@@ -3,6 +3,7 @@ from django.utils import timezone
 from reports.constants import REPORT_NAMES
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from structure.models import Department, Member
 
@@ -11,6 +12,9 @@ from .models import Report
 
 @api_view(['GET', 'POST'])
 def updateReportValue(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     # TODO: Figure out why URL params coming through on request.GET instead of request.POST
     member_name = request.GET.get('member_name')
     report_name = request.GET.get('report_name')
@@ -85,8 +89,11 @@ def updateReportValue(request):
     return Response(status=status.HTTP_200_OK, data={'message': message})
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def getDepartmentReportsByWeek(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     dept_number = request.GET.get('dept_number')
 
     department_lookup = Department.objects.filter(department_number=dept_number)
@@ -104,8 +111,11 @@ def getDepartmentReportsByWeek(request):
     return Response(result)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def getDepartmentReportsByFortnight(request):
+    if not request.user.id:
+        raise AuthenticationFailed('User not found')
+
     report_name = request.GET.get('report_name')
     dept_number = request.GET.get('dept_number')
 
