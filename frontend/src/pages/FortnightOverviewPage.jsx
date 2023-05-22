@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BASE_API_URL, REPORTS } from '../Config';
+import useAuth from '../hooks/useAuth';
 
 import {
   BarElement,
@@ -23,6 +24,8 @@ export default function FortnightOverviewPage() {
   const [values, setValues] = useState([])
   const [labels, setLabels] = useState([])
 
+  const { fetchWithAuthHeader } = useAuth()
+
   const queryParameters = new URLSearchParams(window.location.search)
 
   const reportName = queryParameters.get('name') ? queryParameters.get('name') : 'lesson'
@@ -35,8 +38,8 @@ export default function FortnightOverviewPage() {
   const getReports = async () => {
     const URL = `${BASE_API_URL}/reports/get/department/by-fortnight?dept_number=1&report_name=${reportName}`
 
-    let response = await fetch(URL);
-    let data = await response.json();
+    const response = await fetchWithAuthHeader(URL);
+    const data = await response.json();
 
     setValues(data['values']);
     setLabels(data['labels']);

@@ -2,9 +2,12 @@ import { Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { BASE_API_URL } from '../Config'
 import SubgroupCard from '../components/SubgroupCard'
+import useAuth from '../hooks/useAuth'
 
 export default function SubgroupsPage() {
     const [subgroups, setSubgroups] = useState([])
+
+    const { fetchWithAuthHeader } = useAuth()
 
     useEffect(() => {
         getSubgroups()
@@ -13,8 +16,8 @@ export default function SubgroupsPage() {
     let getSubgroups = async () => {
         const URL = `${BASE_API_URL}/structure/subgroups`
 
-        let response = await fetch(URL);
-        let data = await response.json();
+        const response = await fetchWithAuthHeader(URL);
+        const data = await response.json();
         setSubgroups(data)
     }
 

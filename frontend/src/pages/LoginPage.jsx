@@ -3,14 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn } from '../app/mainSlice'
 import useAuth from '../hooks/useAuth'
-import { INCORRECT_CREDENTIALS, NETWORK_OR_SERVER_ERROR, OTHER_ERROR, SUCCESS } from '../utils'
+import { INCORRECT_CREDENTIALS, SUCCESS } from '../utils'
 
 export default function LoginPage() {
     const [loginError, setloginError] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    const defaultErrorMessage = 'Username or password incorrect, please try again'
-    const [errorMessage, setErrorMessage] = useState(defaultErrorMessage)
+    const [errorMessage, setErrorMessage] = useState(INCORRECT_CREDENTIALS)
 
     const dispatch = useDispatch()
 
@@ -22,27 +21,20 @@ export default function LoginPage() {
         }
     }, [])
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         setLoading(true)
 
-        const message = getNewTokens(values)
+        const message = await getNewTokens(values)
 
         if (message === SUCCESS) {
             setloginError(false)
+            setErrorMessage('')
             dispatch(setLoggedIn(true))
             window.location.replace('/app/dashboard')
 
-        } else if (message === INCORRECT_CREDENTIALS) {
+        } else {
             setloginError(true)
-            setErrorMessage(defaultErrorMessage)
-
-        } else if (message === OTHER_ERROR) {
-            setloginError(true)
-            setErrorMessage('Unexpected error ocurred. Please reload and try again')
-
-        } else if (message === NETWORK_OR_SERVER_ERROR) {
-            setloginError(true)
-            setErrorMessage('Server error ocurred. Please reload and try again')
+            setErrorMessage(message)
         }
 
         setLoading(false)
@@ -57,7 +49,7 @@ export default function LoginPage() {
             setloginError(false)
             setErrorMessage('')
         } else {
-            setErrorMessage(defaultErrorMessage)
+            setErrorMessage(INCORRECT_CREDENTIALS)
         }
     }
 
@@ -107,8 +99,6 @@ export default function LoginPage() {
                     )}
 
                 </div>
-
-
             </div>
         </div>
     )
