@@ -1,5 +1,5 @@
-import { BASE_API_URL, REFRESH_TOKEN } from '../Config'
-import { HTTP_200_OK, HTTP_403_FORBIDDEN, INCORRECT_CREDENTIALS, NETWORK_OR_SERVER_ERROR, OTHER_ERROR, SUCCESS, deleteCookie, getCookieValue, setCookie } from '../utils'
+import { BASE_API_URL, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, INCORRECT_CREDENTIALS, NETWORK_OR_SERVER_ERROR, OTHER_ERROR, REFRESH_TOKEN, SUCCESS } from '../Config'
+import { deleteCookie, getCookieValue, setCookie } from '../utils'
 
 
 const useAuth = () => {
@@ -42,13 +42,14 @@ const useAuth = () => {
         }
     }
 
-    const getNewTokens = async (username, password) => {
+    const getNewTokens = async (credentials) => {
         const URL = `${BASE_API_URL}/token`
 
         try {
             const response = await fetch(URL, {
                 method: 'POST',
-                body: JSON.stringify({ 'username': username, 'pasword': password }),
+                body: JSON.stringify(credentials),
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' }
             })
 
@@ -57,27 +58,27 @@ const useAuth = () => {
 
                 setCookie(REFRESH_TOKEN, data['refresh'])
 
-                return { 'message': SUCCESS }
+                return SUCCESS
 
-            } else if (response.status === HTTP_403_FORBIDDEN) {
-                return { 'message': INCORRECT_CREDENTIALS }
+            } else if (`${HTTP_403_FORBIDDEN} ${HTTP_401_UNAUTHORIZED}`.includes(response.status)) {
+                return INCORRECT_CREDENTIALS
 
             } else {
-                return { 'message': OTHER_ERROR }
+                return OTHER_ERROR
             }
-        } catch (error) {
-            return { 'message': NETWORK_OR_SERVER_ERROR }
+        } catch {
+            return NETWORK_OR_SERVER_ERROR
         }
     }
 
-    const fetchWithAuthHeader = (url) => {
+    const fetchWithAuthHeader = async (url) => {
 
-        const accessToken = getAccessToken()
+        const accessToken = await getAccessToken()
 
         return fetch(url, {
             method: 'POST',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json', 'Authentication': `Bearer ${accessToken}` }
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` }
         })
     }
 

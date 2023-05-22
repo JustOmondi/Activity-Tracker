@@ -8,6 +8,12 @@ export const LAST_WEEK = 'last_week'
 
 export const NOTIFICATION_DURATION_SECONDS = 5
 
+// Messages
+export const INCORRECT_CREDENTIALS = 'Username or password incorrect. Please try again'
+export const NETWORK_OR_SERVER_ERROR = 'Network / Server error. Please check your connection and reload to try again'
+export const OTHER_ERROR = 'Unexpected error ocurred. Please reload and try again'
+export const SUCCESS = 'Success'
+
 // Colors
 const BLUE = 'blue'
 const ORANGE = 'orange'
@@ -21,6 +27,7 @@ export const HTTP_200_OK = 200
 export const HTTP_400_BAD_REQUEST = 400
 export const HTTP_404_NOT_FOUND = 404
 export const HTTP_403_FORBIDDEN = 403
+export const HTTP_401_UNAUTHORIZED = 401
 
 // Reports
 const LESSON = 'lesson'
@@ -33,7 +40,13 @@ const FEATURED_GRAPHS = [LESSON, ACTIVITY, HOMEWORK]
 
 export const REPORT_NAMES = [LESSON, ACTIVITY, HOMEWORK, WEEKLY_MEETING]
 
+// Cookies
+export const REFRESH_TOKEN = 'refresh'
+export const COOKIE_MAX_AGE_DAYS = 30
+
+// Classes
 const iconClasses = 'h-8 w-8 text-white'
+
 export const REPORTS = {
     [`${LESSON}`]: {
         title: 'Lesson Attendance',
@@ -88,6 +101,3 @@ export const getAllReportItems = () => {
     return items
 }
 
-// Cookies
-export const REFRESH_TOKEN = 'refresh'
-export const COOKIE_MAX_AGE_DAYS = 30

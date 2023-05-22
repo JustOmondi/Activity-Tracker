@@ -1,9 +1,9 @@
 import { Button, Form, Input, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { INCORRECT_CREDENTIALS, SUCCESS } from '../Config'
 import { setLoggedIn } from '../app/mainSlice'
 import useAuth from '../hooks/useAuth'
-import { INCORRECT_CREDENTIALS, SUCCESS } from '../utils'
 
 export default function LoginPage() {
     const [loginError, setloginError] = useState(false)
