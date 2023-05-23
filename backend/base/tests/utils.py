@@ -1,6 +1,10 @@
+import pytest
+from django.contrib.auth.models import User
+from django.urls import reverse
 from django.utils import timezone
 from reports.constants import REPORT_NAMES
 from reports.models import Report
+from rest_framework import status
 
 
 def create_all_reports_for_week(member, lastweek=False):
@@ -42,3 +46,18 @@ def create_all_reports_for_fortnight(member):
             Report.objects.create(
                 report_date=date, name=report_name, member=member, value=True
             )
+
+
+@pytest.fixture
+def auth_header(client, db):
+    User.objects.create_user(username='testuser', password='testpass')
+
+    user_credentials = {'username': 'testuser', 'password': 'testpass'}
+
+    response = client.post(reverse('token_pair'), data=user_credentials)
+
+    assert response.status_code == status.HTTP_200_OK
+
+    access_token = response.data['access']
+
+    return {'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
