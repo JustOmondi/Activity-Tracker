@@ -1,33 +1,37 @@
-import React, {useState}from 'react'
 import { Checkbox } from 'antd';
-import { BASE_API_URL } from '../Config'
+import React, { useState } from 'react';
+import { BASE_API_URL, HTTP_200_OK } from '../Config';
 import { capitalize } from '../utils';
 
+import { useDispatch } from 'react-redux';
 import { setMemberUpdated } from '../app/mainSlice';
-import { useDispatch } from 'react-redux'
+import useAuth from '../hooks/useAuth';
 
-export default function CustomCheckbox({item, isChecked, dayOfWeek, showMessage, hideMessage, classes, reportName, memberName }) {
+export default function CustomCheckbox({ item, isChecked, dayOfWeek, showMessage, hideMessage, classes, reportName, memberName }) {
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(isChecked);
 
     const dispatch = useDispatch()
 
+    const { fetchWithAuthHeader } = useAuth()
+
     const currentDay = (new Date()).getDay()
 
-    const updateReportValue = (newChecked) => {
+    const updateReportValue = async (newChecked) => {
         const updateValue = newChecked ? 1 : 0
 
-        const url = `${BASE_API_URL}/reports/update/value?member_name=${memberName}&report_name=${reportName}&value=${updateValue}&day=${dayOfWeek}`
+        const URL = `${BASE_API_URL}/reports/update/value?member_name=${memberName}&report_name=${reportName}&value=${updateValue}&day=${dayOfWeek}`
 
         showMessage('loading', `Updating ${capitalize(reportName)} attendance`)
 
         setIsLoading(true)
 
-        fetch(url, {method: 'POST'})
-        .then(async (response) => {
-            hideMessage()
+        try {
+            const response = await fetchWithAuthHeader(URL)
 
-            if (response.status === 200) {
+            if (response.status === HTTP_200_OK) {
+                hideMessage()
+
                 const message = `${capitalize(reportName)} attendance updated successfully`
 
                 setChecked(newChecked)
@@ -44,8 +48,8 @@ export default function CustomCheckbox({item, isChecked, dayOfWeek, showMessage,
             }
 
             setIsLoading(false)
-        })
-        .catch(error => {
+
+        } catch (error) {
             hideMessage()
 
             const message = 'Update failed. Please try again'
@@ -54,21 +58,21 @@ export default function CustomCheckbox({item, isChecked, dayOfWeek, showMessage,
             setIsLoading(false)
 
             showMessage('error', message)
-        })
+        }
     }
 
-    const handleChange = ({target}) => {
+    const handleChange = ({ target }) => {
         return updateReportValue(target.checked);
     }
 
     return (
-        <Checkbox 
+        <Checkbox
             className={classes}
             disabled={isLoading || dayOfWeek > currentDay}
             checked={checked}
             defaultChecked={isChecked}
             onChange={handleChange}>
-                <p className='mt-2'>{item}</p>
+            <p className='mt-2'>{item}</p>
         </Checkbox>
     )
 }

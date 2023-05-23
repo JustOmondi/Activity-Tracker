@@ -1,43 +1,49 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from './App';
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import Dashboard from './pages/Dashboard';
 import ErrorPage from './pages/ErrorPage';
 import FortnightOverviewPage from './pages/FortnightOverviewPage';
-import Dashboard from './pages/Dashboard';
+import LoginPage from './pages/LoginPage';
 import MembersPage from './pages/MembersPage';
 import SubgroupsPage from './pages/SubgroupsPage';
 
 import { ProSidebarProvider } from 'react-pro-sidebar';
 
-import store from './app/store'
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
+import store from './app/store';
 
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/app",
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "dashboard/",
+        path: "/app/dashboard",
         element: <Dashboard />,
       },
       {
-        path: "members/",
+        path: "/app/members",
         element: <MembersPage />,
       },
       {
-        path: "subgroups/",
+        path: "/app/subgroups",
         element: <SubgroupsPage />,
       },
       {
-        path: "reports/",
+        path: "/app/reports",
         element: <FortnightOverviewPage />,
       },
     ],
   },
+  {
+    path: "/",
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -51,6 +57,3 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

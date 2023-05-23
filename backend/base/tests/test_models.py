@@ -1,5 +1,6 @@
 import pytest
-from structure.models import Member, Department, Subgroup
+from structure.models import Department, Member, Subgroup
+
 
 @pytest.mark.django_db
 def test_model_soft_deletion():
@@ -8,7 +9,7 @@ def test_model_soft_deletion():
 
     subgroup = Subgroup.objects.create(subgroup_number=2, department=department1)
     member = Member.objects.create(full_name='John Doe', subgroup=subgroup)
-    
+
     Department.objects.all().delete()
     member.delete()
 

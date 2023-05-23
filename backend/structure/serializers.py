@@ -1,7 +1,7 @@
-
 from rest_framework import serializers
 
 from .models import Department, Member, Subgroup
+
 
 class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
     report_totals = serializers.SerializerMethodField()
@@ -22,6 +22,7 @@ class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
     def get_total_members(self, object):
         return object.get_total_members()
 
+
 class SubgroupSerializer(serializers.HyperlinkedModelSerializer):
     report_totals = serializers.SerializerMethodField()
 
@@ -40,7 +41,8 @@ class SubgroupSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_total_members(self, object):
         return object.get_total_members()
-    
+
+
 class MemberSerializer(serializers.HyperlinkedModelSerializer):
     reports = serializers.SerializerMethodField()
 
@@ -56,9 +58,6 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_reports(self, object):
         return object.get_all_reports_this_week_and_last_week()
-    
+
     def get_subgroup(self, object):
         return object.subgroup.name()
-
-
-
