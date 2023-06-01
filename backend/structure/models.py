@@ -84,6 +84,8 @@ class Department(BaseModel):
         values = []
         labels = []
 
+        total_members = Member.objects.all().count()
+
         for date in (date_range_start + timezone.timedelta(days=n) for n in range(14)):
             reports = Report.objects.filter(
                 report_date=date,
@@ -97,7 +99,8 @@ class Department(BaseModel):
                 if report.value:
                     total += 1
 
-            values.append(total)
+            value_percentage = round((total / total_members) * 100, 2)
+            values.append(value_percentage)
             labels.append(date.strftime('%d %b'))
 
         return {'values': values, 'labels': labels}

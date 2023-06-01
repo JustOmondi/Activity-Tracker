@@ -48,9 +48,13 @@ export default function FortnightOverviewPage() {
   const calculateAverage = () => {
     const length = values.length
 
-    const sum = values.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+    const sum = values.reduce((accumulator, currentValue) => {
+      currentValue = currentValue ? currentValue : 0
 
-    return (sum / length).toFixed(2)
+      return accumulator + currentValue
+    }, 0)
+
+    return ((sum / length)).toFixed(2)
   }
 
   const config = {
@@ -110,7 +114,7 @@ export default function FortnightOverviewPage() {
           <div>
 
             <div className='card-title font-light text-slate-500'>Range: Last 2 weeks</div>
-            <div className='card-title font-light text-slate-500'>Average: {calculateAverage()}</div>
+            <div className='card-title font-light text-slate-500'>Average: {calculateAverage()}%</div>
           </div>
         </div>
       </div>

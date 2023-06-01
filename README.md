@@ -108,7 +108,7 @@ Clone the repo to where you will be running the system
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # Customization
-Customization is fairly limited currently, one can however change the name, color and icon presenting each activity by changing the associated values in the `frontend/src/Config.jsx` file. 
+Customization is quite limited currently (work in progress to enable color customization), one can however change the name, color assigned and icon presenting each activity by changing the associated values in the `frontend/src/Config.jsx` file. 
 
 ### Example
 ---
@@ -129,39 +129,6 @@ export const REPORTS = {
     }
     ...
 }
-```
-
-### Colours: `frontend/src/App.css`
----
-A more robust and easy form customization will be implemented using theme configurations, see [Work in Progress section](#wip).<br>
-You can name and set the colours according to your preference.<br>
-Example for the green colour set in the example above:
-```
-...
-/* Green */
-.icon-bg-green,
-.graph-bg-green {
-    background: linear-gradient(180deg, #00b76b, #019356);
-    box-shadow: 0px 10px 30px -10px #00b76b;
-}
-
-.value-color-green,
-.text-color-green {
-    color: #00b76b;
-}
-...
-.checkbox-green .ant-checkbox-checked .ant-checkbox-inner,
-.ant-modal .checkbox-green .ant-checkbox:hover .ant-checkbox-inner,
-.ant-modal .checkbox-green.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #00b76b !important;
-    border-color: #00b76b !important;
-}
-
-.checkbox-green .ant-checkbox .ant-checkbox-inner,
-.checkbox-green .ant-checkbox:hover .ant-checkbox-inner {
-    border-color: #00b76b;
-}
-...
 ```
 
 ### Activity types
