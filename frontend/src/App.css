@@ -4,6 +4,15 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
+:root {
+    --green: #00b76b;
+    --blue: #029df0;
+    --orange: #f09502;
+    --pink: #E83875;
+    --gradient-blue: #8cdbff;
+    --gradient-pink: #febbcf;
+}
+
 /* General styles */
 html,
 body,
@@ -90,7 +99,7 @@ div {
 
 .gradient-button {
     background-color: #fd99e7;
-    background: linear-gradient(-45deg, #8cdbff, #febbcf);
+    background: linear-gradient(-45deg, var(--gradient-blue), var(--gradient-pink));
     margin-bottom: 10px;
     background-size: 200% 200%;
     transition: all 0.2s ease;
@@ -99,7 +108,7 @@ div {
 .ps-menu-button:hover,
 .active .ps-menu-button {
     background-color: transparent;
-    background: linear-gradient(-45deg, #8cdbff, #febbcf);
+    background: linear-gradient(-45deg, var(--gradient-blue), var(--gradient-pink));
     background-size: 200% 200%;
     animation: gradient 8s ease infinite;
     color: #000;
@@ -131,49 +140,49 @@ div {
 /* Green */
 .icon-bg-green,
 .graph-bg-green {
-    background: linear-gradient(180deg, #00b76b, #019356);
-    box-shadow: 0px 10px 30px -10px #00b76b;
+    background: linear-gradient(180deg, var(--green), #019356);
+    box-shadow: 0px 10px 30px -10px var(--green);
 }
 
 .value-color-green,
 .text-color-green {
-    color: #00b76b;
+    color: var(--green);
 }
 
 /* Pink */
 .icon-bg-pink,
 .graph-bg-pink {
-    background: linear-gradient(180deg, #E83875, #c93367);
-    box-shadow: 0px 10px 30px -10px #E83875;
+    background: linear-gradient(180deg, var(--pink), #c93367);
+    box-shadow: 0px 10px 30px -10px var(--pink);
 }
 
 .value-color-pink,
 .text-color-pink {
-    color: #E83875;
+    color: var(--pink);
 }
 
 /* Orange */
 .icon-bg-orange,
 .graph-bg-orange {
-    background: linear-gradient(180deg, #f09502, #d68401);
-    box-shadow: 0px 10px 30px -10px #f09502;
+    background: linear-gradient(180deg, var(--orange), #d68401);
+    box-shadow: 0px 10px 30px -10px var(--orange);
 }
 
 .value-color-orange,
 .text-color-orange {
-    color: #f09502;
+    color: var(--orange);
 }
 
 /* Blue */
 .icon-bg-blue,
 .graph-bg-blue {
-    background: linear-gradient(180deg, #029df0, #0487ce);
-    box-shadow: 0px 10px 30px -10px #029df0;
+    background: linear-gradient(180deg, var(--blue), #0487ce);
+    box-shadow: 0px 10px 30px -10px var(--blue);
 }
 
 .value-color-blue,
 .text-color-blue {
-    color: #029df0;
+    color: var(--blue);
 }
 
 
@@ -191,53 +200,53 @@ div {
 }
 
 .primary-color {
-    color: #E83875;
+    color: var(--pink);
 }
 
 .checkbox-orange .ant-checkbox-checked .ant-checkbox-inner,
 .ant-modal .checkbox-orange .ant-checkbox:hover .ant-checkbox-inner,
 .ant-modal .checkbox-orange.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #f09502 !important;
-    border-color: #f09502 !important;
+    background-color: var(--orange) !important;
+    border-color: var(--orange) !important;
 }
 
 .checkbox-orange .ant-checkbox .ant-checkbox-inner,
 .checkbox-orange .ant-checkbox:hover .ant-checkbox-inner {
-    border-color: #f09502;
+    border-color: var(--orange);
 }
 
 .checkbox-green .ant-checkbox-checked .ant-checkbox-inner,
 .ant-modal .checkbox-green .ant-checkbox:hover .ant-checkbox-inner,
 .ant-modal .checkbox-green.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #00b76b !important;
-    border-color: #00b76b !important;
+    background-color: var(--green) !important;
+    border-color: var(--green) !important;
 }
 
 .checkbox-green .ant-checkbox .ant-checkbox-inner,
 .checkbox-green .ant-checkbox:hover .ant-checkbox-inner {
-    border-color: #00b76b;
+    border-color: var(--green);
 }
 
 .checkbox-pink .ant-checkbox-checked .ant-checkbox-inner,
 .ant-modal .checkbox-pink .ant-checkbox:hover .ant-checkbox-inner,
 .ant-modal .checkbox-pink.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #E83875 !important;
-    border-color: #E83875 !important;
+    background-color: var(--pink) !important;
+    border-color: var(--pink) !important;
 }
 
 .checkbox-pink .ant-checkbox .ant-checkbox-inner {
-    border-color: #E83875;
+    border-color: var(--pink);
 }
 
 .checkbox-blue .ant-checkbox-checked .ant-checkbox-inner,
 .ant-modal .checkbox-blue .ant-checkbox:hover .ant-checkbox-inner,
 .ant-modal .checkbox-blue.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #029df0 !important;
-    border-color: #029df0 !important;
+    background-color: var(--blue) !important;
+    border-color: var(--blue) !important;
 }
 
 .checkbox-blue .ant-checkbox .ant-checkbox-inner {
-    border-color: #029df0;
+    border-color: var(--blue);
 }
 
 /* Table */
