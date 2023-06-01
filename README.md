@@ -1,17 +1,17 @@
+<a name="readme-top"></a>
 [![Python Tests](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/python_tests.yml/badge.svg)](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/python_tests.yml)
 [![Python Coverage](https://codecov.io/gh/JustOmondi/Activity-Tracker/branch/main/graph/badge.svg?token=VK2YI0Q2IY)](https://codecov.io/gh/JustOmondi/Activity-Tracker)
 ![Python Version](https://img.shields.io/pypi/pyversions/django)
 
 # Activity Tracker
-<a name="readme-top"></a>
-A simple activity tracker that can be used to track simple attendance-based or recurring tasks. It provides a dashboard for one to perform daily, weekly or fortnightly analysis of activity trends
+A simple activity tracker that can be used to track simple attendance-based / recurring tasks. It provides a dashboard for one to perform daily, weekly or fortnightly analysis of activity trends.
 
 ## Features
 <a name="features"></a>
 - Manage activity updates (Add, change, remove)
 - Manage members (Add, update, remove) 
-- User authentication
 - View Daily, Weekly, Fortnightly activity trends
+- User authenticaion (JWT token-based)
 
 This is a project that was created to help establish a digital, centralized activity tracking system for a community-based social development orgnisation, working with a set group of people. Hence a lot of the current functionality is structured around the needs of the organisation at the currrent stage of the project. 
 
@@ -25,7 +25,7 @@ See [Live Demo]()
 ### Demo Account Credentials
 `username: demo`
 
-`password: activitydemo`
+`password: demo1403!`
 
 
 ## Built With
@@ -71,6 +71,7 @@ Clone the repo to where you will be running the system
 3. Start the React server<br>
 `npm start`
 5. View front-end by navigating to `http://127.0.0.1:3000` although it  should open automatically after running the previous step
+6. Login using the username and password of the superuser that had been created
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -186,7 +187,7 @@ REPORT_NAMES = [ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING]
 - [ ] Add dark mode
 - [ ] Add text-based activity updates
 - [ ] Add front-end Subgroup addition functionality
-- [ ] Add Tailwind custom theme configuration
+- [ ] Add custom theme configuration
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
