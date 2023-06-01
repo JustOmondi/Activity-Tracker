@@ -7,14 +7,3 @@ services:
     command: python manage.py runserver
     volumes:
       - ./backend.:/backend
-
-  web:
-    restart: always
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
-    command: npm start
-    volumes:
-        - ./frontend.:/frontend
