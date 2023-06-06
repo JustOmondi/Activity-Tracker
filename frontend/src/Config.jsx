@@ -1,7 +1,7 @@
 import { BoltIcon, BookOpenIcon, BuildingOfficeIcon, UsersIcon } from '@heroicons/react/24/outline'
 
 // General
-export const BASE_API_URL = 'http://127.0.0.1:8000/api'
+export const BASE_API_URL = 'https://trackerdemoapi.cloud12.co.za/api'
 
 export const THIS_WEEK = 'this_week'
 export const LAST_WEEK = 'last_week'
