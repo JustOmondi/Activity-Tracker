@@ -157,7 +157,7 @@ const useMembersPage = () => {
 
     const getTableRowSkeleton = () => {
         return (
-            <div className='flex justify-between m-4 flex-wrap'>
+            <div className='flex justify-center md:justify-between m-4 flex-wrap'>
                 <Skeleton.Input className='mb-2 md:mb-0' active />
                 <Skeleton.Input className='mb-2 md:mb-0' active />
                 <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
