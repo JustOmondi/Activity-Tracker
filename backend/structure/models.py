@@ -228,6 +228,7 @@ class Member(BaseModel):
             created__gte=date_range_start,
             created__lt=date_range_end,
             value=True,
+            member=self,
         ).count()
 
         return count
