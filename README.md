@@ -6,6 +6,18 @@
 # Activity Tracker
 A simple activity tracker that can be used to track simple attendance-based / recurring tasks. It provides a dashboard for one to perform daily, weekly or fortnightly analysis of activity trends.
 
+![Sreenshot](screenshots/dashboard.png)
+
+<a name="demo"></a>
+See [Live Demo](https://trackerdemo.cloud12.co.za)
+
+### Demo Account Credentials
+`username: demo`
+
+`password: demo1403!`
+
+ <br>
+
 ## Features
 <a name="features"></a>
 - Manage activity updates (Add, change, remove)
@@ -18,15 +30,6 @@ This is a project that was created to help establish a digital, centralized acti
 For example, the main users of the system would be people that are not quite tech-savvy and would like to be able to simply login, update activity, view trends/updates and would rather have the more technical aspects such as user sign up, user password management handled from the backend. Fortunately Django provides a convenient built-in admin dashboard to allow for this.
 
 However, further work is in progress to cater for different system user-roles where more technical users can have more features available in the front-end
-
-<a name="demo"></a>
-See [Live Demo]()
-
-### Demo Account Credentials
-`username: demo`
-
-`password: demo1403!`
-
 
 ## Built With
 <a name="built-with"></a>
@@ -80,30 +83,39 @@ Clone the repo to where you will be running the system
 
 ### Dashboard page
 ---
+![Sreenshot](screenshots/dashboard.png)
 
 ### View specific activity trends
 ---
+![Sreenshot](screenshots/activity-trend.png)
 
 ### Subgroups page
 ---
 
 ### Members Page
 ---
+![Sreenshot](screenshots/members-page.png)
 
 ### Filter Members list
 ---
+![Sreenshot](screenshots/filter-members.png)
 
-### Members Details
----
 
 ### Add Member
 ---
+![Sreenshot](screenshots/add-member.png)
+
+### Edit Member
+---
+![Sreenshot](screenshots/update-member.png)
 
 ### Remove Member
 ---
+![Sreenshot](screenshots/remove-member.png)
 
 ### Update Activity
 ---
+![Sreenshot](screenshots/update-activity.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
