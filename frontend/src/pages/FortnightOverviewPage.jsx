@@ -102,7 +102,7 @@ export default function FortnightOverviewPage() {
     <div className='w-full justify-center flex'>
       <div className='w-full lg:w-3/4 shadow-lg bg-white p-4 xl:p-8 mt-4 rounded-2xl mb-14 xl:mb-10'>
         <div className='flex justify-center mt-4 flex-col'>
-          <h2 className='card-title font-bold text-gray-900 mb-4 text-md xl:text-xl'>{reportConfig.title}</h2>
+          <h2 className='card-title font-bold text-gray-900 mb-4 text-md xl:text-xl'>{reportConfig.title} %</h2>
           <div className={`graph-container relative w-full p-3 rounded-2xl graph-bg-${reportConfig.color}`}>
             <Bar options={options} data={config} />
           </div>

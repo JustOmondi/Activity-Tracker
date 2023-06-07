@@ -27,11 +27,11 @@ export default function SubgroupCard({ name, totalMembers, totals }) {
                                 <div className={summaryClasses}>
                                     <Tooltip className='flex items-center' title="This Week">
                                         <CaretRightOutlined />
-                                        <div className={`value-color-${reportItem.color} mr-5 ml-1`}>{totals[reportItem.name][THIS_WEEK]}</div>
+                                        <div className={`value-color-${reportItem.color} mr-5 ml-1`}>{totals[reportItem.name][THIS_WEEK]} %</div>
                                     </Tooltip>
                                     <Tooltip className='flex items-center' title="Last Week">
                                         <ClockCircleFilled />
-                                        <div className='text-gray-500 ml-2'>{totals[reportItem.name][LAST_WEEK]}</div>
+                                        <div className='text-gray-500 ml-2'>{totals[reportItem.name][LAST_WEEK]} %</div>
                                     </Tooltip>
                                 </div>
                             </div>
