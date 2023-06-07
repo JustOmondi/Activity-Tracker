@@ -10,6 +10,10 @@ export default function SubgroupCard({ name, totalMembers, totals }) {
     const iconContainerClasses = 'card-icon-container rounded-md p-2 mr-4'
     const lineItemClasses = 'flex items-center mb-6'
 
+    const calculateAverage = (value) => {
+        return ((value / totalMembers) * 100).toFixed(0)
+    }
+
     return (
         <div className='subgroup-card shadow-lg bg-white mt-8 mx-6 mb-10 rounded-3xl flex flex-col items-center w-1/3 xl:w-2/5 flex-wrap'>
             <div className='w-2/3 flex justify-center items-center -mt-8 bg-black rounded-2xl p-4 shadow-black-500/50 shadow-2xl'>
@@ -27,11 +31,11 @@ export default function SubgroupCard({ name, totalMembers, totals }) {
                                 <div className={summaryClasses}>
                                     <Tooltip className='flex items-center' title="This Week">
                                         <CaretRightOutlined />
-                                        <div className={`value-color-${reportItem.color} mr-5 ml-1`}>{totals[reportItem.name][THIS_WEEK]} %</div>
+                                        <div className={`value-color-${reportItem.color} mr-5 ml-1`}>{calculateAverage(totals[reportItem.name][THIS_WEEK])}</div>
                                     </Tooltip>
                                     <Tooltip className='flex items-center' title="Last Week">
                                         <ClockCircleFilled />
-                                        <div className='text-gray-500 ml-2'>{totals[reportItem.name][LAST_WEEK]} %</div>
+                                        <div className='text-gray-500 ml-2'>{calculateAverage(totals[reportItem.name][LAST_WEEK])} %</div>
                                     </Tooltip>
                                 </div>
                             </div>
