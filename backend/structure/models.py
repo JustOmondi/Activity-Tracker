@@ -225,8 +225,8 @@ class Member(BaseModel):
 
         count = self.report_set.filter(
             name=report_name,
-            created__gte=date_range_start,
-            created__lt=date_range_end,
+            report_date__gte=date_range_start,
+            report_date__lt=date_range_end,
             value=True,
             member=self,
         ).count()
