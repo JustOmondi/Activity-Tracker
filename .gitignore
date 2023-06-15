@@ -9,3 +9,7 @@ node_modules
 **.coverage
 backend/coverage_re
 backend/.env
+frontend/node_modules
+frontend/build
+backend/coverage
+.env
