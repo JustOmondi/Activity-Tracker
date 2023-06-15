@@ -10,8 +10,7 @@ A simple activity tracker that can be used to track simple attendance-based / re
 ![Sreenshot](screenshots/dashboard.png)
 
 <a name="demo"></a>
-See [Live Demo Link 1](https://trackerdemo.cloud12.co.za)
-See [Live Demo Link 2](https://activity-tracker-demo.onrender.com/)
+See [Live Demo](https://activity-tracker-demo.onrender.com/)
 
 ### Demo Account Credentials
 `username: demo`
