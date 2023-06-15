@@ -26,6 +26,7 @@ See [Live Demo Link 2](https://activity-tracker-demo.onrender.com/)
 - Manage members (Add, update, remove) 
 - View Daily, Weekly, Fortnightly activity trends
 - User authenticaion (JWT token-based)
+- Responsive UI
 
 This is a project that was created to help establish a digital, centralized activity tracking system for a community-based social development orgnisation, working with a set group of people. Hence a lot of the current functionality is structured around the needs of the organisation at the currrent stage of the project. 
 
