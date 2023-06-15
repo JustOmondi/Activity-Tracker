@@ -1,7 +1,8 @@
 <a name="readme-top"></a>
+[![Build](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/build.yml/badge.svg)](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/build.yml)
 [![Python Tests](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/python_tests.yml/badge.svg)](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/python_tests.yml)
 [![Python Coverage](https://codecov.io/gh/JustOmondi/Activity-Tracker/branch/main/graph/badge.svg?token=VK2YI0Q2IY)](https://codecov.io/gh/JustOmondi/Activity-Tracker)
-![Python Version](https://img.shields.io/pypi/pyversions/django)
+
 
 # Activity Tracker
 A simple activity tracker that can be used to track simple attendance-based / recurring tasks. It provides a dashboard for one to perform daily, weekly or fortnightly analysis of activity trends.
