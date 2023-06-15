@@ -92,6 +92,7 @@ Clone the repo to where you will be running the system
 
 ### Subgroups page
 ---
+![Sreenshot](screenshots/subgroups-page.png)
 
 ### Members Page
 ---
