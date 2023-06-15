@@ -19,6 +19,8 @@ export default function LoginPage() {
         if (tokenFound) {
             window.location.replace('/app/dashboard');
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const onFinish = async (values) => {

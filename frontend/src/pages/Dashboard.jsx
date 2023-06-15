@@ -22,6 +22,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     getDashboardData()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const formatReports = (data) => {

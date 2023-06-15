@@ -31,6 +31,8 @@ const useMembersPage = () => {
     useEffect(() => {
         getMembers()
         getSubgroups()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const reloadTableData = async () => {

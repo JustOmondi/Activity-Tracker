@@ -11,6 +11,8 @@ export default function SubgroupsPage() {
 
     useEffect(() => {
         getSubgroups()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     let getSubgroups = async () => {

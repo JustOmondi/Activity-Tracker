@@ -38,6 +38,8 @@ export default function FortnightOverviewPage() {
     if (window.innerWidth < 900) {
       setMobileView(true)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getReports = async () => {
