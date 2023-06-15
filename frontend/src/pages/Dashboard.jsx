@@ -38,7 +38,7 @@ export default function Dashboard() {
 
       formattedReportsForToday[reportName] = {
         'this_week': data[THIS_WEEK][reportName][currentDay],
-        'last_week': data[THIS_WEEK][reportName][currentDay]
+        'last_week': data[LAST_WEEK][reportName][currentDay]
       }
     });
 
