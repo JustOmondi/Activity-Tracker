@@ -23,6 +23,7 @@ ChartJS.register(
 export default function FortnightOverviewPage() {
   const [values, setValues] = useState([])
   const [labels, setLabels] = useState([])
+  const [mobileView, setMobileView] = useState(false)
 
   const { fetchWithAuthHeader } = useAuth()
 
@@ -33,6 +34,10 @@ export default function FortnightOverviewPage() {
 
   useEffect(() => {
     getReports()
+
+    if (window.innerWidth < 900) {
+      setMobileView(true)
+    }
   }, [])
 
   const getReports = async () => {
@@ -67,7 +72,7 @@ export default function FortnightOverviewPage() {
       }],
   };
 
-  const options = {
+  const defaultOptions = {
     responsive: true,
     barThickness: '8',
     color: '#ffffff',
@@ -98,13 +103,47 @@ export default function FortnightOverviewPage() {
     }
   };
 
+  const mobileOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    barThickness: '8',
+    color: '#ffffff',
+    indexAxis: 'y',
+    plugins: {
+      legend: {
+        display: false,
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: '#ffffff'
+        },
+        grid: {
+          display: false,
+        }
+      },
+      y: {
+        ticks: {
+          color: '#ffffff',
+          autoSkip: false
+        },
+        grid: {
+          borderDash: 8,
+          color: '#ffffff20',
+        }
+      }
+    }
+  };
+
   return (
     <div className='w-full justify-center flex'>
       <div className='w-full lg:w-3/4 shadow-lg bg-white p-4 xl:p-8 mt-4 rounded-2xl mb-14 xl:mb-10'>
         <div className='flex justify-center mt-4 flex-col'>
           <h2 className='card-title font-bold text-gray-900 mb-4 text-md xl:text-xl'>{reportConfig.title} %</h2>
-          <div className={`graph-container relative w-full p-3 rounded-2xl graph-bg-${reportConfig.color}`}>
-            <Bar options={options} data={config} />
+          <div className={`graph-container relative w-full h-[300px] md:h-full p-3 rounded-2xl graph-bg-${reportConfig.color}`}>
+            {mobileView && <Bar options={mobileOptions} data={config} />}
+            {!mobileView && <Bar options={defaultOptions} data={config} />}
           </div>
         </div>
         <div className='flex justify-left mt-6'>
