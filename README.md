@@ -174,12 +174,13 @@ REPORT_NAMES = [ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING]
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # Contact
-<a name="usage"></a>
+### [hello@omondi.co.za](mailto:hello@omondi.co.za)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # Acknowledgements
 <a name="acknowledgements"></a>
-A list of resources I found helpful in this project that I would like to give credit to 
+A list of resources I found helpful in this project to which I would like to give credit 
 * [Ant Design](https://ant.design/)
 * [Hero Icons](https://heroicons.com/)
 * [Chart JS](https://www.chartjs.org/)
