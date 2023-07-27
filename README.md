@@ -13,7 +13,7 @@ A simple activity tracker that can be used to track simple attendance-based / re
 See [Live Demo](https://activity-tracker-demo.onrender.com/)
 
 ### Demo Account Credentials
-`username: demo`
+`username: demo-account`
 
 `password: demo1403!`
 
