@@ -40,7 +40,7 @@ const useMembersPage = () => {
     const reloadTableData = async () => {
         setMembers([])
         getMembers()
-        getSubgroups()
+        getSubgroups(true)
     }
 
     const formatSubgroups = (data) => {
@@ -105,8 +105,8 @@ const useMembersPage = () => {
         }
     }
 
-    const getSubgroups = async () => {
-        if (storedSubgroupsList.length > 0) {
+    const getSubgroups = async (bypassCache = false) => {
+        if (storedSubgroupsList.length > 0 && !bypassCache) {
             formatSubgroups(storedSubgroupsList);
             return
         }
@@ -142,6 +142,8 @@ const useMembersPage = () => {
         if (memberUpdated) {
             dispatch(setMemberUpdated(false))
             dispatch(setUpdateDashboard(true))
+
+
             reloadTableData();
         }
     }

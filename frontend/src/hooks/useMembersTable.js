@@ -3,7 +3,7 @@ import { Button, Checkbox, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllReportItems } from '../Config';
-import { setMemberUpdated } from '../app/mainSlice';
+import { setMemberUpdated, setUpdateDashboard } from '../app/mainSlice';
 
 const useMembersTable = (members, subgroups, reloadTableData) => {
     const [modalVisible, setModalVisible] = useState(false)
@@ -31,6 +31,7 @@ const useMembersTable = (members, subgroups, reloadTableData) => {
 
         if (memberUpdated) {
             dispatch(setMemberUpdated(false))
+            dispatch(setUpdateDashboard(true))
             reloadTableData();
         }
     }
