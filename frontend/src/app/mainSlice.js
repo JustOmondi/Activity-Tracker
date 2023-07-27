@@ -24,11 +24,29 @@ export const loggedInSlice = createSlice({
   },
 })
 
+export const membersListSlice = createSlice({
+  name: 'membersList',
+  initialState: {
+    value: [],
+  },
+  reducers: {
+    setMembersList: (state, action) => {
+      state.value = action.payload
+    }
+  },
+})
+
+
+
+
 // Action creators are generated for each case reducer function
 export const { setMemberUpdated } = memberSlice.actions
 export const { setLoggedIn } = loggedInSlice.actions
+export const { setMembersList } = membersListSlice.actions
 
 const memberReducer = memberSlice.reducer
 const loggedInReducer = loggedInSlice.reducer
+const membersListReducer = membersListSlice.reducer
 
-export { loggedInReducer, memberReducer }
+export { loggedInReducer, memberReducer, membersListReducer }
+

@@ -2,7 +2,7 @@ import { Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_API_URL, HTTP_200_OK, getAllReportItems } from '../Config';
-import { setMemberUpdated } from '../app/mainSlice';
+import { setMemberUpdated, setMembersList } from '../app/mainSlice';
 import useAuth from './useAuth';
 import useNotificationMessage from './useNotificationMessage';
 
@@ -16,6 +16,7 @@ const useMembersPage = () => {
     const dispatch = useDispatch()
 
     const memberUpdated = useSelector((state) => state.memberUpdated.value)
+    const storedMembersList = useSelector((state) => state.membersList.value)
 
     const {
         contextHolder,
@@ -76,23 +77,48 @@ const useMembersPage = () => {
         }
 
         setMembers(formattedMembers)
+        dispatch(setMembersList(formattedMembers))
     }
 
     const getMembers = async () => {
         const URL = `${BASE_API_URL}/structure/members`
 
-        let response = await fetchWithAuthHeader(URL);
-        let data = await response.json();
-        formatMembers(data);
+        if (storedMembersList.length > 0 && !memberUpdated) {
+            setMembers(storedMembersList)
+            return
+        }
+
+        try {
+            const response = await fetchWithAuthHeader(URL)
+
+            if (response.status === HTTP_200_OK) {
+                let data = await response.json();
+                formatMembers(data);
+            } else {
+                showMessage('error', `An error ocurred in fetching members. Please try again (E:${response.status})`)
+            }
+        } catch (error) {
+            showMessage('error', `Network / server error occurred. Please try again (E:${error.name})`)
+        }
     }
 
     const getSubgroups = async () => {
         const URL = `${BASE_API_URL}/structure/subgroups`
 
-        let response = await fetchWithAuthHeader(URL);
-        let data = await response.json();
+        try {
+            const response = await fetchWithAuthHeader(URL);
 
-        formatSubgroups(data);
+            if (response.status === HTTP_200_OK) {
+                let data = await response.json();
+
+                formatSubgroups(data);
+            } else {
+                showMessage('error', `An error ocurred in fetching subgroups. Please try again (E:${response.status})`)
+            }
+
+        } catch (error) {
+            showMessage('error', `Network / server error occurred. Please try again (E:${error.name})`)
+        }
     }
 
     const handleAddMemberClick = () => {
@@ -130,12 +156,12 @@ const useMembersPage = () => {
                 setAddMemberModalVisible(false)
 
             } else {
-                showMessage('error', 'Adding new member failed. Please try again')
+                showMessage('error', `Adding new member failed. Please try again (E:${response.status})`)
             }
         } catch (error) {
             hideMessage()
 
-            showMessage('error', 'Adding new member failed. Please try again')
+            showMessage('error', `Network / server error occurred. Please try again (E:${error.name})`)
         }
     }
 
