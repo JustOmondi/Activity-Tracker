@@ -9,3 +9,12 @@ services:
     command: npm start
     volumes:
         - ./frontend.:/frontend
+    
+  api:
+    restart: always
+    build: ./backend
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver
+    volumes:
+      - ./backend.:/backend
