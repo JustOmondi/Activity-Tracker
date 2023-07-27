@@ -15,6 +15,8 @@ function App() {
     if (!tokenFound) {
       window.location.replace('/')
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -1,10 +1,23 @@
 <a name="readme-top"></a>
+[![Build](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/build.yml/badge.svg)](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/build.yml)
 [![Python Tests](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/python_tests.yml/badge.svg)](https://github.com/JustOmondi/Activity-Tracker/actions/workflows/python_tests.yml)
 [![Python Coverage](https://codecov.io/gh/JustOmondi/Activity-Tracker/branch/main/graph/badge.svg?token=VK2YI0Q2IY)](https://codecov.io/gh/JustOmondi/Activity-Tracker)
-![Python Version](https://img.shields.io/pypi/pyversions/django)
+
 
 # Activity Tracker
 A simple activity tracker that can be used to track simple attendance-based / recurring tasks. It provides a dashboard for one to perform daily, weekly or fortnightly analysis of activity trends.
+
+![Sreenshot](screenshots/dashboard.png)
+
+<a name="demo"></a>
+See [Live Demo](https://activity-tracker-demo.onrender.com/)
+
+### Demo Account Credentials
+`username: demo-account`
+
+`password: demo1403!`
+
+ <br>
 
 ## Features
 <a name="features"></a>
@@ -12,21 +25,13 @@ A simple activity tracker that can be used to track simple attendance-based / re
 - Manage members (Add, update, remove) 
 - View Daily, Weekly, Fortnightly activity trends
 - User authenticaion (JWT token-based)
+- Responsive UI
 
 This is a project that was created to help establish a digital, centralized activity tracking system for a community-based social development orgnisation, working with a set group of people. Hence a lot of the current functionality is structured around the needs of the organisation at the currrent stage of the project. 
 
 For example, the main users of the system would be people that are not quite tech-savvy and would like to be able to simply login, update activity, view trends/updates and would rather have the more technical aspects such as user sign up, user password management handled from the backend. Fortunately Django provides a convenient built-in admin dashboard to allow for this.
 
 However, further work is in progress to cater for different system user-roles where more technical users can have more features available in the front-end
-
-<a name="demo"></a>
-See [Live Demo]()
-
-### Demo Account Credentials
-`username: demo-account`
-
-`password: demo1403!`
-
 
 ## Built With
 <a name="built-with"></a>
@@ -80,30 +85,40 @@ Clone the repo to where you will be running the system
 
 ### Dashboard page
 ---
+![Sreenshot](screenshots/dashboard.png)
 
 ### View specific activity trends
 ---
+![Sreenshot](screenshots/activity-trend.png)
 
 ### Subgroups page
 ---
+![Sreenshot](screenshots/subgroups-page.png)
 
 ### Members Page
 ---
+![Sreenshot](screenshots/members-page.png)
 
 ### Filter Members list
 ---
+![Sreenshot](screenshots/filter-members.png)
 
-### Members Details
----
 
 ### Add Member
 ---
+![Sreenshot](screenshots/add-member.png)
+
+### Edit Member
+---
+![Sreenshot](screenshots/update-member.png)
 
 ### Remove Member
 ---
+![Sreenshot](screenshots/remove-member.png)
 
 ### Update Activity
 ---
+![Sreenshot](screenshots/update-activity.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -159,12 +174,13 @@ REPORT_NAMES = [ACTIVITY, LESSON, HOMEWORK, WEEKLY_MEETING]
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # Contact
-<a name="usage"></a>
+### [hello@omondi.co.za](mailto:hello@omondi.co.za)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # Acknowledgements
 <a name="acknowledgements"></a>
-A list of resources I found helpful in this project that I would like to give credit to 
+A list of resources I found helpful in this project to which I would like to give credit 
 * [Ant Design](https://ant.design/)
 * [Hero Icons](https://heroicons.com/)
 * [Chart JS](https://www.chartjs.org/)
