@@ -228,7 +228,6 @@ class Member(BaseModel):
             report_date__gte=date_range_start,
             report_date__lt=date_range_end,
             value=True,
-            member=self,
         ).count()
 
         return count

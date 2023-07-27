@@ -2,13 +2,13 @@ import { Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_API_URL, HTTP_200_OK, getAllReportItems } from '../Config';
-import { setMemberUpdated } from '../app/mainSlice';
+import { setMemberUpdated, setMembersList, setSubgroupsList, setUpdateDashboard } from '../app/mainSlice';
 import useAuth from './useAuth';
 import useNotificationMessage from './useNotificationMessage';
 
 const useMembersPage = () => {
     const [members, setMembers] = useState([])
-    const [subgroups, setsubgroups] = useState([])
+    const [subgroups, setSubgroups] = useState([])
     const [addMemberModalVisible, setAddMemberModalVisible] = useState(false)
     const [newMemberName, setNewMemberName] = useState('')
     const [newMemberSubgroup, setNewMemberSubgroup] = useState('')
@@ -16,6 +16,8 @@ const useMembersPage = () => {
     const dispatch = useDispatch()
 
     const memberUpdated = useSelector((state) => state.memberUpdated.value)
+    const storedMembersList = useSelector((state) => state.membersList.value)
+    const storedSubgroupsList = useSelector((state) => state.subgroupsList.value)
 
     const {
         contextHolder,
@@ -38,7 +40,7 @@ const useMembersPage = () => {
     const reloadTableData = async () => {
         setMembers([])
         getMembers()
-        getSubgroups()
+        getSubgroups(true)
     }
 
     const formatSubgroups = (data) => {
@@ -52,7 +54,7 @@ const useMembersPage = () => {
 
             formattedSubgroups.push(formattedSubgroup)
         }
-        setsubgroups(formattedSubgroups)
+        setSubgroups(formattedSubgroups)
     }
 
     const formatMembers = (data) => {
@@ -78,23 +80,54 @@ const useMembersPage = () => {
         }
 
         setMembers(formattedMembers)
+        dispatch(setMembersList(formattedMembers))
     }
 
     const getMembers = async () => {
+        if (storedMembersList.length > 0 && !memberUpdated) {
+            setMembers(storedMembersList)
+            return
+        }
+
         const URL = `${BASE_API_URL}/structure/members`
 
-        let response = await fetchWithAuthHeader(URL);
-        let data = await response.json();
-        formatMembers(data);
+        try {
+            const response = await fetchWithAuthHeader(URL)
+
+            if (response.status === HTTP_200_OK) {
+                let data = await response.json();
+                formatMembers(data);
+            } else {
+                showMessage('error', `An error ocurred in fetching members. Please try again (E:${response.status})`)
+            }
+        } catch (error) {
+            showMessage('error', `Network / server error occurred. Please try again (E:${error.name})`)
+        }
     }
 
-    const getSubgroups = async () => {
+    const getSubgroups = async (bypassCache = false) => {
+        if (storedSubgroupsList.length > 0 && !bypassCache) {
+            formatSubgroups(storedSubgroupsList);
+            return
+        }
+
         const URL = `${BASE_API_URL}/structure/subgroups`
 
-        let response = await fetchWithAuthHeader(URL);
-        let data = await response.json();
+        try {
+            const response = await fetchWithAuthHeader(URL);
 
-        formatSubgroups(data);
+            if (response.status === HTTP_200_OK) {
+                let data = await response.json();
+
+                formatSubgroups(data);
+                dispatch(setSubgroupsList(data))
+            } else {
+                showMessage('error', `An error ocurred in fetching subgroups. Please try again (E:${response.status})`)
+            }
+
+        } catch (error) {
+            showMessage('error', `Network / server error occurred. Please try again (E:${error.name})`)
+        }
     }
 
     const handleAddMemberClick = () => {
@@ -108,6 +141,9 @@ const useMembersPage = () => {
     const handleAfterClose = () => {
         if (memberUpdated) {
             dispatch(setMemberUpdated(false))
+            dispatch(setUpdateDashboard(true))
+
+
             reloadTableData();
         }
     }
@@ -128,16 +164,16 @@ const useMembersPage = () => {
                 showMessage('success', 'Member added successfully')
 
                 dispatch(setMemberUpdated(true))
-
+                dispatch(setUpdateDashboard(true))
                 setAddMemberModalVisible(false)
 
             } else {
-                showMessage('error', 'Adding new member failed. Please try again')
+                showMessage('error', `Adding new member failed. Please try again (E:${response.status})`)
             }
         } catch (error) {
             hideMessage()
 
-            showMessage('error', 'Adding new member failed. Please try again')
+            showMessage('error', `Network / server error occurred. Please try again (E:${error.name})`)
         }
     }
 
@@ -159,7 +195,7 @@ const useMembersPage = () => {
 
     const getTableRowSkeleton = () => {
         return (
-            <div className='flex justify-between m-4 flex-wrap'>
+            <div className='flex justify-center md:justify-between m-4 flex-wrap'>
                 <Skeleton.Input className='mb-2 md:mb-0' active />
                 <Skeleton.Input className='mb-2 md:mb-0' active />
                 <Skeleton.Input className='mb-2 md:mb-0 hidden lg:block' active />
