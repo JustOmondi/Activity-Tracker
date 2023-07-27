@@ -1,6 +1,6 @@
 import { Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { BASE_API_URL, LAST_WEEK, REPORT_NAMES, THIS_WEEK, getFeaturedGraphs, getFeaturedTiles } from '../Config'
+import { BASE_API_URL, HTTP_200_OK, LAST_WEEK, REPORT_NAMES, THIS_WEEK, getFeaturedGraphs, getFeaturedTiles } from '../Config'
 import RecentChangesCard from '../components/RecentChangesCard'
 import ReportGraphTile from '../components/ReportGraphTile'
 import ReportTile from '../components/ReportTile'
@@ -54,14 +54,18 @@ export default function Dashboard() {
     try {
       const response = await fetchWithAuthHeader(URL)
 
-      const data = await response.json();
+      if (response.status === HTTP_200_OK) {
+        const data = await response.json();
 
-      formatReports(data['reports']);
+        formatReports(data['reports']);
 
-      setMemberChanges(data['logs']['member_changes'])
-      setReportChanges(data['logs']['report_changes'])
+        setMemberChanges(data['logs']['member_changes'])
+        setReportChanges(data['logs']['report_changes'])
+      } else {
+        showMessage('error', `An error ocurred in fetching members. Please try again (E:${response.status})`)
+      }
     } catch (error) {
-      showMessage('error', 'Please reload the page to try again')
+      showMessage('error', `Network / server error occurred. Please try again`)
     }
   }
 

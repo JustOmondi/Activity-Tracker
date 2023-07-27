@@ -319,7 +319,7 @@ div {
 
 /* Message Box */
 .ant-message-notice .ant-message-notice-content {
-    background-color: #000;
+    background: #000000 !important;
     color: #fff;
 }
 

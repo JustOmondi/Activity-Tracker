@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { BASE_API_URL, REPORTS } from '../Config';
+import { BASE_API_URL, HTTP_200_OK, REPORTS } from '../Config';
 import useAuth from '../hooks/useAuth';
+import useNotificationMessage from '../hooks/useNotificationMessage';
 
 import {
   BarElement,
@@ -8,7 +9,7 @@ import {
   Chart as ChartJS,
   LinearScale,
   Title,
-  Tooltip,
+  Tooltip
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
@@ -27,6 +28,11 @@ export default function FortnightOverviewPage() {
 
   const { fetchWithAuthHeader } = useAuth()
 
+  const {
+    contextHolder,
+    showMessage
+  } = useNotificationMessage()
+
   const queryParameters = new URLSearchParams(window.location.search)
 
   const reportName = queryParameters.get('name') ? queryParameters.get('name') : 'lesson'
@@ -43,11 +49,21 @@ export default function FortnightOverviewPage() {
   const getReports = async () => {
     const URL = `${BASE_API_URL}/reports/get/department/by-fortnight?dept_number=1&report_name=${reportName}`
 
-    const response = await fetchWithAuthHeader(URL);
-    const data = await response.json();
+    try {
+      const response = await fetchWithAuthHeader(URL)
 
-    setValues(data['values']);
-    setLabels(data['labels']);
+      if (response.status === HTTP_200_OK) {
+        const data = await response.json();
+
+        setValues(data['values']);
+        setLabels(data['labels']);
+      } else {
+        showMessage('error', `An error ocurred in fetching reports. Please try again (E:${response.status})`)
+      }
+
+    } catch (error) {
+      showMessage('error', `Network / server error occurred. Please try again (E:${error.name})`)
+    }
   }
 
   const calculateAverage = () => {
@@ -59,7 +75,9 @@ export default function FortnightOverviewPage() {
       return accumulator + currentValue
     }, 0)
 
-    return ((sum / length)).toFixed(2)
+    const result = ((sum / length)) ? ((sum / length)).toFixed(2) : 0
+
+    return result
   }
 
   const config = {
@@ -138,6 +156,7 @@ export default function FortnightOverviewPage() {
 
   return (
     <div className='w-full justify-center flex'>
+      {contextHolder}
       <div className='w-full lg:w-3/4 shadow-lg bg-white p-4 xl:p-8 mt-4 rounded-2xl mb-14 xl:mb-10'>
         <div className='flex justify-center mt-4 flex-col'>
           <h2 className='card-title font-bold text-gray-900 mb-4 text-md xl:text-xl'>{reportConfig.title} %</h2>
