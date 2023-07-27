@@ -1,6 +1,8 @@
 import { Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { BASE_API_URL, HTTP_200_OK, LAST_WEEK, REPORT_NAMES, THIS_WEEK, getFeaturedGraphs, getFeaturedTiles } from '../Config'
+import { setDashboardData, setUpdateDashboard } from '../app/mainSlice'
 import RecentChangesCard from '../components/RecentChangesCard'
 import ReportGraphTile from '../components/ReportGraphTile'
 import ReportTile from '../components/ReportTile'
@@ -18,10 +20,16 @@ export default function Dashboard() {
     showMessage
   } = useNotificationMessage()
 
+  const dispatch = useDispatch()
+  const storedDashboardData = useSelector((state) => state.dashboardData.value)
+  const updateDashboard = useSelector((state) => state.updateDashboard.value)
+
   const { fetchWithAuthHeader } = useAuth()
 
   useEffect(() => {
     getDashboardData()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const formatReports = (data) => {
@@ -48,6 +56,13 @@ export default function Dashboard() {
   }
 
   const getDashboardData = async () => {
+    console.log('Update dashabord = ', updateDashboard)
+    if (Object.keys(storedDashboardData).length > 0 && !updateDashboard) {
+      formatReports(storedDashboardData['reports']);
+      setMemberChanges(storedDashboardData['logs']['member_changes'])
+      setReportChanges(storedDashboardData['logs']['report_changes'])
+      return
+    }
 
     const URL = `${BASE_API_URL}/reports/get/department/by-week?dept_number=1`
 
@@ -61,6 +76,10 @@ export default function Dashboard() {
 
         setMemberChanges(data['logs']['member_changes'])
         setReportChanges(data['logs']['report_changes'])
+
+        dispatch(setDashboardData(data))
+        dispatch(setUpdateDashboard(false))
+
       } else {
         showMessage('error', `An error ocurred in fetching members. Please try again (E:${response.status})`)
       }

@@ -76,7 +76,8 @@ export default function MemberModal({ hideModal, member, subgroups, showMessage,
                   hideMessage={hideMessage}
                   attendance={getAttendance(reportItem.name, reportItem.color)}
                   reportName={reportItem.name}
-                  memberName={newNameUnderscore} />
+                  memberName={newNameUnderscore}
+                  key={`panel-item-${index}`} />
               </Panel>
             )
           })}

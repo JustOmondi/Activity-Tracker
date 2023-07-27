@@ -1,6 +1,6 @@
 
 import { configureStore } from '@reduxjs/toolkit';
-import { loggedInReducer, memberReducer, membersListReducer, subgroupsListReducer } from './mainSlice';
+import { dashboardDataReducer, loggedInReducer, memberReducer, membersListReducer, subgroupsListReducer, updateDashboardReducer } from './mainSlice';
 
 export const REPORT_UPDATED = 'REPORT_UPDATED';
 
@@ -9,7 +9,9 @@ export default configureStore({
       memberUpdated: memberReducer,
       loggedIn: loggedInReducer,
       membersList: membersListReducer,
-      subgroupsList: subgroupsListReducer
+      subgroupsList: subgroupsListReducer,
+      dashboardData: dashboardDataReducer,
+      updateDashboard: updateDashboardReducer,
    }
 })
 

@@ -2,7 +2,7 @@ import { Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_API_URL, HTTP_200_OK, getAllReportItems } from '../Config';
-import { setMemberUpdated, setMembersList, setSubgroupsList } from '../app/mainSlice';
+import { setMemberUpdated, setMembersList, setSubgroupsList, setUpdateDashboard } from '../app/mainSlice';
 import useAuth from './useAuth';
 import useNotificationMessage from './useNotificationMessage';
 
@@ -141,6 +141,7 @@ const useMembersPage = () => {
     const handleAfterClose = () => {
         if (memberUpdated) {
             dispatch(setMemberUpdated(false))
+            dispatch(setUpdateDashboard(true))
             reloadTableData();
         }
     }
@@ -161,7 +162,7 @@ const useMembersPage = () => {
                 showMessage('success', 'Member added successfully')
 
                 dispatch(setMemberUpdated(true))
-
+                dispatch(setUpdateDashboard(true))
                 setAddMemberModalVisible(false)
 
             } else {
