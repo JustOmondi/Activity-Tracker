@@ -56,7 +56,6 @@ export default function Dashboard() {
   }
 
   const getDashboardData = async () => {
-    console.log('Update dashabord = ', updateDashboard)
     if (Object.keys(storedDashboardData).length > 0 && !updateDashboard) {
       formatReports(storedDashboardData['reports']);
       setMemberChanges(storedDashboardData['logs']['member_changes'])
