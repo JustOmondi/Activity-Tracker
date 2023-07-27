@@ -2,13 +2,13 @@ import { Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_API_URL, HTTP_200_OK, getAllReportItems } from '../Config';
-import { setMemberUpdated, setMembersList } from '../app/mainSlice';
+import { setMemberUpdated, setMembersList, setSubgroupsList } from '../app/mainSlice';
 import useAuth from './useAuth';
 import useNotificationMessage from './useNotificationMessage';
 
 const useMembersPage = () => {
     const [members, setMembers] = useState([])
-    const [subgroups, setsubgroups] = useState([])
+    const [subgroups, setSubgroups] = useState([])
     const [addMemberModalVisible, setAddMemberModalVisible] = useState(false)
     const [newMemberName, setNewMemberName] = useState('')
     const [newMemberSubgroup, setNewMemberSubgroup] = useState('')
@@ -17,6 +17,7 @@ const useMembersPage = () => {
 
     const memberUpdated = useSelector((state) => state.memberUpdated.value)
     const storedMembersList = useSelector((state) => state.membersList.value)
+    const storedSubgroupsList = useSelector((state) => state.subgroupsList.value)
 
     const {
         contextHolder,
@@ -32,6 +33,8 @@ const useMembersPage = () => {
     useEffect(() => {
         getMembers()
         getSubgroups()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const reloadTableData = async () => {
@@ -51,7 +54,7 @@ const useMembersPage = () => {
 
             formattedSubgroups.push(formattedSubgroup)
         }
-        setsubgroups(formattedSubgroups)
+        setSubgroups(formattedSubgroups)
     }
 
     const formatMembers = (data) => {
@@ -81,12 +84,12 @@ const useMembersPage = () => {
     }
 
     const getMembers = async () => {
-        const URL = `${BASE_API_URL}/structure/members`
-
         if (storedMembersList.length > 0 && !memberUpdated) {
             setMembers(storedMembersList)
             return
         }
+
+        const URL = `${BASE_API_URL}/structure/members`
 
         try {
             const response = await fetchWithAuthHeader(URL)
@@ -103,6 +106,11 @@ const useMembersPage = () => {
     }
 
     const getSubgroups = async () => {
+        if (storedSubgroupsList.length > 0) {
+            formatSubgroups(storedSubgroupsList);
+            return
+        }
+
         const URL = `${BASE_API_URL}/structure/subgroups`
 
         try {
@@ -112,6 +120,7 @@ const useMembersPage = () => {
                 let data = await response.json();
 
                 formatSubgroups(data);
+                dispatch(setSubgroupsList(data))
             } else {
                 showMessage('error', `An error ocurred in fetching subgroups. Please try again (E:${response.status})`)
             }

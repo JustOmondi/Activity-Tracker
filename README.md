@@ -23,7 +23,7 @@ However, further work is in progress to cater for different system user-roles wh
 See [Live Demo]()
 
 ### Demo Account Credentials
-`username: demo`
+`username: demo-account`
 
 `password: demo1403!`
 

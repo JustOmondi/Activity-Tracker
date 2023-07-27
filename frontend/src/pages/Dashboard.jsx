@@ -139,11 +139,11 @@ export default function Dashboard() {
       <div className='flex w-full justify-evenly space-around mt-0 xl:mt-12 flex-wrap xl:flex-nowrap'>
         <div key={1} className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
           {memberChanges.length === 0 && <Skeleton key={1} active paragraph={{ rows: 2 }} />}
-          {memberChanges.length !== 0 && <RecentChangesCard key={1} changes={memberChanges} title={'Member Changes'} />}
+          {memberChanges.length !== 0 && <RecentChangesCard key={2} changes={memberChanges} title={'Member Changes'} />}
         </div>
         <div key={2} className='w-full xl:w-1/2 shadow-lg bg-white p-2 xl:p-6 m-1 rounded-2xl mx-0 xl:mx-6 mb-4 xl:mb-0'>
-          {reportChanges.length === 0 && <Skeleton key={2} active paragraph={{ rows: 2 }} />}
-          {reportChanges.length !== 0 && <RecentChangesCard key={2} changes={reportChanges} title={'Report Changes'} />}
+          {reportChanges.length === 0 && <Skeleton key={3} active paragraph={{ rows: 2 }} />}
+          {reportChanges.length !== 0 && <RecentChangesCard key={4} changes={reportChanges} title={'Report Changes'} />}
         </div>
       </div>
     </div>

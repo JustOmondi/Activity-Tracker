@@ -1,6 +1,8 @@
 import { Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { BASE_API_URL, HTTP_200_OK } from '../Config'
+import { setSubgroupsList } from '../app/mainSlice'
 import SubgroupCard from '../components/SubgroupCard'
 import useAuth from '../hooks/useAuth'
 import useNotificationMessage from '../hooks/useNotificationMessage'
@@ -15,11 +17,21 @@ export default function SubgroupsPage() {
 
     const { fetchWithAuthHeader } = useAuth()
 
+    const dispatch = useDispatch()
+    const storedSubgroupsList = useSelector((state) => state.subgroupsList.value)
+
     useEffect(() => {
         getSubgroups()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     let getSubgroups = async () => {
+        if (storedSubgroupsList.length > 0) {
+            setSubgroups(storedSubgroupsList)
+            return
+        }
+
         const URL = `${BASE_API_URL}/structure/subgroups`
 
         try {
@@ -28,6 +40,7 @@ export default function SubgroupsPage() {
             if (response.status === HTTP_200_OK) {
                 const data = await response.json();
                 setSubgroups(data)
+                dispatch(setSubgroupsList(data))
             } else {
                 showMessage('error', `An error ocurred in fetching subgroups. Please try again (E:${response.status})`)
             }
